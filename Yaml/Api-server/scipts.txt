@@ -1,0 +1,40 @@
+
+
+kubectl run -it mongo-shell --image=mongo:4.4 --rm -- /bin/bash
+
+mongo mongodb-0.mongodb
+
+show dbs
+
+show users
+
+use nagpdb
+
+db.createUser({
+    user: "nagpadmin",
+    pwd: "NAGPDB_Password",
+    roles: ["readWrite"]
+})
+
+db.grantRolesToUser('nagpadmin', ['readWrite'])
+
+db.test.insertMany([{name: "this is testing1"}, {name: "this is testing2"}])
+
+db.test.find()
+
+function fibonacci(n) {
+    if (n <= 1) {
+        return n;
+    } else {
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+}
+
+
+wrk -t2 -c100 -d30s http://ipaddress
+
+
+kubectl exec -it podname -- /bin/sh
+
+
+http://34.30.47.190/data
