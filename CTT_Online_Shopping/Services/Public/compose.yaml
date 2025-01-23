@@ -1,0 +1,6 @@
+﻿services:
+  userapi:
+    image: userapi
+    build:
+      context: .
+      dockerfile: UserAPI/Dockerfile
