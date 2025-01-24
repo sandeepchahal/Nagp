@@ -4,3 +4,9 @@
     build:
       context: .
       dockerfile: UserAPI/Dockerfile
+
+  productapi:
+    image: productapi
+    build:
+      context: .
+      dockerfile: ProductAPI/Dockerfile
