@@ -79,4 +79,22 @@ public class ProductController(
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
+    [HttpGet("get-all-items")]
+    public async Task<IActionResult> GetAllProductItems()
+    {
+        try
+        {
+            var products = await productItemCollection.Find(_ => true).ToListAsync();
+            if (products == null || products.Count == 0)
+            {
+                return NotFound("No products found.");
+            }
+
+            return Ok(products);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
 }
