@@ -10,3 +10,9 @@
     build:
       context: .
       dockerfile: ProductAPI/Dockerfile
+
+  searchapi:
+    image: searchapi
+    build:
+      context: .
+      dockerfile: SearchAPI/Dockerfile

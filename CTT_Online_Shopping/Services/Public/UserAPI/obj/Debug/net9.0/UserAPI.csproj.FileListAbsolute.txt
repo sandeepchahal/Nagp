@@ -154,3 +154,5 @@
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/bin/Debug/net9.0/tr/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/bin/Debug/net9.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/bin/Debug/net9.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
