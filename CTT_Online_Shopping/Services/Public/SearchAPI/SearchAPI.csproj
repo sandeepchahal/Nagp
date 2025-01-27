@@ -11,6 +11,7 @@
         <PackageReference Include="Confluent.Kafka" Version="2.8.0" />
         <PackageReference Include="Elastic.Clients.Elasticsearch" Version="8.17.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
+        <PackageReference Include="Microsoft.IdentityModel.Protocols" Version="6.35.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="7.2.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="7.2.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="7.2.0" />

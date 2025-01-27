@@ -1,22 +1,32 @@
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using ProductAPI.Events;
 using ProductAPI.Models;
+using ProductAPI.Models.Commands;
+using ProductAPI.Models.DbModels;
 
 namespace ProductAPI.Controllers;
 
 [Route("product")]
-public class ProductController( IMongoCollection<Product> productCollection):ControllerBase
+public class ProductController( IMongoCollection<ProductDb> productCollection, IProductEvent productEvent):ControllerBase
 {
     // Add a new product
     [HttpPost("add")]
-    public async Task<IActionResult> AddProduct([FromBody] Product product)
+    public async Task<IActionResult> AddProduct([FromBody] ProductCommand product)
     {
         try
         {
             if (product == null) return BadRequest("Product data is required.");
-
-            await productCollection.InsertOneAsync(product);
-            return Ok(new { message = "Product added successfully.", product });
+            ProductDb productDb = new()
+            {
+                Name = product.Name,
+                Description = product.Description,
+                Category = product.Category
+            };
+            await productCollection.InsertOneAsync(productDb);
+            // send an event to search api
+            _ = productEvent.RaiseAddProductAsync(productDb);
+            return Ok(new { message = "Product added successfully.", product = productDb });
         }
         catch (Exception ex)
         {

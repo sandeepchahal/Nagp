@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using ProductAPI.Models;
+using ProductAPI.Models.DbModels;
 
 namespace ProductAPI.Controllers;
 

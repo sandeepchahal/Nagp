@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "57CQQg1YfRY=",
+  "dgSpecHash": "FKTQGAsF7QI=",
   "success": true,
   "projectFilePath": "/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/SearchAPI/SearchAPI.csproj",
   "expectedPackageFiles": [
@@ -9,10 +9,16 @@
     "/Users/sandeepsingh/.nuget/packages/elastic.transport/0.5.7/elastic.transport.0.5.7.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/librdkafka.redist/2.8.0/librdkafka.redist.2.8.0.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/microsoft.aspnetcore.openapi/9.0.1/microsoft.aspnetcore.openapi.9.0.1.nupkg.sha512",
+    "/Users/sandeepsingh/.nuget/packages/microsoft.csharp/4.5.0/microsoft.csharp.4.5.0.nupkg.sha512",
+    "/Users/sandeepsingh/.nuget/packages/microsoft.identitymodel.abstractions/6.35.0/microsoft.identitymodel.abstractions.6.35.0.nupkg.sha512",
+    "/Users/sandeepsingh/.nuget/packages/microsoft.identitymodel.logging/6.35.0/microsoft.identitymodel.logging.6.35.0.nupkg.sha512",
+    "/Users/sandeepsingh/.nuget/packages/microsoft.identitymodel.protocols/6.35.0/microsoft.identitymodel.protocols.6.35.0.nupkg.sha512",
+    "/Users/sandeepsingh/.nuget/packages/microsoft.identitymodel.tokens/6.35.0/microsoft.identitymodel.tokens.6.35.0.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/microsoft.openapi/1.6.22/microsoft.openapi.1.6.22.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/swashbuckle.aspnetcore.swagger/7.2.0/swashbuckle.aspnetcore.swagger.7.2.0.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/swashbuckle.aspnetcore.swaggergen/7.2.0/swashbuckle.aspnetcore.swaggergen.7.2.0.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/swashbuckle.aspnetcore.swaggerui/7.2.0/swashbuckle.aspnetcore.swaggerui.7.2.0.nupkg.sha512",
+    "/Users/sandeepsingh/.nuget/packages/system.security.cryptography.cng/4.5.0/system.security.cryptography.cng.4.5.0.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/system.text.json/9.0.1/system.text.json.9.0.1.nupkg.sha512"
   ],
   "logs": []

@@ -1,0 +1,6 @@
+﻿services:
+  productconsumer:
+    image: productconsumer
+    build:
+      context: .
+      dockerfile: ProductConsumer/Dockerfile

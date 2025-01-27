@@ -3,6 +3,7 @@ using System.Web;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using ProductAPI.Models;
+using ProductAPI.Models.DbModels;
 
 namespace ProductAPI.ServiceRegistration;
 
@@ -43,7 +44,7 @@ public static class ConfigurationDbRegistration
     private static void RegisterDbCollections(this IServiceCollection services)
     {
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<Category>("categories"));
-        services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<Product>("products"));
+        services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<ProductDb>("products"));
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<ProductItem>("productItems"));
     }
     private static string GetConnectionString(IConfiguration configuration)

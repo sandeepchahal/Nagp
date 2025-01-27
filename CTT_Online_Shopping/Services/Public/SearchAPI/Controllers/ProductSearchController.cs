@@ -7,24 +7,6 @@ namespace SearchAPI.Controllers;
 [Route("api/product-search")]
 public class ProductSearchController(ElasticsearchClient elasticClient):ControllerBase
 {
-    [HttpPost("IndexProduct")]
-    public async Task<IActionResult> IndexProduct([FromBody] Product product)
-    {
-        try
-        {
-            if (product == null) return BadRequest("Product data is required.");
-        
-            var response = await elasticClient.IndexAsync(product);
-            if (!response.IsValidResponse)
-                throw new Exception($"Failed to index product: {response.DebugInformation}");
-
-            return Ok(new { message = "Product indexed successfully." });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "Error indexing product.", error = ex.Message });
-        }
-    }
     [HttpGet("search")]
     public async Task<IActionResult> SearchProduct([FromQuery] string query)
     {
