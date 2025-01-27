@@ -1,0 +1,6 @@
+﻿services:
+  productapi:
+    image: productapi
+    build:
+      context: .
+      dockerfile: ProductAPI/Dockerfile

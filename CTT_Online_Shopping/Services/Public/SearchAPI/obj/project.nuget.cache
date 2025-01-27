@@ -1,16 +1,19 @@
 {
   "version": 2,
-  "dgSpecHash": "R2VkiZqo49I=",
+  "dgSpecHash": "57CQQg1YfRY=",
   "success": true,
   "projectFilePath": "/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/SearchAPI/SearchAPI.csproj",
   "expectedPackageFiles": [
+    "/Users/sandeepsingh/.nuget/packages/confluent.kafka/2.8.0/confluent.kafka.2.8.0.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/elastic.clients.elasticsearch/8.17.1/elastic.clients.elasticsearch.8.17.1.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/elastic.transport/0.5.7/elastic.transport.0.5.7.nupkg.sha512",
+    "/Users/sandeepsingh/.nuget/packages/librdkafka.redist/2.8.0/librdkafka.redist.2.8.0.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/microsoft.aspnetcore.openapi/9.0.1/microsoft.aspnetcore.openapi.9.0.1.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/microsoft.openapi/1.6.22/microsoft.openapi.1.6.22.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/swashbuckle.aspnetcore.swagger/7.2.0/swashbuckle.aspnetcore.swagger.7.2.0.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/swashbuckle.aspnetcore.swaggergen/7.2.0/swashbuckle.aspnetcore.swaggergen.7.2.0.nupkg.sha512",
-    "/Users/sandeepsingh/.nuget/packages/swashbuckle.aspnetcore.swaggerui/7.2.0/swashbuckle.aspnetcore.swaggerui.7.2.0.nupkg.sha512"
+    "/Users/sandeepsingh/.nuget/packages/swashbuckle.aspnetcore.swaggerui/7.2.0/swashbuckle.aspnetcore.swaggerui.7.2.0.nupkg.sha512",
+    "/Users/sandeepsingh/.nuget/packages/system.text.json/9.0.1/system.text.json.9.0.1.nupkg.sha512"
   ],
   "logs": []
 }
