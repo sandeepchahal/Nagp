@@ -25,7 +25,8 @@ public class ProductConsumerService : BackgroundService
         {
             BootstrapServers = $"{host}:{port}",
             GroupId = groupId,
-            AutoOffsetReset = AutoOffsetReset.Earliest
+            AutoOffsetReset = AutoOffsetReset.Earliest,
+            SecurityProtocol = SecurityProtocol.Plaintext
         };
         _consumer = new ConsumerBuilder<Null, string>(config).Build();
         _consumer.Subscribe(Topic);

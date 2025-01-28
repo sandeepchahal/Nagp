@@ -6,6 +6,8 @@ namespace ProductAPI.Events;
 
 public class ProductEvent(IConfiguration configuration):IProductEvent
 {
+    private const string Topic = "ctt-product";
+
     public async Task RaiseAddProductAsync(ProductDb productDb)
     {
         try
@@ -22,7 +24,7 @@ public class ProductEvent(IConfiguration configuration):IProductEvent
             using var producer = new ProducerBuilder<Null, string>(config).Build();
             var productJson = System.Text.Json.JsonSerializer.Serialize(productDb);
 
-            var result = await producer.ProduceAsync("product-topic", new Message<Null, string>
+            var result = await producer.ProduceAsync(Topic, new Message<Null, string>
             {
                 Value = productJson
             });

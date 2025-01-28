@@ -4,7 +4,7 @@ using ProductConsumer.Models;
 
 namespace ProductConsumer.DbServices;
 
-public class ProductService(ElasticsearchClient elasticClient, ILogger logger):IProductService
+public class ProductService(ElasticsearchClient elasticClient, ILogger<ProductService> logger):IProductService
 {
     
     public async Task Add(Product product)
