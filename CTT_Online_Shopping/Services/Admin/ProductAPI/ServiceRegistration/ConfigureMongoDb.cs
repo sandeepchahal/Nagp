@@ -45,7 +45,7 @@ public static class ConfigurationDbRegistration
     {
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<Category>("categories"));
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<ProductDb>("products"));
-        services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<ProductItem>("productItems"));
+        services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<ProductItemDb>("productItems"));
     }
     private static string GetConnectionString(IConfiguration configuration)
     {

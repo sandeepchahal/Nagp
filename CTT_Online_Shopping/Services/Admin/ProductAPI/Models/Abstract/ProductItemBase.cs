@@ -1,13 +1,8 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+namespace ProductAPI.Models.Abstract;
 
-namespace ProductAPI.Models.DbModels;
-
-public class ProductItem
+public abstract class ProductItemBase
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = string.Empty;
+    public string ProductId { get; set; } = string.Empty;
     public string Sku { get; set; } = string.Empty;
     public Dictionary<string, string> Attributes { get; set; } = null!;
     public decimal Price { get; set; } // Price of the product item

@@ -5,23 +5,26 @@ using ProductAPI.Models.DbModels;
 
 namespace ProductAPI.Events;
 
-public class ProductEvent(IConfiguration configuration):IProductEvent
+public class ProductEvent:IProductEvent
 {
     private const string Topic = "ctt-product";
+    private readonly ProducerConfig _config;
 
+    public ProductEvent(IConfiguration configuration)
+    {
+        var host = configuration["Kafka:Host"];
+        var port = configuration["Kafka:Port"];
+
+        _config = new ProducerConfig
+        {
+            BootstrapServers = $"{host}:{port}"
+        };
+    }
     public async Task RaiseAddProductAsync(ProductDb productDb)
     {
         try
         {
-            var host = configuration["Kafka:Host"];
-            var port = configuration["Kafka:Port"];
-
-            var config = new ProducerConfig
-            {
-                BootstrapServers = $"{host}:{port}"
-            };
-
-            using var producer = new ProducerBuilder<Null, string>(config).Build();
+            using var producer = new ProducerBuilder<Null, string>(_config).Build();
             var productEventModel = new ProductEventModel()
             {
                 EventType = "Add",
@@ -43,5 +46,33 @@ public class ProductEvent(IConfiguration configuration):IProductEvent
             Console.Error.WriteLine($"Error producing Kafka message: {ex.Message}");
             throw; // Rethrow the exception if needed
         }
+    }
+
+    public async Task RaiseUpdateProductAsync(ProductDb productDb)
+    {
+        try
+        {
+            using var producer = new ProducerBuilder<Null, string>(_config).Build();
+            var productEventModel = new ProductEventModel()
+            {
+                EventType = "Update",
+                Product = productDb
+            };
+            var productJson = System.Text.Json.JsonSerializer.Serialize(productEventModel);
+
+            var result = await producer.ProduceAsync(Topic, new Message<Null, string>
+            {
+                Value = productJson
+            });
+
+            // Log result if necessary
+            Console.WriteLine($"Message delivered to {result.TopicPartitionOffset}");
+        }
+        catch (Exception ex)
+        {
+            // Log exception for debugging
+            Console.Error.WriteLine($"Error producing Kafka message: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        } 
     }
 }

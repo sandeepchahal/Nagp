@@ -1,23 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using ProductAPI.Models;
+using ProductAPI.Models.Commands;
 using ProductAPI.Models.DbModels;
 
 namespace ProductAPI.Controllers;
 
 [Route("product-item")]
-public class ProductItemController(IMongoCollection<ProductItem> productItemCollection):ControllerBase
+public class ProductItemController(IMongoCollection<ProductItemDb> productItemCollection):ControllerBase
 {
     // Add a new product item
     [HttpPost("add")]
-    public async Task<IActionResult> AddProductItem([FromBody] ProductItem productItem)
+    public async Task<IActionResult> AddProductItem([FromBody] ProductItemCommand productItem)
     {
         try
         {
             if (productItem == null) return BadRequest("ProductItem data is required.");
-
-            await productItemCollection.InsertOneAsync(productItem);
-            return Ok(new { message = "Product item added successfully.", productItem });
+            
+            // map product command to product item db
+            //await productItemCollection.InsertOneAsync(productItem);
+            return Ok(new { message = "Product item added successfully.", productItem = productItem });
         }
         catch (Exception ex)
         {
@@ -43,5 +45,6 @@ public class ProductItemController(IMongoCollection<ProductItem> productItemColl
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
+    
 
 }

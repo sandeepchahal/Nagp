@@ -5,5 +5,5 @@ namespace ProductAPI.Models.Query;
 
 public class ProductView:ProductDb
 {
-    public List<ProductItem>? Items { get; set; } = new List<ProductItem>(); 
+    public List<ProductItemDb>? Items { get; set; } = new List<ProductItemDb>(); 
 }

@@ -8,31 +8,8 @@ using ProductAPI.Models.DbModels;
 namespace ProductAPI.Controllers;
 
 [Route("product")]
-public class ProductController( IMongoCollection<ProductDb> productCollection, IProductEvent productEvent):ControllerBase
+public partial class ProductController( IMongoCollection<ProductDb> productCollection, IProductEvent productEvent):ControllerBase
 {
-    // Add a new product
-    [HttpPost("add")]
-    public async Task<IActionResult> AddProduct([FromBody] ProductCommand product)
-    {
-        try
-        {
-            if (product == null) return BadRequest("Product data is required.");
-            ProductDb productDb = new()
-            {
-                Name = product.Name,
-                Description = product.Description,
-                Category = product.Category
-            };
-            await productCollection.InsertOneAsync(productDb);
-            // send an event to search api
-            _ = productEvent.RaiseAddProductAsync(productDb);
-            return Ok(new { message = "Product added successfully.", product = productDb });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "Error adding product.", error = ex.Message });
-        }
-    } 
     [HttpGet("get-all")]
     public async Task<IActionResult> GetAllProducts()
     {
@@ -43,8 +20,25 @@ public class ProductController( IMongoCollection<ProductDb> productCollection, I
             {
                 return NotFound("No products found.");
             }
-
             return Ok(products);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+    [HttpGet("get/{id}")]
+    public async Task<IActionResult> GetByProductId(string id)
+    {
+        try
+        {
+            var filter = Builders<ProductDb>.Filter.Eq(p => p.Id, id);
+            var product = await productCollection.Find(filter).FirstOrDefaultAsync();
+            if (product == null)
+            {
+                return NotFound("No product found.");
+            }
+            return Ok(product);
         }
         catch (Exception ex)
         {
