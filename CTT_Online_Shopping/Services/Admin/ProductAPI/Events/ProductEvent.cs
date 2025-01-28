@@ -1,4 +1,5 @@
 using Confluent.Kafka;
+using ProductAPI.Events.Models;
 using ProductAPI.Models;
 using ProductAPI.Models.DbModels;
 
@@ -17,12 +18,16 @@ public class ProductEvent(IConfiguration configuration):IProductEvent
 
             var config = new ProducerConfig
             {
-                
                 BootstrapServers = $"{host}:{port}"
             };
 
             using var producer = new ProducerBuilder<Null, string>(config).Build();
-            var productJson = System.Text.Json.JsonSerializer.Serialize(productDb);
+            var productEventModel = new ProductEventModel()
+            {
+                EventType = "Add",
+                Product = productDb
+            };
+            var productJson = System.Text.Json.JsonSerializer.Serialize(productEventModel);
 
             var result = await producer.ProduceAsync(Topic, new Message<Null, string>
             {
