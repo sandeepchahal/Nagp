@@ -8,7 +8,7 @@ namespace ProductAPI.Controllers;
 public partial class ProductController
 {
     // Add a new product
-    [HttpPost]
+    [HttpPost("add")]
     public async Task<IActionResult> Add([FromBody] ProductCommand product)
     {
         try
@@ -30,7 +30,7 @@ public partial class ProductController
             return StatusCode(500, new { message = "Error adding product.", error = ex.Message });
         }
     }
-    [HttpPost("{id}")]
+    [HttpPost("update/{id}")]
     public async Task<IActionResult> Update(string id, [FromBody] ProductCommand productCommand)
     {
         try
