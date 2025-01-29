@@ -13,7 +13,7 @@ public class ProductConsumerService : BackgroundService
     private readonly IConsumer<Null, string> _consumer;
     private readonly ILogger<ProductConsumerService> _logger;
     private const string Topic = "ctt-product";
-    private IProductService _productService;
+    private readonly IProductService _productService;
     public ProductConsumerService(ILogger<ProductConsumerService> logger, IConfiguration configuration, IProductService productService)
     {
         var host = configuration["Kafka:Host"];
@@ -24,7 +24,7 @@ public class ProductConsumerService : BackgroundService
         var config = new ConsumerConfig
         {
             BootstrapServers = $"{host}:{port}",
-            GroupId = groupId,
+            GroupId = $"{groupId}-product", 
             AutoOffsetReset = AutoOffsetReset.Earliest,
             SecurityProtocol = SecurityProtocol.Plaintext
         };

@@ -9,7 +9,7 @@ public partial class ProductController
 {
     // Add a new product
     [HttpPost("add")]
-    public async Task<IActionResult> Add([FromBody] ProductCommand product)
+    public async Task<IActionResult> Add([FromBody] ProductCommand? product)
     {
         try
         {
@@ -22,7 +22,7 @@ public partial class ProductController
             };
             await productCollection.InsertOneAsync(productDb);
             // send an event to search api
-            _ = productEvent.RaiseAddProductAsync(productDb);
+            _ = productEvent.RaiseAddAsync(productDb);
             return Ok(new { message = "Product added successfully.", product = productDb });
         }
         catch (Exception ex)
@@ -41,11 +41,11 @@ public partial class ProductController
                 .Set(p => p.Category, productCommand.Category)
                 .Set(p => p.Name, productCommand.Name);
 
-            var result = await productCollection.UpdateOneAsync(filter, update);
+            await productCollection.UpdateOneAsync(filter, update);// return number of rows updated
             var updatedProduct = await productCollection.Find(filter).FirstOrDefaultAsync();
 
             // send an event to search api
-            _ = productEvent.RaiseUpdateProductAsync(updatedProduct);
+            _ = productEvent.RaiseUpdateAsync(updatedProduct);
             return Ok(new { message = "Product added successfully.", product = updatedProduct });
         }
         catch (Exception ex)

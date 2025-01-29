@@ -5,7 +5,7 @@ namespace ProductAPI.Events;
 
 public interface IProductEvent
 {
-    Task RaiseAddProductAsync(ProductDb productDb);
-    Task RaiseUpdateProductAsync(ProductDb productDb);
+    Task RaiseAddAsync(ProductDb productDb);
+    Task RaiseUpdateAsync(ProductDb productDb);
 
 }

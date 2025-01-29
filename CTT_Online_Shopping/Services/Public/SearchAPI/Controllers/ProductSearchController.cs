@@ -42,4 +42,5 @@ public class ProductSearchController(ElasticsearchClient elasticClient):Controll
         }
     }
 
+    
 }
