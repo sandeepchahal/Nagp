@@ -35,33 +35,39 @@ public class ProductConsumerService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
+        await Task.Run(() =>
         {
-            try
+            while (!stoppingToken.IsCancellationRequested)
             {
-                var result = _consumer.Consume(stoppingToken);
-                var productConsumerModel = JsonSerializer.Deserialize<ProductConsumerModel>(result.Message.Value);
+                try
+                {
+                    var result = _consumer.Consume(stoppingToken);
+                    var productConsumerModel = JsonSerializer.Deserialize<ProductConsumerModel>(result.Message.Value);
+                    if (productConsumerModel == null) continue;
+                    if (productConsumerModel.EventType == null) continue;
+                    if (productConsumerModel.Product == null) continue;
 
-                if (productConsumerModel == null) continue;
-                _ = productConsumerModel.EventType == "Add" 
-                    ? HandleAdd(productConsumerModel.Product) 
-                    : HandleUpdate(productConsumerModel.Product);
+                    _ = productConsumerModel.EventType == "Add"
+                        ? HandleAdd(productConsumerModel.Product)
+                        : HandleUpdate(productConsumerModel.Product);
+                    _consumer.Commit(result);
+                }
+                catch (ConsumeException e)
+                {
+                    _logger.LogError($"Error consuming message: {e.Error.Reason}");
+                }
             }
-            catch (ConsumeException e)
-            {
-                _logger.LogError($"Error consuming message: {e.Error.Reason}");
-            }
-        }
+        }, stoppingToken);
     }
     private Task HandleAdd(Product product)
     {
-        _logger.LogInformation($"Handling Add Event Type \n: {product}");
+        _logger.LogInformation($"Handling Add Product Event Type \n: {product}");
         _ = _productService.Add(product: product);
         return Task.CompletedTask;
     }
     private Task HandleUpdate(Product product)
     {
-        _logger.LogInformation($"Handling Update Event Type \n: {product}");
+        _logger.LogInformation($"Handling Update Product Event Type \n: {product}");
         _ = _productService.Update(product.Id!,product);
         return Task.CompletedTask;
 

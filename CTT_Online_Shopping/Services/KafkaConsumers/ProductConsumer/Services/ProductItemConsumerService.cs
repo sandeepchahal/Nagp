@@ -36,24 +36,28 @@ public class ProductItemConsumerService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
+        await Task.Run(() =>
         {
-            try
+            while (!stoppingToken.IsCancellationRequested)
             {
-                var result = _consumer.Consume(stoppingToken);
-                var productItemModel = JsonSerializer.Deserialize<ProductItemConsumerModel>(result.Message.Value);
+                try
+                {
+                    var result = _consumer.Consume(stoppingToken);
+                    var productItemModel = JsonSerializer.Deserialize<ProductItemConsumerModel>(result.Message.Value);
 
-                if (productItemModel == null) continue;
+                    if (productItemModel == null) continue;
 
-                _ = productItemModel.EventType == "Add"
-                    ? HandleAdd(productItemModel.ProductItem)
-                    : HandleUpdate(productItemModel.ProductItem);
+                    _ = productItemModel.EventType == "Add"
+                        ? HandleAdd(productItemModel.ProductItem)
+                        : HandleUpdate(productItemModel.ProductItem);
+                    _consumer.Commit(result);
+                }
+                catch (ConsumeException e)
+                {
+                    _logger.LogError($"Error consuming ProductItem message: {e.Error.Reason}");
+                }
             }
-            catch (ConsumeException e)
-            {
-                _logger.LogError($"Error consuming ProductItem message: {e.Error.Reason}");
-            }
-        }
+        }, stoppingToken);
     }
 
     private Task HandleAdd(ProductItem productItem)

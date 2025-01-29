@@ -9,9 +9,9 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
 
 // Register services
-builder.Services.RegisterBackgroundServices();
-builder.Services.RegisterElasticClientServices(builder.Configuration);
 builder.Services.RegisterDbServices();
+builder.Services.RegisterElasticClientServices(builder.Configuration);
+builder.Services.RegisterBackgroundServices();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole(); // or other logging providers

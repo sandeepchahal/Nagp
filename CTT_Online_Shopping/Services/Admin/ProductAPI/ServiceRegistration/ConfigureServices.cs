@@ -7,5 +7,7 @@ public static class ConfigureServices
     public static void AddScopedServices(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IProductEvent, ProductEvent>();
+        serviceCollection.AddScoped<IProductItemEvent, ProductItemEvent>();
+
     }
 }

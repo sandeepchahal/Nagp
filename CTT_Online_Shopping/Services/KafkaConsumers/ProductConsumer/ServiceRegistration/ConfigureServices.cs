@@ -1,6 +1,7 @@
 using Elastic.Clients.Elasticsearch;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using ProductConsumer.DbServices;
 using ProductConsumer.Services;
 
@@ -11,8 +12,9 @@ public static class ConfigureServices
     public static void RegisterBackgroundServices(this IServiceCollection serviceCollection)
     {
         // Register background service
-        serviceCollection.AddHostedService<ProductConsumerService>();
-        serviceCollection.AddHostedService<ProductItemConsumerService>();
+        serviceCollection.AddSingleton<IHostedService, ProductConsumerService>();
+        serviceCollection.AddSingleton<IHostedService, ProductItemConsumerService>();
+
     }
     public static void RegisterElasticClientServices(this IServiceCollection serviceCollection, ConfigurationManager configurationManager)
     {
