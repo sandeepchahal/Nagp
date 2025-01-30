@@ -48,8 +48,8 @@ public class ProductItemConsumerService : BackgroundService
                     if (productItemModel == null) continue;
 
                     _ = productItemModel.EventType == "Add"
-                        ? HandleAdd(productItemModel.ProductItem)
-                        : HandleUpdate(productItemModel.ProductItem);
+                        ? HandleAdd(productItemModel.ProductItemEventModel)
+                        : HandleUpdate(productItemModel.ProductItemEventModel);
                     _consumer.Commit(result);
                 }
                 catch (ConsumeException e)
@@ -60,17 +60,17 @@ public class ProductItemConsumerService : BackgroundService
         }, stoppingToken);
     }
 
-    private Task HandleAdd(ProductItem productItem)
+    private Task HandleAdd(ProductItemEventModel productItemEventModel)
     {
-        _logger.LogInformation($"Handling ProductItem Add Event \n: {productItem}");
-        _ = _productItemService.Add(productItem);
+        _logger.LogInformation($"Handling ProductItem Add Event \n: {productItemEventModel}");
+        _ = _productItemService.Add(productItemEventModel);
         return Task.CompletedTask;
     }
 
-    private Task HandleUpdate(ProductItem productItem)
+    private Task HandleUpdate(ProductItemEventModel productItemEventModel)
     {
-        _logger.LogInformation($"Handling ProductItem Update Event \n: {productItem}");
-        _ = _productItemService.Update(productItem.Id!, productItem);
+        _logger.LogInformation($"Handling ProductItem Update Event \n: {productItemEventModel}");
+        _ = _productItemService.Update(productItemEventModel.Id!, productItemEventModel);
         return Task.CompletedTask;
     }
 }

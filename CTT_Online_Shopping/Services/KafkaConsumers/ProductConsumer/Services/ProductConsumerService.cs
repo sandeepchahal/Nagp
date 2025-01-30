@@ -45,11 +45,11 @@ public class ProductConsumerService : BackgroundService
                     var productConsumerModel = JsonSerializer.Deserialize<ProductConsumerModel>(result.Message.Value);
                     if (productConsumerModel == null) continue;
                     if (productConsumerModel.EventType == null) continue;
-                    if (productConsumerModel.Product == null) continue;
+                    if (productConsumerModel.ProductEventModel == null) continue;
 
                     _ = productConsumerModel.EventType == "Add"
-                        ? HandleAdd(productConsumerModel.Product)
-                        : HandleUpdate(productConsumerModel.Product);
+                        ? HandleAdd(productConsumerModel.ProductEventModel)
+                        : HandleUpdate(productConsumerModel.ProductEventModel);
                     _consumer.Commit(result);
                 }
                 catch (ConsumeException e)
@@ -59,16 +59,16 @@ public class ProductConsumerService : BackgroundService
             }
         }, stoppingToken);
     }
-    private Task HandleAdd(Product product)
+    private Task HandleAdd(ProductEventModel productEventModel)
     {
-        _logger.LogInformation($"Handling Add Product Event Type \n: {product}");
-        _ = _productService.Add(product: product);
+        _logger.LogInformation($"Handling Add Product Event Type \n: {productEventModel}");
+        _ = _productService.Add(productEventModel: productEventModel);
         return Task.CompletedTask;
     }
-    private Task HandleUpdate(Product product)
+    private Task HandleUpdate(ProductEventModel productEventModel)
     {
-        _logger.LogInformation($"Handling Update Product Event Type \n: {product}");
-        _ = _productService.Update(product.Id!,product);
+        _logger.LogInformation($"Handling Update Product Event Type \n: {productEventModel}");
+        _ = _productService.Update(productEventModel.Id!,productEventModel);
         return Task.CompletedTask;
 
     }
