@@ -18,7 +18,8 @@ public partial class ProductItemController
             await productItemCollection.InsertOneAsync(productItemDb);
             
             // send the event to update search db
-            _= productItemEvent.RaiseAddAsync(productItemDb);
+            var productItemAddEventModel = ProductItemMapper.MapToProductItemEvent(productItemDb);
+            _= productItemEventService.RaiseAddAsync(productItemAddEventModel);
             
             return Ok(new { message = "Product item added successfully.", productItem });
         }

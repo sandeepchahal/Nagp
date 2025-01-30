@@ -1,15 +1,16 @@
 using Confluent.Kafka;
 using ProductAPI.Events.Models;
+using ProductAPI.Models;
 using ProductAPI.Models.DbModels;
 
 namespace ProductAPI.Events;
 
-public class ProductItemEvent:IProductItemEvent
+public class ProductEventService:IProductEventService
 {
-    private const string Topic = "ctt-product-item";
+    private const string Topic = "ctt-product";
     private readonly ProducerConfig _config;
 
-    public ProductItemEvent(IConfiguration configuration)
+    public ProductEventService(IConfiguration configuration)
     {
         var host = configuration["Kafka:Host"];
         var port = configuration["Kafka:Port"];
@@ -19,21 +20,21 @@ public class ProductItemEvent:IProductItemEvent
             BootstrapServers = $"{host}:{port}"
         };
     }
-    public async Task RaiseAddAsync(ProductItemDb productItemDb)
+    public async Task RaiseAddAsync(ProductDb productDb)
     {
         try
         {
             using var producer = new ProducerBuilder<Null, string>(_config).Build();
-            var productItemEventModel = new ProductItemEventModel()
+            var productEventModel = new ProductEventModel()
             {
                 EventType = "Add",
-                ProductItem = productItemDb
+                Product = productDb
             };
-            var productItemJson = System.Text.Json.JsonSerializer.Serialize(productItemEventModel);
+            var productJson = System.Text.Json.JsonSerializer.Serialize(productEventModel);
 
             var result = await producer.ProduceAsync(Topic, new Message<Null, string>
             {
-                Value = productItemJson
+                Value = productJson
             });
 
             // Log result if necessary
@@ -47,21 +48,21 @@ public class ProductItemEvent:IProductItemEvent
         }
     }
 
-    public async Task RaiseUpdateAsync(ProductItemDb productItemDb)
+    public async Task RaiseUpdateAsync(ProductDb productDb)
     {
         try
         {
             using var producer = new ProducerBuilder<Null, string>(_config).Build();
-            var productItemEventModel = new ProductItemEventModel()
+            var productEventModel = new ProductEventModel()
             {
                 EventType = "Update",
-                ProductItem = productItemDb
+                Product = productDb
             };
-            var productItemJson = System.Text.Json.JsonSerializer.Serialize(productItemEventModel);
+            var productJson = System.Text.Json.JsonSerializer.Serialize(productEventModel);
 
             var result = await producer.ProduceAsync(Topic, new Message<Null, string>
             {
-                Value = productItemJson
+                Value = productJson
             });
 
             // Log result if necessary

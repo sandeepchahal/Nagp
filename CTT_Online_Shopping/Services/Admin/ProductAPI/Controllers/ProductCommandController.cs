@@ -22,7 +22,7 @@ public partial class ProductController
             };
             await productCollection.InsertOneAsync(productDb);
             // send an event to search api
-            _ = productEvent.RaiseAddAsync(productDb);
+            _ = productEventService.RaiseAddAsync(productDb);
             return Ok(new { message = "Product added successfully.", product = productDb });
         }
         catch (Exception ex)
@@ -45,7 +45,7 @@ public partial class ProductController
             var updatedProduct = await productCollection.Find(filter).FirstOrDefaultAsync();
 
             // send an event to search api
-            _ = productEvent.RaiseUpdateAsync(updatedProduct);
+            _ = productEventService.RaiseUpdateAsync(updatedProduct);
             return Ok(new { message = "Product added successfully.", product = updatedProduct });
         }
         catch (Exception ex)

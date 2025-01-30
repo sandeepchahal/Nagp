@@ -3,7 +3,7 @@ using ProductAPI.Models.DbModels;
 
 namespace ProductAPI.Events;
 
-public interface IProductEvent
+public interface IProductEventService
 {
     Task RaiseAddAsync(ProductDb productDb);
     Task RaiseUpdateAsync(ProductDb productDb);

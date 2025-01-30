@@ -8,7 +8,7 @@ using ProductAPI.Models.DbModels;
 namespace ProductAPI.Controllers;
 
 [Route("product")]
-public partial class ProductController( IMongoCollection<ProductDb> productCollection, IProductEvent productEvent):ControllerBase
+public partial class ProductController( IMongoCollection<ProductDb> productCollection, IProductEventService productEventService):ControllerBase
 {
     [HttpGet("get-all")]
     public async Task<IActionResult> GetAllProducts()
