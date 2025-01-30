@@ -16,39 +16,7 @@ public class ProductItemService(ElasticsearchClient elasticClient, ILogger<Produ
 
             if (productExists.Exists)
             {
-                // Step 2: Check if the product item already exists
-                var productItemExists = await IsProductItemExists(productItemEvent.Id);
-
-                if (productItemExists)
-                {
-                    // Update the existing product item
-                    await elasticClient.UpdateAsync<Product, object>(
-                        productItemEvent.ProductId,
-                        u => u
-                            .Script(s => s
-                                .Source(@"
-                            for (int i = 0; i < ctx._source.items.length; i++) {
-                                if (ctx._source.items[i].productItemId == params.newItem.productItemId) {
-                                    ctx._source.items[i] = params.newItem;
-                                    break;
-                                }
-                            }
-                        ")
-                                .Params(p => p.Add("newItem", new ProductItemEventModel()
-                                {
-                                    Id = productItemEvent.Id,
-                                    Attributes = productItemEvent.Attributes,
-                                    MinPrice = productItemEvent.MinPrice,
-                                    MaxPrice = productItemEvent.MaxPrice,
-                                    Name = productItemEvent.Name
-                                }))
-                            )
-                    );
-                }
-                else
-                {
-                    // Add the new product item to the items array
-                    await elasticClient.UpdateAsync<Product, object>(
+                await elasticClient.UpdateAsync<Product, object>(
                         productItemEvent.ProductId,
                         u => u
                             .Script(s => s
@@ -63,32 +31,6 @@ public class ProductItemService(ElasticsearchClient elasticClient, ILogger<Produ
                                 }))
                             )
                     );
-                }
-            }
-            else
-            {
-                // Create a new product document with the product item
-                var product = new Product
-                {
-                    Id = productItemEvent.ProductId,
-                    Name = "Unknown", // Default name (can be updated later)
-                    Category = "Unknown", // Default category (can be updated later)
-                    Description = "Unknown", // Default description (can be updated later)
-                    Items = new List<ProductItemEventModel>
-                    {
-                        new ProductItemEventModel()
-                        {
-                            Id = productItemEvent.Id,
-                            Attributes = productItemEvent.Attributes,
-                            MinPrice = productItemEvent.MinPrice,
-                            MaxPrice = productItemEvent.MaxPrice,
-                            Name = productItemEvent.Name
-                        }
-                    }
-                };
-
-                // Index the product in Elasticsearch
-                await elasticClient.IndexAsync(product, idx => idx.Index("products"));
             }
         }
         catch (Exception e)

@@ -1,11 +1,3 @@
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.csproj.AssemblyReference.cache
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.GeneratedMSBuildEditorConfig.editorconfig
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.AssemblyInfoInputs.cache
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.AssemblyInfo.cs
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.csproj.CoreCompileInputs.cache
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.MvcApplicationPartsAssemblyInfo.cs
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.MvcApplicationPartsAssemblyInfo.cache
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.sourcelink.json
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/appsettings.Development.json
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/appsettings.json
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/ProductAPI.staticwebassets.endpoints.json
@@ -21,7 +13,18 @@
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/MongoDB.Driver.dll
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/SharpCompress.dll
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/Snappier.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/ZstdSharp.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.csproj.AssemblyReference.cache
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.GeneratedMSBuildEditorConfig.editorconfig
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.AssemblyInfoInputs.cache
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.AssemblyInfo.cs
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.csproj.CoreCompileInputs.cache
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.MvcApplicationPartsAssemblyInfo.cs
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.MvcApplicationPartsAssemblyInfo.cache
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.sourcelink.json
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/scopedcss/bundle/ProductAPI.styles.css
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/staticwebassets.build.json
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/staticwebassets.development.json
@@ -38,6 +41,3 @@
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.pdb
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.genruntimeconfig.cache
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ref/ProductAPI.dll
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll

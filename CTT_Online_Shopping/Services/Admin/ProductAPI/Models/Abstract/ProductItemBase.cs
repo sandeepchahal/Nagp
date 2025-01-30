@@ -14,7 +14,7 @@ public abstract class ProductItemBase
     public Discount? ProductLevelDiscount { get; set; }
 }
 
-public abstract class ProductVariantBase
+public  class ProductVariantBase
 {
     public Dictionary<string, string> Attributes { get; set; } = new(); // E.g., {"Color": "Red", "Size": "M"}
     public int RemainingStockQuantity { get; set; }  // Stock per variant remaining
@@ -29,14 +29,14 @@ public class ProductVariant : ProductVariantBase
     public bool IsDiscountApplied { get; set; } = false;
 }
 
-public abstract class ImagesBase
+public class ImagesBase
 {
     public string Url { get; set; } = string.Empty;
     public string AltText { get; set; } = string.Empty;
     public bool IsPrimary { get; set; } = false;
     public int OrderNumber { get; set; }
 }
-public abstract class Discount
+public class Discount
 {
     public string Type { get; set; } = nameof(DiscountEnum.Percentage);
     public decimal Value { get; set; } 

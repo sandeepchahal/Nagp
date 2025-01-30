@@ -18,7 +18,8 @@ public partial class ProductController
             {
                 Name = product.Name,
                 Description = product.Description,
-                Category = product.Category
+                Category = product.Category,
+                Brand = product.Brand
             };
             await productCollection.InsertOneAsync(productDb);
             // send an event to search api

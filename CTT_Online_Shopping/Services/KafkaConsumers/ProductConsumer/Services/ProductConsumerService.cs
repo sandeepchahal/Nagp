@@ -44,12 +44,20 @@ public class ProductConsumerService : BackgroundService
                     var result = _consumer.Consume(stoppingToken);
                     var productConsumerModel = JsonSerializer.Deserialize<ProductConsumerModel>(result.Message.Value);
                     if (productConsumerModel == null) continue;
-                    if (productConsumerModel.EventType == null) continue;
-                    if (productConsumerModel.ProductEventModel == null) continue;
+                    if (productConsumerModel.EventType == null)
+                    {
+                        _logger.LogInformation("Event Type is null");
+                        continue;
+                    }
+                    if (productConsumerModel.Product == null)
+                    {
+                        _logger.LogInformation("ProductEventModel is null");
+                        continue;
+                    }
 
                     _ = productConsumerModel.EventType == "Add"
-                        ? HandleAdd(productConsumerModel.ProductEventModel)
-                        : HandleUpdate(productConsumerModel.ProductEventModel);
+                        ? HandleAdd(productConsumerModel.Product)
+                        : HandleUpdate(productConsumerModel.Product);
                     _consumer.Commit(result);
                 }
                 catch (ConsumeException e)

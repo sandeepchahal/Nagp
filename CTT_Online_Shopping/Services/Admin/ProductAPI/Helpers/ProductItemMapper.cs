@@ -21,6 +21,7 @@ public static class ProductItemMapper
                 Discount = v.Discount,
                 Images = v.Images
             }).ToList()
+            ,ProductId = request.ProductId
         };
     }
     
@@ -28,6 +29,7 @@ public static class ProductItemMapper
     {
         var searchEvent = new ProductItemEventModel
         {
+            Id = product.Id,
             ProductId = product.ProductId,
             Name = product.Name,
             MinPrice = product.Variants.Min(v => v.OriginalPrice), // Calculate min price

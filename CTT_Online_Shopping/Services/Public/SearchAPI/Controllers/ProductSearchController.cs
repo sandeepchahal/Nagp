@@ -8,72 +8,39 @@ namespace SearchAPI.Controllers;
 public class ProductSearchController(ElasticsearchClient elasticClient):ControllerBase
 {
     [HttpGet("text")]
-    public async Task<IActionResult> SearchProduct([FromQuery] string query)
+public async Task<IActionResult> SearchProduct([FromQuery] string query)
+{
+    try
     {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(query)) return BadRequest("Search query is required.");
+        if (string.IsNullOrWhiteSpace(query)) return BadRequest("Search query is required.");
 
-            var searchResponse = await elasticClient.SearchAsync<Product>(s => s
-                .Query(q => q
-                    .Bool(b => b
-                        .Should(
-                            sh => sh.Match(m => m
-                                    .Field(f => f.Name) // Field to search for a match
-                                    .Query(query) // Search term
-                            ),
-                            sh => sh.Match(m => m
-                                    .Field(f => f.Category) // Also search the Category field
-                                    .Query(query) // Search term
-                            )
+        var searchResponse = await elasticClient.SearchAsync<Product>(s => s
+            .Query(q => q
+                .Bool(b => b
+                    .Should(
+                        // Match against Product fields (Name, Category, etc.)
+                        sh => sh.Match(m => m
+                            .Field(f => f.Name) // Field to search for a match in Product name
+                            .Query(query) // Search term
+                        ),
+                        sh => sh.Match(m => m
+                            .Field(f => f.Category) // Also search the Category field in Product
+                            .Query(query) // Search term
                         )
                     )
                 )
-            );
+            )
+        );
 
-            if (!searchResponse.IsValidResponse)
-                throw new Exception($"Search failed: {searchResponse.DebugInformation}");
+        if (!searchResponse.IsValidResponse)
+            throw new Exception($"Search failed: {searchResponse.DebugInformation}");
 
-            return Ok(searchResponse.Documents); // Returns matching products
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "Error performing search.", error = ex.Message });
-        }
+        return Ok(searchResponse.Documents); // Returns matching products
     }
-
-    [HttpGet("text-1")]
-    public async Task<IActionResult> SearchProductItem([FromQuery] string query)
+    catch (Exception ex)
     {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(query)) return BadRequest("Search query is required.");
-
-            var searchResponse = await elasticClient.SearchAsync<ProductItem>(s => s
-                .Query(q => q
-                    .Bool(b => b
-                        .Should(
-                            sh => sh.Match(m => m
-                                    .Field(f => f.Sku) // Field to search for a match
-                                    .Query(query) // Search term
-                            ),
-                            sh => sh.Match(m => m
-                                    .Field(f => f.Attributes) // Also search the Category field
-                                    .Query(query) // Search term
-                            )
-                        )
-                    )
-                )
-            );
-
-            if (!searchResponse.IsValidResponse)
-                throw new Exception($"Search failed: {searchResponse.DebugInformation}");
-
-            return Ok(searchResponse.Documents); // Returns matching products
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "Error performing search.", error = ex.Message });
-        }
+        return StatusCode(500, new { message = "Error performing search.", error = ex.Message });
     }
+}
+
 }

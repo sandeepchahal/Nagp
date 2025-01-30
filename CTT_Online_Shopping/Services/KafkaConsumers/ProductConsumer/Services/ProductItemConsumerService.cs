@@ -48,8 +48,8 @@ public class ProductItemConsumerService : BackgroundService
                     if (productItemModel == null) continue;
 
                     _ = productItemModel.EventType == "Add"
-                        ? HandleAdd(productItemModel.ProductItemEventModel)
-                        : HandleUpdate(productItemModel.ProductItemEventModel);
+                        ? HandleAdd(productItemModel.ProductItem)
+                        : HandleUpdate(productItemModel.ProductItem);
                     _consumer.Commit(result);
                 }
                 catch (ConsumeException e)

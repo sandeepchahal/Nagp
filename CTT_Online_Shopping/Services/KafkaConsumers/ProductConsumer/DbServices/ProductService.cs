@@ -14,8 +14,10 @@ public class ProductService(ElasticsearchClient elasticClient, ILogger<ProductSe
             {
                 Id = productEvent.Id!,
                 Name = productEvent.Name,
+                Brand = productEvent.Brand,
                 Category = productEvent.Category,
                 Description = productEvent.Description,
+                
                 Items = new List<ProductItemEventModel>() // Initialize empty list of items
             };
 
