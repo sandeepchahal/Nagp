@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using ProductAPI.Helpers;
 using ProductAPI.Models.Commands;
-using ProductAPI.Models.DbModels;
 
 namespace ProductAPI.Controllers;
 
@@ -13,21 +13,14 @@ public partial class ProductItemController
         try
         {
             if (string.IsNullOrEmpty(productItem.ProductId)) return BadRequest("Product Id is required.");
-            
-            var productItemDb = new ProductItemDb()
-            {
-                Attributes = productItem.Attributes,
-                Price = productItem.Price,
-                Quantity = productItem.Quantity,
-                Sku = productItem.Sku,
-                ProductId = productItem.ProductId
-            };
+
+            var productItemDb = ProductItemMapper.MapToDomainModel(productItem);
             await productItemCollection.InsertOneAsync(productItemDb);
             
             // send the event to update search db
             _= productItemEvent.RaiseAddAsync(productItemDb);
             
-            return Ok(new { message = "Product item added successfully.", productItem = productItem });
+            return Ok(new { message = "Product item added successfully.", productItem });
         }
         catch (Exception ex)
         {
