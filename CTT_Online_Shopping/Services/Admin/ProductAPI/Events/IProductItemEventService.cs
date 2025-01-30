@@ -5,6 +5,6 @@ namespace ProductAPI.Events;
 
 public interface IProductItemEventService
 {
-    Task RaiseAddAsync(ProductItemAddEventModel productItemAddEventModel);
-    Task RaiseUpdateAsync(ProductItemAddEventModel productItemEventModel);
+    Task RaiseAddAsync(ProductItemEventModel productItemEventModel);
+    Task RaiseUpdateAsync(ProductItemEventModel productItemEventModel);
 }

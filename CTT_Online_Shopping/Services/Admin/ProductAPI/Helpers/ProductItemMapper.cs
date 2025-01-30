@@ -24,9 +24,9 @@ public static class ProductItemMapper
         };
     }
     
-    public static ProductItemAddEventModel MapToProductItemEvent(ProductItemDb product)
+    public static ProductItemEventModel MapToProductItemEvent(ProductItemDb product)
     {
-        var searchEvent = new ProductItemAddEventModel
+        var searchEvent = new ProductItemEventModel
         {
             ProductId = product.ProductId,
             Name = product.Name,

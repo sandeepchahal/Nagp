@@ -18,17 +18,17 @@ public class ProductItemEventService:IProductItemEventService
             BootstrapServers = $"{host}:{port}"
         };
     }
-    public async Task RaiseAddAsync(ProductItemAddEventModel productItemAddEventModel)
+    public async Task RaiseAddAsync(ProductItemEventModel productItemEventModel)
     {
         try
         {
             using var producer = new ProducerBuilder<Null, string>(_config).Build();
-            var productItemEventModel = new Models.ProductItemRaiseEventModel()
+            var eventModel = new ProductItemRaiseEventModel()
             {
                 EventType = "Add",
-                ProductItem = productItemAddEventModel
+                ProductItem = productItemEventModel
             };
-            var productItemJson = System.Text.Json.JsonSerializer.Serialize(productItemEventModel);
+            var productItemJson = System.Text.Json.JsonSerializer.Serialize(eventModel);
 
             var result = await producer.ProduceAsync(Topic, new Message<Null, string>
             {
@@ -46,17 +46,17 @@ public class ProductItemEventService:IProductItemEventService
         }
     }
 
-    public async Task RaiseUpdateAsync(ProductItemAddEventModel productItemAddEventModel)
+    public async Task RaiseUpdateAsync(ProductItemEventModel productItemEventModel)
     {
         try
         {
             using var producer = new ProducerBuilder<Null, string>(_config).Build();
-            var productItemEventModel = new Models.ProductItemRaiseEventModel()
+            var eventModel = new ProductItemRaiseEventModel()
             {
                 EventType = "Update",
-                ProductItem = productItemAddEventModel
+                ProductItem = productItemEventModel
             };
-            var productItemJson = System.Text.Json.JsonSerializer.Serialize(productItemEventModel);
+            var productItemJson = System.Text.Json.JsonSerializer.Serialize(eventModel);
 
             var result = await producer.ProduceAsync(Topic, new Message<Null, string>
             {
