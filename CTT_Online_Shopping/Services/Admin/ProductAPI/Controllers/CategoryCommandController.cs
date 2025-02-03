@@ -28,11 +28,11 @@ public partial class CategoryController
                 Gender = category.Gender,
                 MainCategory = category.MainCategory,
                 SubCategories = category.SubCategories.Select(sub =>
-                    new SubCategoryDb(sub.Name, nameof(category.Gender), 
-                        sub.FilterAttributes.Select(att=>
-                            new FilterAttributeDb(){Name = att.Name,Options = att.Options, Type = att.Type}).ToList())).ToList()
+                    new SubCategoryDb(){Name = sub.Name,FilterAttributes = sub.FilterAttributes.Select(att=>
+                            new FilterAttributeDb(){Name = att.Name,Options = att.Options, Type = att.Type}).ToList(), 
+                        Slug = string.IsNullOrEmpty(sub.Slug)?GenerateSlug(category.Gender, sub.Name):sub.Slug
+                        }).ToList()
             };
-
             await categoryCollection.InsertOneAsync(newCategory);
 
             return CreatedAtAction(nameof(Add), new { id = newCategory.Id }, newCategory);
@@ -41,5 +41,14 @@ public partial class CategoryController
         {
             return StatusCode(500, new { message = "Error adding product.", error = ex.Message });
         }
+    }
+    
+    private string GenerateSlug(string gender, string name)
+    {
+        return $"{gender}-{name}"
+            .ToLower()
+            .Replace(" ", "-")
+            .Replace("&", "and")
+            .Replace("/", "-");
     }
 }
