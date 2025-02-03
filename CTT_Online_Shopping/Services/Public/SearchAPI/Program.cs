@@ -22,7 +22,9 @@ builder.Services.AddSingleton<ElasticsearchClient>(_ =>
 
     // Create Elasticsearch client settings
     var settings = new ElasticsearchClientSettings(new Uri(elasticUri))
-        .DefaultIndex(defaultIndex); // Set the default index from configuration
+        .DefaultIndex(defaultIndex)
+        .EnableDebugMode() // Optional: Enable debug mode for detailed logging
+        .PrettyJson(); // Set the default index from configuration
 
     return new ElasticsearchClient(settings);
 });

@@ -24,6 +24,7 @@ public class ProductItemService(ElasticsearchClient elasticClient, ILogger<Produ
                                 .Params(p => p.Add("newItem", new ProductItemEventModel()
                                 {
                                     Id = productItemEvent.Id,
+                                    ProductId = productItemEvent.ProductId,
                                     Attributes = productItemEvent.Attributes,
                                     MinPrice = productItemEvent.MinPrice,
                                     MaxPrice = productItemEvent.MaxPrice,

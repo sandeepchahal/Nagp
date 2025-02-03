@@ -1,9 +1,13 @@
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/ProductConsumer
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/appsettings.Development.json
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/appsettings.json
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/ProductConsumer.deps.json
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/ProductConsumer.runtimeconfig.json
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/ProductConsumer.dll
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/ProductConsumer.pdb
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/Confluent.Kafka.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/Elastic.Clients.Elasticsearch.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/Elastic.Transport.dll
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/Microsoft.Extensions.Configuration.dll
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/Microsoft.Extensions.Configuration.Abstractions.dll
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/Microsoft.Extensions.Configuration.Binder.dll
@@ -70,7 +74,3 @@
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/obj/Debug/net9.0/ProductConsumer.pdb
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/obj/Debug/net9.0/ProductConsumer.genruntimeconfig.cache
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/obj/Debug/net9.0/ref/ProductConsumer.dll
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/Elastic.Clients.Elasticsearch.dll
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/Elastic.Transport.dll
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/appsettings.Development.json
-/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer/bin/Debug/net9.0/appsettings.json

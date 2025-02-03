@@ -10,7 +10,7 @@ builder.Configuration.AddJsonFile("appsettings.Development.json", optional: fals
 
 // Register services
 builder.Services.RegisterDbServices();
-builder.Services.RegisterElasticClientServices(builder.Configuration);
+await builder.Services.RegisterElasticClientServices(builder.Configuration);
 builder.Services.RegisterBackgroundServices();
 
 builder.Logging.ClearProviders();

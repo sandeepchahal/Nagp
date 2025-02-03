@@ -15,8 +15,8 @@ namespace SearchAPI.Controllers
             _elasticClient = elasticClient;
         }
 
-        [HttpGet("text")]
-      public async Task<IActionResult> SearchProduct([FromQuery] string query)
+       [HttpGet("text")]
+public async Task<IActionResult> SearchProduct([FromQuery] string query)
 {
     try
     {
@@ -28,27 +28,42 @@ namespace SearchAPI.Controllers
                     .Should(
                         // Match against top-level fields (Name, Category, etc.)
                         sh => sh.Match(m => m
-                            .Field(f => f.Name) // Search in the Name field
-                            .Query(query)
-                            .Fuzziness(new Fuzziness("Auto")) // Enable fuzzy search for partial matches
+                                .Field(f => f.Name) // Search in the Name field
+                                .Query(query)
+                                .Fuzziness(new Fuzziness("Auto")) // Enable fuzzy search for partial matches
                         ),
                         sh => sh.Match(m => m
-                            .Field(f => f.Category) // Search in the Category field
-                            .Query(query)
-                            .Fuzziness(new Fuzziness("Auto")) // Enable fuzzy search for partial matches
+                                .Field(f => f.Category) // Search in the Category field
+                                .Query(query)
+                                .Fuzziness(new Fuzziness("Auto")) // Enable fuzzy search for partial matches
                         ),
-
-                        // Match against nested fields (variants.attributes) only if items exist
+                        sh => sh.Match(m => m
+                                .Field(f => f.Brand) // Search in the Category field
+                                .Query(query)
+                                .Fuzziness(new Fuzziness("Auto")) // Enable fuzzy search for partial matches
+                        ),
+                        sh => sh.Match(m => m
+                                .Field(f => f.Id) // Search in the Category field
+                                .Query(query)
+                                .Fuzziness(new Fuzziness("Auto")) // Enable fuzzy search for partial matches
+                        ),
+                        // Match against nested fields (items.attributes)
                         sh => sh.Nested(n => n
-                            .Path("items") // Path to the nested object
+                            .Path(p => p.Items) // Path to the nested object 'Items'
                             .Query(nq => nq
                                 .Bool(bq => bq
-                                    .Must(
-                                        m => m.Exists(e => e.Field("variants")), // Ensure variants exist
+                                    .Should(
+                                        // Match against attributes in items (nested)
                                         m => m.Match(mt => mt
-                                            .Field("items.attributes") // Search in the attributes field
+                                            .Field(f => f.Items.First().Attributes) // Search in the attributes field of Items
                                             .Query(query)
                                             .Fuzziness(new Fuzziness("Auto")) // Enable fuzzy search for partial matches
+                                        ),
+                                        // Optionally, match other fields in items (e.g., Name, ProductId)
+                                        m => m.Match(mt => mt
+                                            .Field(f => f.Items.First().Name) // Search in the Name field of Items
+                                            .Query(query)
+                                            .Fuzziness(new Fuzziness("Auto"))
                                         )
                                     )
                                 )
@@ -83,5 +98,22 @@ namespace SearchAPI.Controllers
         return StatusCode(500, new { message = "Error performing search.", error = ex.Message });
     }
 }
+
+
+        [HttpGet("get-mapping")]
+        public async Task<IActionResult> GetMapping()
+        {
+            var mappingResponse = await _elasticClient.Indices.GetMappingAsync("products");
+
+            if (mappingResponse.IsValidResponse)
+            {
+                var mappings = mappingResponse.Indices["products"].Mappings;
+                return Ok(mappings.Properties);
+            }
+            else
+            {
+                return BadRequest("");
+            }
+        }
     }
 }

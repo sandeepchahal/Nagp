@@ -17,7 +17,6 @@ public class ProductService(ElasticsearchClient elasticClient, ILogger<ProductSe
                 Brand = productEvent.Brand,
                 Category = productEvent.Category,
                 Description = productEvent.Description,
-                
                 Items = new List<ProductItemEventModel>() // Initialize empty list of items
             };
 
@@ -56,4 +55,9 @@ public class ProductService(ElasticsearchClient elasticClient, ILogger<ProductSe
             logger.LogError($"An error occurred while updating the product. Error: {e.Message}");
         }
     }
+
+    
+
+
+
 }

@@ -1,0 +1,88 @@
+version: "3.8"
+
+services:
+  # Zookeeper
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - app-network
+
+  # Kafka
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true" # Enable auto topic creation
+    ports:
+      - "9092:9092"
+    networks:
+      - app-network
+
+  # MongoDB
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+    command: [--auth]
+
+  # Elasticsearch
+  elasticsearch:
+    image: elasticsearch:8.0.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - app-network
+
+  # Azure SQL Edge
+  azuresql:
+    image: mcr.microsoft.com/azure-sql-edge
+    container_name: azuresql
+    environment:
+      - ACCEPT_EULA=1
+      - MSSQL_SA_PASSWORD=YourStrong!Passw0rd
+    ports:
+      - "1433:1433"
+    volumes:
+      - azuresql_data:/var/opt/mssql
+    networks:
+      - app-network
+
+volumes:
+  mongo_data:
+  es_data:
+  azuresql_data:
+
+networks:
+  app-network:
+    driver: bridge
+# db.getCollectionNames().forEach(function(collection) {
+#   db[collection].drop();
+# });
