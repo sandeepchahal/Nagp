@@ -1,29 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
-using ProductAPI.Models;
+using ProductAPI.DbServices;
 
 namespace ProductAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductController(
-    IMongoCollection<Product> productCollection)
+public class ProductController(IProductDbService productDbService)
     : ControllerBase
 {
-    // Read product by ID
+    
     [HttpGet("get/{id}")] 
     public async Task<IActionResult> GetProductById(string id)
     {
         try
         {
-            var product = await productCollection.Find(p => p.Id == id).FirstOrDefaultAsync();
-            if (product == null) return NotFound(new { message = "Product not found." });
-
-            return Ok(product);
+            var product = await productDbService.GetAsync(id);
+            return product is null? NotFound("Product id is not found") : Ok(product);
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            return StatusCode(500, new { message = "Error fetching product.", error = ex.Message });
+            return BadRequest("An error has occurred");
         }
     }
     
