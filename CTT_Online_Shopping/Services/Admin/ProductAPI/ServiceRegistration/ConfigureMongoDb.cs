@@ -43,7 +43,7 @@ public static class ConfigurationDbRegistration
     }
     private static void RegisterDbCollections(this IServiceCollection services)
     {
-        services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<Category>("categories"));
+        services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<CategoryDb>("categories"));
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<ProductDb>("products"));
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<ProductItemDb>("productItems"));
     }

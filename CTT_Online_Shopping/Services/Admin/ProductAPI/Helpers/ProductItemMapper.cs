@@ -12,37 +12,36 @@ public static class ProductItemMapper
         return new ProductItemDb
         {
             Name = request.Name,
+            ProductId = request.ProductId,
             ProductLevelDiscount = request.ProductLevelDiscount,
             Variants = request.Variants.Select(v => new ProductVariant
             {
                 Attributes = v.Attributes,
-                RemainingStockQuantity = v.RemainingStockQuantity,
-                OriginalPrice = v.OriginalPrice,
                 Discount = v.Discount,
-                Images = v.Images
+                Images = v.Images,
+                IsDiscountApplied = false,
             }).ToList()
-            ,ProductId = request.ProductId
         };
     }
     
-    public static ProductItemEventModel MapToProductItemEvent(ProductItemDb product)
-    {
-        var searchEvent = new ProductItemEventModel
-        {
-            Id = product.Id,
-            ProductId = product.ProductId,
-            Name = product.Name,
-            MinPrice = product.Variants.Min(v => v.OriginalPrice), // Calculate min price
-            MaxPrice = product.Variants.Max(v => v.OriginalPrice), // Calculate max price
-            Attributes = product.Variants
-                .SelectMany(v => v.Attributes
-                    .Select(attr => $"{attr.Key}:{attr.Value}")) // Flatten attributes
-                .Distinct()
-                .ToList()
-                .Distinct()
-                .ToList()
-        };
-
-        return searchEvent;
-    }
+    // public static ProductItemEventModel MapToProductItemEvent(ProductItemDb product)
+    // {
+    //     var searchEvent = new ProductItemEventModel
+    //     {
+    //         Id = product.Id,
+    //         ProductId = product.ProductId,
+    //         Name = product.Name,
+    //         MinPrice = product.Variants.Min(v => v.), // Calculate min price
+    //         MaxPrice = product.Variants.Max(v => v.OriginalPrice), // Calculate max price
+    //         Attributes = product.Variants
+    //             .SelectMany(v => v.Attributes
+    //                 .Select(attr => $"{attr.Key}:{attr.Value}")) // Flatten attributes
+    //             .Distinct()
+    //             .ToList()
+    //             .Distinct()
+    //             .ToList()
+    //     };
+    //
+    //     return searchEvent;
+    // }
 }

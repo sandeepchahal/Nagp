@@ -18,7 +18,8 @@ public partial class ProductController
             {
                 Name = product.Name,
                 Description = product.Description,
-                Category = product.Category,
+                SubCategoryId = product.SubCategoryId,
+                CategoryId = product.CategoryId,
                 Brand = product.Brand
             };
             await productCollection.InsertOneAsync(productDb);
@@ -39,7 +40,8 @@ public partial class ProductController
             var filter = Builders<ProductDb>.Filter.Eq(p => p.Id, id);
             var update = Builders<ProductDb>.Update
                 .Set(p => p.Description, productCommand.Description)
-                .Set(p => p.Category, productCommand.Category)
+                .Set(p => p.CategoryId, productCommand.CategoryId)
+                .Set(p => p.CategoryId, productCommand.SubCategoryId)
                 .Set(p => p.Name, productCommand.Name);
 
             await productCollection.UpdateOneAsync(filter, update);// return number of rows updated

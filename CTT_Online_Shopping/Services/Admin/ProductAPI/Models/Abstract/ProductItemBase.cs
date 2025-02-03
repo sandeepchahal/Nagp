@@ -16,13 +16,17 @@ public abstract class ProductItemBase
 
 public  class ProductVariantBase
 {
-    public Dictionary<string, string> Attributes { get; set; } = new(); // E.g., {"Color": "Red", "Size": "M"}
-    public int RemainingStockQuantity { get; set; }  // Stock per variant remaining
-    public decimal OriginalPrice { get; set; }  // Price per variant
+    public List<ProductFeaturesBase> Attributes { get; set; } = new(); 
     public List<ImagesBase> Images { get; set; } = new();
     public Discount? Discount { get; set; }
 }
 
+public abstract class ProductFeaturesBase
+{
+    public Dictionary<string, string> Features { get; set; } = new(); 
+    public int StockQuantity { get; set; }  // Stock per variant remaining
+    public decimal Price { get; set; }  // Price per variant
+}
 public class ProductVariant : ProductVariantBase
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
