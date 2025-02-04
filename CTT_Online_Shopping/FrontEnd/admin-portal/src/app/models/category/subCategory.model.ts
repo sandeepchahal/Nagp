@@ -1,11 +1,11 @@
-import { FilterAttributeView } from './category.model';
+import { FilterAttributeBase, FilterAttributeView } from './category.model';
 
 export interface SubCategoryBase {
   name: string;
   slug: string;
 }
 export interface SubCategoryCommand extends SubCategoryBase {
-  filterAttributes: FilterAttributeView[];
+  filterAttributes: FilterAttributeBase[];
 }
 
 export interface SubCategoryView extends SubCategoryBase {

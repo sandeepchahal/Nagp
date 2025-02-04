@@ -8,6 +8,7 @@ import {
 import { Gender, FilterAttributeType } from '../../../models/category/enums';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Mapper } from '../../../helpers/mapper.service';
 
 @Component({
   selector: 'app-edit-category',
@@ -25,7 +26,8 @@ export class EditCategoryComponent implements OnInit {
   constructor(
     private categoryService: CategoryService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private mapper: Mapper
   ) {}
 
   ngOnInit(): void {
@@ -39,7 +41,7 @@ export class EditCategoryComponent implements OnInit {
   fetchCategoryDetails(categoryId: string): void {
     this.categoryService.getCategoryById(categoryId).subscribe({
       next: (category) => {
-        this.category = category;
+        this.category = this.mapper.mapCategoryViewToCategoryCommand(category);
       },
       error: (err) => {
         console.error('Error fetching category details:', err);

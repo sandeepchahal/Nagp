@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input'; // For input elements
 import { MatAutocompleteModule } from '@angular/material/autocomplete'; // For autocomplete
 import { CategoryService } from '../../../services/category.service';
 import { CategoryView } from '../../../models/category/category.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-product',
@@ -38,7 +39,8 @@ export class AddProductComponent {
 
   constructor(
     private productService: ProductService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -104,7 +106,10 @@ export class AddProductComponent {
   onSubmit() {
     if (this.isValidProduct(this.product)) {
       this.productService.addProduct(this.product).subscribe(
-        (response) => alert('Product added successfully'),
+        (response) => {
+          alert('Product added successfully');
+          this.router.navigate(['/product']);
+        },
         (error) => alert('Error adding product')
       );
     } else {

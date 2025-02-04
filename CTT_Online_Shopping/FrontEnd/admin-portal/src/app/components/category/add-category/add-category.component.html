@@ -5,7 +5,7 @@
     </select>
   
     <label>Main Category:</label>
-    <input type="text" [(ngModel)]="category.mainCategory" name="mainCategory" required />
+    <input type="text" [(ngModel)]="category.name" name="mainCategory" required />
   
     <div class="sub-div" *ngFor="let subCategory of category.subCategories; let i = index">
       <h4>Subcategory {{ i + 1 }}</h4>

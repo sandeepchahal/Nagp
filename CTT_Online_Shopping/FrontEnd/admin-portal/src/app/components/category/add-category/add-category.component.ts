@@ -20,7 +20,7 @@ export class AddCategoryComponent {
 
   category: CategoryCommand = {
     gender: Gender.Male,
-    mainCategory: '',
+    name: '',
     subCategories: [],
   };
 
