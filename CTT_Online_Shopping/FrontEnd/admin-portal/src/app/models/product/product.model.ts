@@ -9,18 +9,31 @@ export interface ProductBase {
   subCategoryId: string;
 }
 
+export interface ProductCommand extends ProductBase {}
+
 export interface ProductView extends ProductBase {
   id: string;
+  discountPrice: number;
+  originalPrice: number;
+  overallRating: string;
+  numberOfReviews: number;
+  category: ProductCategoryView;
+  images: ImagesBase[];
 }
-
-export interface ProductCommand extends ProductBase {}
 
 // category View for product
 
 export interface ProductCategoryView extends CategoryViewBase {
-  SubCategory: SubCategoryViewBase;
+  subCategory: SubCategoryViewBase;
 }
 
 // Product Details
 
 export interface ProductDetailView extends ProductView {}
+
+export interface ImagesBase {
+  url: string;
+  altText: string;
+  isPrimary: boolean;
+  orderNumber: number;
+}

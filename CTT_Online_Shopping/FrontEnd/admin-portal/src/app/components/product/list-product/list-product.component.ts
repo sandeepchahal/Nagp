@@ -39,6 +39,7 @@ export class ListProductComponent {
     'name',
     'category',
     'subCategory',
+    'actions',
   ];
 
   constructor(private productService: ProductService, private router: Router) {}
@@ -57,6 +58,9 @@ export class ListProductComponent {
   }
 
   viewProductDetails(id: string): void {
-    this.router.navigate([`/product-details/${id}`]);
+    this.router.navigate([`/product/details/`, id]);
+  }
+  editProduct(id: string): void {
+    this.router.navigate(['/product/edit', id]); // Navigate to edit route
   }
 }

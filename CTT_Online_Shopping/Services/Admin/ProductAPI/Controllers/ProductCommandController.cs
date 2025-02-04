@@ -32,7 +32,7 @@ public partial class ProductController
             return StatusCode(500, new { message = "Error adding product.", error = ex.Message });
         }
     }
-    [HttpPost("update/{id}")]
+    [HttpPut("update/{id}")]
     public async Task<IActionResult> Update(string id, [FromBody] ProductCommand productCommand)
     {
         try
@@ -41,7 +41,7 @@ public partial class ProductController
             var update = Builders<ProductDb>.Update
                 .Set(p => p.Description, productCommand.Description)
                 .Set(p => p.CategoryId, productCommand.CategoryId)
-                .Set(p => p.CategoryId, productCommand.SubCategoryId)
+                .Set(p => p.SubCategoryId, productCommand.SubCategoryId)
                 .Set(p => p.Name, productCommand.Name);
 
             await productCollection.UpdateOneAsync(filter, update);// return number of rows updated

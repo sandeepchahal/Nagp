@@ -1,0 +1,111 @@
+/* Product Add Form Container */
+.product-add {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  /* Title Style */
+  .product-add h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #3f51b5;
+  }
+  
+  /* Form Fields */
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  mat-form-field.mat-form-field-appearance-fill {
+    background-color: #fafafa;
+    border-radius: 4px;
+  }
+  
+  /* Label and Input Alignment */
+  mat-label {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  input[matInput], textarea[matInput] {
+    font-size: 14px;
+    color: #555;
+    padding: 10px;
+  }
+  
+  /* Textarea Styling */
+  textarea[matInput] {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  /* Autocomplete Dropdown */
+  mat-autocomplete .mat-option {
+    font-size: 14px;
+  }
+  
+  /* Button Styling */
+  button[mat-raised-button] {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background-color: #3f51b5;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    text-transform: none;
+    box-shadow: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  button[mat-raised-button]:hover {
+    background-color: #303f9f;
+  }
+  
+  /* Disable Submit Button when Form is Incomplete */
+  button[mat-raised-button][disabled] {
+    background-color: #b0bec5;
+    cursor: not-allowed;
+  }
+  
+  /* Add some spacing between elements for a cleaner layout */
+  mat-form-field,
+  button {
+    margin-bottom: 20px;
+  }
+  
+  /* Error Styling */
+  mat-form-field.ng-invalid.ng-touched .mat-form-field-label {
+    color: red;
+  }
+  
+  mat-form-field.ng-invalid.ng-touched .mat-input-element {
+    border: 1px solid red;
+  }
+  
+  mat-form-field.ng-valid.ng-touched .mat-input-element {
+    border: 1px solid #3f51b5;
+  }
+  
+  /* Styling for the subcategory field to indicate disabled state */
+  mat-form-field[disabled] {
+    background-color: #f5f5f5;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .product-add {
+      padding: 10px;
+    }
+    button[mat-raised-button] {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }
+  

@@ -1,1 +1,59 @@
-<p>edit-product works!</p>
+<div class="product-add">
+    <h2>Edit Product</h2>
+  
+    <form (ngSubmit)="onSubmit()">
+
+        <!-- Category Auto-suggestion -->
+        <mat-form-field appearance="fill">
+          <mat-label>Category</mat-label>
+          <input matInput [(ngModel)]="product.category.name" name="categoryId" [matAutocomplete]="autoCategory" (input)="onCategoryInputChange()" required />
+          <mat-autocomplete #autoCategory="matAutocomplete" (optionSelected)="onCategorySelected($event)">
+            <mat-option *ngFor="let category of filteredCategories" [value]="category.id">
+              {{ category.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+    
+        <!-- SubCategory Auto-suggestion (Enabled only after category selection) -->
+        <mat-form-field appearance="fill">
+            <mat-label>SubCategory</mat-label>
+            <input 
+              matInput 
+              [(ngModel)]="product.category.subCategory.name" 
+              name="subCategoryId" 
+              [matAutocomplete]="autoSubCategory" 
+              (input)="onSubCategoryInputChange()" 
+              [disabled]="!product.categoryId" 
+              required 
+            />
+            <mat-autocomplete #autoSubCategory="matAutocomplete" (optionSelected)="onSubCategorySelected($event)">
+              <mat-option *ngFor="let subCategory of filteredSubCategories" [value]="subCategory.id">
+                {{ subCategory.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          
+    
+        <!-- Product Name -->
+        <mat-form-field appearance="fill">
+          <mat-label>Product Name</mat-label>
+          <input matInput [(ngModel)]="product.name" name="name" required />
+        </mat-form-field>
+    
+        <!-- Product Brand -->
+        <mat-form-field appearance="fill">
+          <mat-label>Brand</mat-label>
+          <input matInput [(ngModel)]="product.brand" name="brand" required />
+        </mat-form-field>
+    
+    
+        <!-- Product Description -->
+        <mat-form-field appearance="fill">
+          <mat-label>Description</mat-label>
+          <textarea matInput [(ngModel)]="product.description" name="description" required></textarea>
+        </mat-form-field>
+    
+        <button mat-raised-button color="primary" type="submit">Update Product</button>
+      </form>
+  </div>
+  

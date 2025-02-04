@@ -26,7 +26,10 @@ export class ProductService {
     return this.http.get<ProductCategoryView[]>(`${this.apiUrl}/get-all`);
   }
 
-  getProductDetails(id: string): Observable<ProductView> {
+  getProductById(id: string): Observable<ProductView> {
     return this.http.get<ProductView>(`${this.apiUrl}/get/${id}`);
+  }
+  updateProduct(id: string, product: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update/${id}`, product);
   }
 }

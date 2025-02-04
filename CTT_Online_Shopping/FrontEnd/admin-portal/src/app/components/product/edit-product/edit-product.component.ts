@@ -1,12 +1,120 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input'; // For input elements
+import { MatAutocompleteModule } from '@angular/material/autocomplete'; //
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProductService } from '../../../services/product.service';
+import { CategoryService } from '../../../services/category.service';
+import { ProductView } from '../../../models/product/product.model';
+import { CategoryView } from '../../../models/category/category.model';
 @Component({
   selector: 'app-edit-product',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+  ],
   templateUrl: './edit-product.component.html',
-  styleUrl: './edit-product.component.css'
+  styleUrl: './edit-product.component.css',
 })
 export class EditProductComponent {
+  product!: ProductView;
 
+  categories: CategoryView[] = []; // All categories fetched from the API
+  filteredCategories: CategoryView[] = []; // Filtered categories based on user input
+  filteredSubCategories: any[] = []; // Filtered subcategories based on selected category
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private productService: ProductService,
+    private categoryService: CategoryService
+  ) {}
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.loadProduct(id);
+    this.loadCategories();
+  }
+
+  loadProduct(id: string | null): void {
+    if (id) {
+      this.productService.getProductById(id).subscribe((data) => {
+        this.product = data;
+        this.product.categoryId = data.category.id;
+        this.product.subCategoryId = data.category.subCategory.id;
+      });
+    }
+  }
+
+  loadCategories(): void {
+    this.categoryService.getCategories().subscribe((data) => {
+      this.categories = data;
+      this.filteredCategories = data;
+    });
+  }
+  // Filter categories based on user input
+  onCategoryInputChange(): void {
+    console.log(this.product.categoryId.toLowerCase());
+    if (this.product.categoryId) {
+      // Filter categories locally
+      this.filteredCategories = this.categories.filter((category) =>
+        category.name
+          .toLowerCase()
+          .includes(this.product.categoryId.toLowerCase())
+      );
+      console.log(this.filteredCategories);
+    } else {
+      this.filteredCategories = this.categories; // Show all categories if input is empty
+    }
+  }
+
+  // Select category from the list
+  onCategorySelected(event: any): void {
+    this.product.categoryId = event.option.value;
+    this.filteredSubCategories = this.filterSubCategoriesByCategory(
+      this.product.categoryId
+    ); // Filter subcategories based on selected category
+  }
+  // Filter subcategories based on selected category
+  filterSubCategoriesByCategory(categoryId: string): any[] {
+    // Assuming subcategories data is available for each category, you may have to modify this based on your data structure
+    return (
+      this.categories.find((category) => category.id === categoryId)
+        ?.subCategories || []
+    );
+  }
+
+  // Filter subcategories based on user input
+  onSubCategoryInputChange(): void {
+    if (this.product.subCategoryId) {
+      // Filter subcategories locally based on user input
+      this.filteredSubCategories = this.filteredSubCategories.filter(
+        (subCategory) =>
+          subCategory.name
+            .toLowerCase()
+            .includes(this.product.subCategoryId.toLowerCase())
+      );
+    }
+  }
+
+  // Select subcategory from the list
+  onSubCategorySelected(event: any): void {
+    this.product.subCategoryId = event.option.value;
+  }
+
+  onSubmit(): void {
+    this.productService.updateProduct(this.product.id, this.product).subscribe(
+      (response) => {
+        alert('Product Updated successfully');
+        this.router.navigate(['/product']);
+      },
+      (error) => alert('Error adding product')
+    );
+  }
 }
