@@ -1,10 +1,12 @@
 namespace ProductAPI.Models.Query;
 
-public class CategoryView
+public class CategoryViewBase
 {
     public string Gender { get; set; } = null!;       
-    public string MainCategoryName { get; set; } = null!;
-    public string MainCategoryId { get; set; } = null!;
-    public string SubCategoryName { get; set; } = null!;
-    public string SubCategoryId { get; set; } = null!;
+    public string Name { get; set; } = null!;
+    public string Id { get; set; } = null!;
+}
+public class CategoryView:CategoryViewBase
+{ 
+    public List<SubCategoryView> SubCategories { get; set; } = new();
 }

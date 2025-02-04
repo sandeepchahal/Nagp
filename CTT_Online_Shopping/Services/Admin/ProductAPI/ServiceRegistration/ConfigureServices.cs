@@ -1,3 +1,4 @@
+using ProductAPI.DbServices;
 using ProductAPI.Events;
 
 namespace ProductAPI.ServiceRegistration;
@@ -8,6 +9,11 @@ public static class ConfigureServices
     {
         serviceCollection.AddScoped<IProductEventService, ProductEventService>();
         serviceCollection.AddScoped<IProductItemEventService, ProductItemEventService>();
+
+    }
+    public static void ConfigureDbServices(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<ICategoryDbService, CategoryDbService>();
 
     }
 }

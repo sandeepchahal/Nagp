@@ -19,6 +19,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 builder.Services.ConfigureMongoDb(builder.Configuration);
 builder.Services.AddScopedServices();
+builder.Services.ConfigureDbServices();
 
 // Register MongoDB camelCase convention
 var conventionPack = new ConventionPack

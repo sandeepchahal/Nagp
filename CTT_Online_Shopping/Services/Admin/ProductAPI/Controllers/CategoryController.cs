@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using ProductAPI.DbServices;
 using ProductAPI.Models.DbModels;
 
 namespace ProductAPI.Controllers;
 
 [Route("api/category")]
-public partial class CategoryController(IMongoCollection<CategoryDb> categoryCollection):ControllerBase
+public partial class CategoryController(IMongoCollection<CategoryDb> categoryCollection, ICategoryDbService categoryDbService):ControllerBase
 {
     [HttpGet("get-all")]
     public async Task<IActionResult> GetAll()

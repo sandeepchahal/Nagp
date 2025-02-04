@@ -1,14 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using ProductAPI.DbServices;
 using ProductAPI.Events;
-using ProductAPI.Models;
-using ProductAPI.Models.Commands;
+using ProductAPI.Helpers;
 using ProductAPI.Models.DbModels;
+using ProductAPI.Models.Query;
 
 namespace ProductAPI.Controllers;
 
-[Route("product")]
-public partial class ProductController( IMongoCollection<ProductDb> productCollection, IProductEventService productEventService):ControllerBase
+[Route("api/product")]
+public partial class ProductController(
+    IMongoCollection<ProductDb> productCollection,
+    IProductEventService productEventService,
+    ICategoryDbService categoryDbService) : ControllerBase
 {
     [HttpGet("get-all")]
     public async Task<IActionResult> GetAllProducts()
@@ -20,13 +24,35 @@ public partial class ProductController( IMongoCollection<ProductDb> productColle
             {
                 return NotFound("No products found.");
             }
-            return Ok(products);
+
+            var productViewList = new List<ProductView>();
+            foreach (var productDb in products)
+            {
+                var mapped = ProductMapper.MapToProductView(productDb);
+                var category = await categoryDbService.GetAsync(productDb.CategoryId);
+                mapped.Category = new ProductCategoryView()
+                {
+                    Id = category!.Id,
+                    Gender = category.Gender,
+                    Name = category.Name,
+                    SubCategory = category.SubCategories.Where(col => col.Id == productDb.SubCategoryId).Select(col =>
+                        new SubCategoryView()
+                        {
+                            Id = col.Id,
+                            Name = col.Name
+                        }).FirstOrDefault() ?? new SubCategoryView()
+                };
+                productViewList.Add(mapped);
+            }
+
+            return Ok(productViewList);
         }
         catch (Exception ex)
         {
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
+
     [HttpGet("get/{id}")]
     public async Task<IActionResult> GetByProductId(string id)
     {
@@ -38,7 +64,22 @@ public partial class ProductController( IMongoCollection<ProductDb> productColle
             {
                 return NotFound("No product found.");
             }
-            return Ok(product);
+
+            var mapped = ProductMapper.MapToProductView(product);
+            var category = await categoryDbService.GetAsync(product.CategoryId);
+            mapped.Category = new ProductCategoryView()
+            {
+                Id = category!.Id,
+                Gender = category.Gender,
+                Name = category.Name,
+                SubCategory = category.SubCategories.Where(col => col.Id == product.SubCategoryId).Select(col =>
+                    new SubCategoryView()
+                    {
+                        Id = col.Id,
+                        Name = col.Name
+                    }).FirstOrDefault() ?? new SubCategoryView()
+            };
+            return Ok(mapped);
         }
         catch (Exception ex)
         {

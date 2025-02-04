@@ -7,7 +7,7 @@ public abstract class CategoryBase
     [JsonPropertyName("gender")]
     public string Gender { get; set; } = string.Empty;   
     
-    [JsonPropertyName("mainCategory")]
+    [JsonPropertyName("name")]
     public string MainCategory { get; set; } = null!;
 }
 

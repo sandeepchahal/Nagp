@@ -9,11 +9,11 @@ public partial class ProductController
 {
     // Add a new product
     [HttpPost("add")]
-    public async Task<IActionResult> Add([FromBody] ProductCommand? product)
+    public async Task<IActionResult> Add([FromBody] ProductCommand product)
     {
         try
         {
-            if (product == null) return BadRequest("Product data is required.");
+            if (product.CategoryId == null || product.SubCategoryId == null) return BadRequest("Product data is required.");
             ProductDb productDb = new()
             {
                 Name = product.Name,

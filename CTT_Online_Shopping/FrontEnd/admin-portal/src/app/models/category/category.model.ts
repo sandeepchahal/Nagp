@@ -1,42 +1,28 @@
 import { FilterAttributeType, Gender } from '../category/enums';
+import { SubCategoryCommand, SubCategoryViewBase } from './subCategory.model';
 
-export interface FilterAttribute {
+export interface FilterAttributeBase {
   name: string;
   type: string;
   options: string[];
 }
-
-export interface SubCategoryCommand {
-  name: string;
-  slug: string;
-  filterAttributes: FilterAttribute[];
+export interface FilterAttributeView extends FilterAttributeBase {
+  id: string;
 }
 
-export interface CategoryCommand {
+// categories
+
+export interface CategoryBase {
   gender: string;
-  mainCategory: string;
+  name: string;
+}
+export interface CategoryCommand extends CategoryBase {
   subCategories: SubCategoryCommand[];
 }
 
-// Query Models
-
-export interface FilterAttributeView {
+export interface CategoryViewBase extends CategoryBase {
   id: string;
-  name: string;
-  type: string;
-  options: string[];
 }
-
-export interface SubCategoryView {
-  id: string;
-  name: string;
-  slug: string;
-  filterAttributes: FilterAttributeView[];
-}
-
-export interface CategoryView {
-  id: string;
-  gender: string;
-  mainCategory: string;
-  subCategories: SubCategoryView[];
+export interface CategoryView extends CategoryViewBase {
+  subCategories: SubCategoryViewBase[];
 }

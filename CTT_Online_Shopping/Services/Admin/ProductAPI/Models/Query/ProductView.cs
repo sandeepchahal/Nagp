@@ -9,9 +9,15 @@ public class ProductView:ProductDb
     public decimal OriginalPrice { get; set; }
     public string OverallRating { get; set; } = string.Empty;
     public decimal NumberOfReviews { get; set; }
+    public ProductCategoryView Category { get; set; } = new();
     public List<ImagesBase> Images { get; set; } = new();
 }
 public class ProductDetailedView:ProductDb
 {
     public List<ProductItemDb>? Items { get; set; } = new List<ProductItemDb>(); 
+}
+
+public class ProductCategoryView : CategoryViewBase
+{
+    public SubCategoryView SubCategory { get; set; } = new();
 }

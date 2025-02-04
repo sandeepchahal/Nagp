@@ -9,4 +9,6 @@ public class ProductDb:ProductBase
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; } = string.Empty;
+
+    public DateTime CreatedOn { get; set; }= DateTime.Now;
 }
