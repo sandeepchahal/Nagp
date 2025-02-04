@@ -3,11 +3,12 @@ import { AppComponent } from './app/app.component';
 import { importProvidersFrom } from '@angular/core';
 import { routes } from './app/app.routes';
 import { RouterModule } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 
 const appConfig = {
   providers: [
-    importProvidersFrom(RouterModule.forRoot(routes)), // Adding RouterModule with routes
-    // Add other necessary providers here
+    importProvidersFrom(RouterModule.forRoot(routes)),
+    provideHttpClient(),
   ],
 };
 

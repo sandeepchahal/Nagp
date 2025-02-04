@@ -7,7 +7,7 @@
     <label>Main Category:</label>
     <input type="text" [(ngModel)]="category.mainCategory" name="mainCategory" required />
   
-    <div *ngFor="let subCategory of category.subCategories; let i = index">
+    <div class="sub-div" *ngFor="let subCategory of category.subCategories; let i = index">
       <h4>Subcategory {{ i + 1 }}</h4>
       <input type="text" [(ngModel)]="subCategory.name" name="name{{ i }}" placeholder="Subcategory Name" required />
       <input type="text" [(ngModel)]="subCategory.slug" name="slug{{ i }}" placeholder="Slug" required />
@@ -26,7 +26,10 @@
       <button type="button" (click)="addFilterAttribute(i)">Add Filter Attribute</button>
     </div>
   
-    <button type="button" (click)="addSubCategory()">Add Subcategory</button>
-    <button type="submit">Add Category</button>
+    <button class="subcategories" type="button" (click)="addSubCategory()">Add Subcategories</button>
+    <div class="submit-btn-div"> <button type="submit">Submit</button></div>
+     
+   
+    
   </form>
   

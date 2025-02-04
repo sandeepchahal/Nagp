@@ -1,20 +1,17 @@
 import { Component } from '@angular/core';
 import { CategoryService } from '../../../services/category.service';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
-import {
-  CategoryCommand,
-  FilterAttribute,
-  SubCategoryCommand,
-} from '../../../models/category/category.model';
+import { CategoryCommand } from '../../../models/category/category.model';
 import { Gender, FilterAttributeType } from '../../../models/category/enums';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-category',
-  standalone: true, // Standalone component
-  imports: [FormsModule, CommonModule], // Add FormsModule in the imports array
+  standalone: true,
+  imports: [FormsModule, CommonModule],
   templateUrl: './add-category.component.html',
+  styleUrl: './add-category.component.css',
 })
 export class AddCategoryComponent {
   genders = Object.values(Gender);
@@ -26,7 +23,9 @@ export class AddCategoryComponent {
     subCategories: [],
   };
 
-  constructor(private categoryService: CategoryService) {}
+  constructor(private categoryService: CategoryService) {
+    console.log('in Constructor');
+  }
 
   addSubCategory(): void {
     this.category.subCategories.push({
@@ -45,6 +44,7 @@ export class AddCategoryComponent {
   }
 
   addCategory(): void {
+    console.log('submitted the form', this.category);
     this.categoryService.addCategory(this.category).subscribe({
       next: () => alert('Category added successfully'),
       error: () => alert('Error adding category'),

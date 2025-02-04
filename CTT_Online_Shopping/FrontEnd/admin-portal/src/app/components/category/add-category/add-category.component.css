@@ -34,6 +34,12 @@ form {
     margin: 5px 0;
   }
   
+  button.subcategories {
+    float: right;
+  }
+  button.submit {
+    align-self: center;
+  }
   button:hover {
     background-color: #0056b3;
   }
@@ -42,8 +48,11 @@ form {
     margin-top: 20px;
     color: #555;
   }
-  
-  div {
+  div.submit-btn-div
+  {
+    align-items: center;
+  }
+  div.sub-div {
     margin-bottom: 10px;
     padding: 10px;
     background-color: #fff;
