@@ -67,8 +67,8 @@ export class EditCategoryComponent implements OnInit {
         .updateCategory(this.selectedCategoryId, this.category)
         .subscribe({
           next: (response) => {
-            console.log('Category updated successfully:', response);
-            this.router.navigate(['/categories']); // Redirect after successful update
+            alert('Category updated successfully');
+            this.router.navigate(['/category']); // Redirect after successful update
           },
           error: (error) => {
             console.error('Error updating category:', error);

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CategoryCommand } from '../../../models/category/category.model';
 import { Gender, FilterAttributeType } from '../../../models/category/enums';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-category',
@@ -23,9 +24,10 @@ export class AddCategoryComponent {
     subCategories: [],
   };
 
-  constructor(private categoryService: CategoryService) {
-    console.log('in Constructor');
-  }
+  constructor(
+    private categoryService: CategoryService,
+    private router: Router
+  ) {}
 
   addSubCategory(): void {
     this.category.subCategories.push({
@@ -62,7 +64,10 @@ export class AddCategoryComponent {
     console.log('submitted the form', this.category);
 
     this.categoryService.addCategory(this.category).subscribe({
-      next: () => alert('Category added successfully'),
+      next: () => {
+        alert('Category added successfully');
+        this.router.navigate(['/category']);
+      },
       error: () => alert('Error adding category'),
     });
   }
