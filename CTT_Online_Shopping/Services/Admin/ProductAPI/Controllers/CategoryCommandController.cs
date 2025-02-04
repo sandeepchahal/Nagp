@@ -43,6 +43,56 @@ public partial class CategoryController
         }
     }
     
+    [HttpPut("update/{id}")]
+    public async Task<IActionResult> UpdateCategory(string id, [FromBody] CategoryCommand category)
+    {
+        try
+        {
+            // Check if the category exists
+            var existingCategory = await categoryCollection.Find(c => c.Id == id).FirstOrDefaultAsync();
+            if (existingCategory == null)
+            {
+                return NotFound(new { message = "Category not found." });
+            }
+
+            // Update the category fields
+            var updatedCategory = Builders<CategoryDb>.Update
+                .Set(c => c.Gender, category.Gender)
+                .Set(c => c.MainCategory, category.MainCategory)
+                .Set(c => c.SubCategories, category.SubCategories.Select(sub =>
+                        new SubCategoryDb
+                        {
+                            Name = sub.Name,
+                            Slug = string.IsNullOrEmpty(sub.Slug) ? GenerateSlug(category.Gender, sub.Name) : sub.Slug,
+                            FilterAttributes = sub.FilterAttributes.Select(att => 
+                                new FilterAttributeDb
+                                {
+                                    Name = att.Name,
+                                    Options = att.Options,
+                                    Type = att.Type
+                                }).ToList()
+                        }).ToList()
+                );
+
+            // Apply the update in MongoDB
+            var result = await categoryCollection.UpdateOneAsync(
+                c => c.Id == id,
+                updatedCategory
+            );
+
+            if (result.ModifiedCount == 0)
+            {
+                return BadRequest(new { message = "No changes detected or update failed." });
+            }
+
+            return Ok(new { message = "Category updated successfully." });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error updating category.", error = ex.Message });
+        }
+    }
+
     private string GenerateSlug(string gender, string name)
     {
         return $"{gender}-{name}"

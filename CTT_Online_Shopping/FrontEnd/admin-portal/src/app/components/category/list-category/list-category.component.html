@@ -1,1 +1,52 @@
-<p>list-category works!</p>
+<div class="category-list-container">
+    <table class="category-list-table">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Gender</th>
+          <th>Main Category</th>
+          <th>Type</th>
+          <th>Slug</th>
+          <th>Subcategories</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let category of categories" (click)="showCategoryDetails(category)">
+            <td>{{ category.id }}</td>   
+          <td>{{ category.gender }}</td>
+          <td>{{ category.mainCategory }}</td>
+          <td>{{ category.subCategories[0].name }}</td> <!-- Example: Category Type -->
+          <td>{{ category.subCategories[0].slug || 'No Slug' }}</td> <!-- Example: Subcategory slug -->
+          <td>{{ category.subCategories.length }}</td>
+
+          <td>
+            <button class="details-btn" (click)="showCategoryDetails(category)">View Details</button>
+            <button class="edit-btn" (click)="editCategory(category.id)">Edit</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+   <!-- Details View -->
+  <div *ngIf="selectedCategory" class="category-details">
+    <h3>Category Details</h3>
+    <button class="close-btn" (click)="hideCategoryDetails()">Close</button>
+
+    <h4>Subcategories:</h4>
+    <ul>
+      <li *ngFor="let subCategory of selectedCategory.subCategories">
+        <strong>{{ subCategory.name }}</strong> - {{ subCategory.slug }}
+        <ul>
+          <li *ngFor="let filter of subCategory.filterAttributes">
+            <strong>{{ filter.name }} ({{ filter.type }}):</strong>
+            <ul>
+              <li *ngFor="let option of filter.options">{{ option }}</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  </div>
+  

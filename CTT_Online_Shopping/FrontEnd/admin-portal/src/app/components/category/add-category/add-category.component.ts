@@ -42,9 +42,25 @@ export class AddCategoryComponent {
       options: [],
     });
   }
-
   addCategory(): void {
+    // Ensure each filter attribute has options as a string, then split it into an array of strings
+    this.category.subCategories.forEach((subCategory) => {
+      subCategory.filterAttributes.forEach((attribute) => {
+        // Check if options is a string (not already an array)
+        console.log('att', attribute);
+        console.log('type', typeof attribute.options);
+        if (typeof attribute.options === 'string') {
+          // Split the comma-separated string into an array
+          attribute.options = (attribute.options as string)
+            .split(',')
+            .map((option) => option.trim())
+            .filter((option) => option.length > 0); // Remove empty strings
+        }
+      });
+    });
+
     console.log('submitted the form', this.category);
+
     this.categoryService.addCategory(this.category).subscribe({
       next: () => alert('Category added successfully'),
       error: () => alert('Error adding category'),
