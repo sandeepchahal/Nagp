@@ -1,0 +1,32 @@
+<form (ngSubmit)="addCategory()" #categoryForm="ngForm">
+    <label>Gender:</label>
+    <select [(ngModel)]="category.gender" name="gender" required>
+      <option *ngFor="let g of genders" [value]="g">{{ g }}</option>
+    </select>
+  
+    <label>Main Category:</label>
+    <input type="text" [(ngModel)]="category.mainCategory" name="mainCategory" required />
+  
+    <div *ngFor="let subCategory of category.subCategories; let i = index">
+      <h4>Subcategory {{ i + 1 }}</h4>
+      <input type="text" [(ngModel)]="subCategory.name" name="name{{ i }}" placeholder="Subcategory Name" required />
+      <input type="text" [(ngModel)]="subCategory.slug" name="slug{{ i }}" placeholder="Slug" required />
+  
+      <div *ngFor="let attr of subCategory.filterAttributes; let j = index">
+        <input type="text" [(ngModel)]="attr.name" name="attrName{{ i }}{{ j }}" placeholder="Attribute Name" required />
+  
+        <label>Type:</label>
+        <select [(ngModel)]="attr.type" name="type{{ i }}{{ j }}" required>
+          <option *ngFor="let type of filterTypes" [value]="type">{{ type }}</option>
+        </select>
+  
+        <input type="text" [(ngModel)]="attr.options" name="options{{ i }}{{ j }}" placeholder="Options (comma-separated)" />
+      </div>
+  
+      <button type="button" (click)="addFilterAttribute(i)">Add Filter Attribute</button>
+    </div>
+  
+    <button type="button" (click)="addSubCategory()">Add Subcategory</button>
+    <button type="submit">Add Category</button>
+  </form>
+  

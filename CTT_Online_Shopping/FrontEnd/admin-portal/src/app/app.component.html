@@ -1,0 +1,30 @@
+<!-- app.component.html -->
+<div class="header">
+  <nav>
+    <ul>
+      <li>
+        <a routerLink="/category" routerLinkActive="active">Category</a>
+        <ul>
+          <li><a routerLink="/category" routerLinkActive="active">List</a></li>
+          <li><a routerLink="/category/add" routerLinkActive="active">Add</a></li>
+        </ul>
+      </li>
+      <li>
+        <a routerLink="/product" routerLinkActive="active">Product</a>
+        <ul>
+          <li><a routerLink="/product" routerLinkActive="active">List</a></li>
+          <li><a routerLink="/product/add" routerLinkActive="active">Add</a></li>
+        </ul>
+      </li>
+      <li>
+        <a routerLink="/product-item" routerLinkActive="active">Product Item</a>
+        <ul>
+          <li><a routerLink="/product-item" routerLinkActive="active">List</a></li>
+          <li><a routerLink="/product-item/add" routerLinkActive="active">Add</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<router-outlet></router-outlet>
