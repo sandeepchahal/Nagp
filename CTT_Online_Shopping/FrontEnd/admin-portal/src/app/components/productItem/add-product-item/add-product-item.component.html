@@ -1,1 +1,77 @@
-<p>add-product-item works!</p>
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+  <!-- Product Details -->
+  <div>
+    <label>Product ID:</label>
+    <input formControlName="productId" placeholder="Product ID" />
+  </div>
+  <div>
+    <label>Product Item Name:</label>
+    <input formControlName="name" placeholder="Product Name" />
+  </div>
+  <div formGroupName="productLevelDiscount">
+    <label>Product Level Discount:</label>
+    <select formControlName="type">
+      <option *ngFor="let type of discountTypes" [value]="type">{{ type }}</option>
+    </select>
+    <label>Discount Value:</label>
+    <input formControlName="value" type="number" placeholder="Discount Value" />
+  </div>
+
+  <!-- Variants -->
+<div formArrayName="variants">
+  <div *ngFor="let variant of variants.controls; let i = index" [formGroupName]="i" class="variant-border">
+    <h2>Variant {{ i + 1 }}</h2>
+
+    <!-- Attributes -->
+    <div formArrayName="attributes">
+      <div *ngFor="let attribute of getAttributes(i).controls; let j = index" [formGroupName]="j" class="attribute-border">
+        <h4>Attribute {{ j + 1 }}</h4>
+
+        <!-- Features -->
+        <div formArrayName="features" class="feature-border">
+          <div *ngFor="let feature of getFeatures(i, j).controls; let f = index" [formGroupName]="f">
+            <label>Feature {{ f + 1 }}:</label>
+            <input formControlName="value" placeholder="Feature" />
+          </div>
+          <button type="button" (click)="addFeature(i, j)">Add More Features</button>
+        </div>
+
+        <label>Stock Quantity:</label>
+        <input formControlName="stockQuantity" type="number" placeholder="Stock Quantity" />
+        <label>Price:</label>
+        <input formControlName="price" type="number" placeholder="Price" />
+      </div>
+      <button type="button" (click)="addAttribute(i)">Add Attribute</button>
+    </div>
+
+    <!-- Images -->
+    <div formArrayName="images">
+      <div *ngFor="let image of getImages(i).controls; let k = index" [formGroupName]="k">
+        <h4>Image {{ k + 1 }}</h4>
+        <label>Image URL:</label>
+        <input formControlName="url" placeholder="Image URL" />
+        <label>Alt Text:</label>
+        <input formControlName="altText" placeholder="Alt Text" />
+        <label>Order Number:</label>
+        <input formControlName="orderNumber" type="number" placeholder="Order Number" />
+      </div>
+      <button type="button" (click)="addImage(i)">Add Image</button>
+    </div>
+
+    <!-- Discount -->
+    <div formGroupName="discount">
+      <label>Variant Discount:</label>
+      <select formControlName="type">
+        <option *ngFor="let type of discountTypes" [value]="type">{{ type }}</option>
+      </select>
+      <label>Discount Value:</label>
+      <input formControlName="value" type="number" placeholder="Discount Value" />
+    </div>
+  </div>
+  <button type="button" (click)="addVariant()">Add Variant</button>
+</div>
+
+
+  <!-- Submit Button -->
+  <button type="submit">Submit</button>
+</form>

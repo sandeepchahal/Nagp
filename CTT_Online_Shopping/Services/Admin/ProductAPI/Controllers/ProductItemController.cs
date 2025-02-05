@@ -7,7 +7,7 @@ using ProductAPI.Models.DbModels;
 
 namespace ProductAPI.Controllers;
 
-[Route("product-item")]
+[Route("api/product/item")]
 public partial class ProductItemController(IMongoCollection<ProductItemDb> productItemCollection, IProductItemEventService productItemEventService):ControllerBase
 {
     [HttpGet("get-all")]

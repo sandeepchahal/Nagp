@@ -63,4 +63,7 @@ export class ListProductComponent {
   editProduct(id: string): void {
     this.router.navigate(['/product/edit', id]); // Navigate to edit route
   }
+  addProductItem(id: string): void {
+    this.router.navigate(['/product/item/add', id]); // Navigate to edit route
+  }
 }
