@@ -9,5 +9,7 @@ public class ProductItemDb:ProductItemBase
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; } = string.Empty;
-    public ProductVariantDb Variants { get; set; } = new();
+   
+    [BsonElement("variants")]
+    public ProductVariantDb Variant { get; set; } = new();
 }

@@ -1,1 +1,30 @@
-<p>list-product-item works!</p>
+<div class="product-item-list">
+    <h2>Product Items</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Product ID</th>
+          <th>Product Item ID</th>
+
+          <th>Name</th>
+          <th>Category</th>
+          <th>Subcategory</th>
+          <th>Brand</th>
+          <th>Variant Type</th>
+          <th>Variant Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let productItem of productItems">
+          <td>{{ productItem.productId }}</td>
+          <td>{{ productItem.id }}</td>
+          <td>{{ productItem.product.name }}</td>
+          <td>{{ productItem.product.category.name }}</td>
+          <td>{{ productItem.product.category.subCategory.name }}</td>
+          <td>{{ productItem.product.brand }}</td>
+          <td>{{ productItem.variantType }}</td>
+          <td>{{ getVariantCount(productItem) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

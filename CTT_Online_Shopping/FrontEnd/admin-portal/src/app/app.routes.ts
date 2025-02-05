@@ -7,6 +7,7 @@ import { ListProductComponent } from './components/product/list-product/list-pro
 import { EditProductComponent } from './components/product/edit-product/edit-product.component';
 import { DetailProductComponent } from './components/product/detail-product/detail-product.component';
 import { AddProductItemComponent } from './components/productItem/add-product-item/add-product-item.component';
+import { ListProductItemComponent } from './components/productItem/list-product-item/list-product-item.component';
 
 export const routes: Routes = [
   { path: 'category', component: ListCategoryComponent },
@@ -19,6 +20,7 @@ export const routes: Routes = [
   { path: 'product/details/:id', component: DetailProductComponent },
 
   { path: 'product/item/add/:id', component: AddProductItemComponent },
+  { path: 'product/items', component: ListProductItemComponent },
 
   { path: '', redirectTo: '/category', pathMatch: 'full' },
 ];

@@ -1,5 +1,5 @@
 import { DiscountType, VariantType } from '../enums';
-import { ImagesBase } from '../product/product.model';
+import { ImagesBase, ProductView } from '../product/product.model';
 
 export interface Discount {
   type: DiscountType;
@@ -78,5 +78,6 @@ export interface ProductVariantView extends ProductVariantBase {
 
 export interface ProductItemView extends ProductItemBase {
   id: string;
-  variants: ProductVariantView[];
+  variant: ProductVariantView;
+  product: ProductView;
 }

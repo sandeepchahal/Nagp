@@ -14,7 +14,7 @@ public static class ProductItemMapper
         {
             ProductId = request.ProductId,
             VariantType = request.VariantType,
-            Variants = new ProductVariantDb()
+            Variant = new ProductVariantDb()
             {
                 Discount = request.Variant.Discount,
                 Images = (Enum.TryParse(request.VariantType, out VariantTypeEnum variantType) && variantType == VariantTypeEnum.Size)
@@ -58,7 +58,7 @@ public static class ProductItemMapper
         {
             ProductId = productItemDb.ProductId,
             VariantType = productItemDb.VariantType,
-            Variants = productItemDb.Variants,
+            Variant = productItemDb.Variant,
             Id = productItemDb.Id
         };
     }
