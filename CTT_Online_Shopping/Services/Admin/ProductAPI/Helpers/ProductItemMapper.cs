@@ -1,7 +1,8 @@
-using ProductAPI.Events.Models;
+using ProductAPI.Enums;
 using ProductAPI.Models.Abstract;
 using ProductAPI.Models.Commands;
 using ProductAPI.Models.DbModels;
+using ProductAPI.Models.Query;
 
 namespace ProductAPI.Helpers;
 
@@ -11,37 +12,55 @@ public static class ProductItemMapper
     {
         return new ProductItemDb
         {
-            Name = request.Name,
             ProductId = request.ProductId,
-            ProductLevelDiscount = request.ProductLevelDiscount,
-            Variants = request.Variants.Select(v => new ProductVariant
+            VariantType = request.VariantType,
+            Variants = new ProductVariantDb()
             {
-                Attributes = v.Attributes,
-                Discount = v.Discount,
-                Images = v.Images,
-                IsDiscountApplied = false,
-            }).ToList()
+                Discount = request.Variant.Discount,
+                Images = (Enum.TryParse(request.VariantType, out VariantTypeEnum variantType) && variantType == VariantTypeEnum.Size)
+                    ? request.Variant.Images
+                    : new List<ImagesBase>(),
+                IsDiscountApplied = (Enum.TryParse(request.Variant.Discount.Type, out DiscountTypeEnum discountType) && discountType != DiscountTypeEnum.None),
+                ColorVariant = request.Variant.ColorVariant is { Count: > 0 }
+                    ? request.Variant.ColorVariant.Select(col => new ProductVariantColorDb()
+                    {
+                        Color = col.Color,
+                        Discount = col.Discount,
+                        Image = col.Image,
+                        Price = col.Price,
+                        StockQuantity = col.StockQuantity
+                    }).ToList()
+                    : null,
+                SizeVariant = request.Variant.SizeVariant is { Count: > 0 }
+                    ? request.Variant.SizeVariant.Select(col => new ProductVariantSizeDb()
+                    {
+                        Discount = col.Discount,
+                        Price = col.Price,
+                        StockQuantity = col.StockQuantity,
+                        Size = col.Size
+                    }).ToList()
+                    : null,
+                SizeColorVariant =
+                    request.Variant.SizeColorVariant is { Count: > 0 }
+                        ? request.Variant.SizeColorVariant.Select(col => new ProductVariantSizeColorDb()
+                        {
+                            Color = col.Color,
+                            Sizes = col.Sizes
+                        }).ToList()
+                        : null
+            },
+        };
+    }
+
+    public static ProductItemView MapToProductViewModel(ProductItemDb productItemDb)
+    {
+        return new ProductItemView()
+        {
+            ProductId = productItemDb.ProductId,
+            VariantType = productItemDb.VariantType,
+            Variants = productItemDb.Variants,
+            Id = productItemDb.Id
         };
     }
     
-    // public static ProductItemEventModel MapToProductItemEvent(ProductItemDb product)
-    // {
-    //     var searchEvent = new ProductItemEventModel
-    //     {
-    //         Id = product.Id,
-    //         ProductId = product.ProductId,
-    //         Name = product.Name,
-    //         MinPrice = product.Variants.Min(v => v.), // Calculate min price
-    //         MaxPrice = product.Variants.Max(v => v.OriginalPrice), // Calculate max price
-    //         Attributes = product.Variants
-    //             .SelectMany(v => v.Attributes
-    //                 .Select(attr => $"{attr.Key}:{attr.Value}")) // Flatten attributes
-    //             .Distinct()
-    //             .ToList()
-    //             .Distinct()
-    //             .ToList()
-    //     };
-    //
-    //     return searchEvent;
-    // }
 }

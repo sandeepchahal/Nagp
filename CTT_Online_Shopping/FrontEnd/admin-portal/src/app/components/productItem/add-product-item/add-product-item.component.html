@@ -1,77 +1,142 @@
-<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-  <!-- Product Details -->
-  <div>
+<form [formGroup]="productItemForm" (ngSubmit)="onSubmit()">
+  <!-- Product Item Details -->
+  <div class="section">
+    <h2>Product Item Details</h2>
     <label>Product ID:</label>
-    <input formControlName="productId" placeholder="Product ID" />
-  </div>
-  <div>
-    <label>Product Item Name:</label>
-    <input formControlName="name" placeholder="Product Name" />
-  </div>
-  <div formGroupName="productLevelDiscount">
-    <label>Product Level Discount:</label>
-    <select formControlName="type">
-      <option *ngFor="let type of discountTypes" [value]="type">{{ type }}</option>
+    <input formControlName="productId" placeholder="Product ID"  />
+
+    <label>Variant Type:</label>
+    <select formControlName="variantType">
+      <option *ngFor="let type of variantTypes" [value]="type">{{ type }}</option>
     </select>
-    <label>Discount Value:</label>
-    <input formControlName="value" type="number" placeholder="Discount Value" />
   </div>
 
-  <!-- Variants -->
-<div formArrayName="variants">
-  <div *ngFor="let variant of variants.controls; let i = index" [formGroupName]="i" class="variant-border">
-    <h2>Variant {{ i + 1 }}</h2>
-
-    <!-- Attributes -->
-    <div formArrayName="attributes">
-      <div *ngFor="let attribute of getAttributes(i).controls; let j = index" [formGroupName]="j" class="attribute-border">
-        <h4>Attribute {{ j + 1 }}</h4>
-
-        <!-- Features -->
-        <div formArrayName="features" class="feature-border">
-          <div *ngFor="let feature of getFeatures(i, j).controls; let f = index" [formGroupName]="f">
-            <label>Feature {{ f + 1 }}:</label>
-            <input formControlName="value" placeholder="Feature" />
-          </div>
-          <button type="button" (click)="addFeature(i, j)">Add More Features</button>
-        </div>
-
-        <label>Stock Quantity:</label>
-        <input formControlName="stockQuantity" type="number" placeholder="Stock Quantity" />
-        <label>Price:</label>
-        <input formControlName="price" type="number" placeholder="Price" />
-      </div>
-      <button type="button" (click)="addAttribute(i)">Add Attribute</button>
-    </div>
-
+  <!-- Variant Details -->
+  <div class="section" formGroupName="variant">
+    <h2>Variant Details</h2>
     <!-- Images -->
-    <div formArrayName="images">
-      <div *ngFor="let image of getImages(i).controls; let k = index" [formGroupName]="k">
-        <h4>Image {{ k + 1 }}</h4>
-        <label>Image URL:</label>
-        <input formControlName="url" placeholder="Image URL" />
-        <label>Alt Text:</label>
-        <input formControlName="altText" placeholder="Alt Text" />
-        <label>Order Number:</label>
-        <input formControlName="orderNumber" type="number" placeholder="Order Number" />
+    <div class="subsection">
+      <h3>Images</h3>
+      <div formArrayName="images">
+        <div *ngFor="let image of images.controls; let i = index" [formGroupName]="i" class="image-item">
+          <label>Image URL:</label>
+          <input formControlName="url" placeholder="Image URL" />
+          <label>Alt Text:</label>
+          <input formControlName="altText" placeholder="Alt Text" />
+          <label>Order Number:</label>
+          <input formControlName="orderNumber" type="number" placeholder="Order Number" />
+        </div>
+        <button type="button" (click)="addImage()">Add Image</button>
       </div>
-      <button type="button" (click)="addImage(i)">Add Image</button>
     </div>
 
+    <!-- Size Variants -->
+    <div class="subsection" *ngIf="productItemForm.get('variantType')?.value === 'Size'">
+      <h3>Size Variants</h3>
+      <div formArrayName="sizeVariant">
+        <div *ngFor="let sizeVariant of sizeVariants.controls; let i = index" [formGroupName]="i" class="size-item">
+          <h4>Size {{ i + 1 }}</h4>
+          <label>Size:</label>
+          <input formControlName="size" placeholder="Size" />
+          <label>Stock Quantity:</label>
+          <input formControlName="stockQuantity" type="number" placeholder="Stock Quantity" />
+          <label>Price:</label>
+          <input formControlName="price" type="number" placeholder="Price" />
+          <div formGroupName="discount">
+            <label>Discount Type:</label>
+            <select formControlName="type">
+              <option *ngFor="let type of discountTypes" [value]="type">{{ type }}</option>
+            </select>
+            <label>Discount Value:</label>
+            <input formControlName="value" type="number" placeholder="Discount Value" />
+          </div>
+        </div>
+        <button type="button" (click)="addSizeVariant()">Add Size Variant</button>
+      </div>
+    </div>
+
+    <!-- Color Variants -->
+    <div class="subsection" *ngIf="productItemForm.get('variantType')?.value === 'Color'">
+      <h3>Color Variants</h3>
+      <div formArrayName="colorVariant">
+        <div *ngFor="let colorVariant of colorVariants.controls; let i = index" [formGroupName]="i" class="color-item">
+          <h4>Color {{ i + 1 }}</h4>
+          <label>Color:</label>
+          <input formControlName="color" placeholder="Color" />
+          <label>Stock Quantity:</label>
+          <input formControlName="stockQuantity" type="number" placeholder="Stock Quantity" />
+          <label>Price:</label>
+          <input formControlName="price" type="number" placeholder="Price" />
+          <div formGroupName="discount">
+            <label>Discount Type:</label>
+            <select formControlName="type">
+              <option *ngFor="let type of discountTypes" [value]="type">{{ type }}</option>
+            </select>
+            <label>Discount Value:</label>
+            <input formControlName="value" type="number" placeholder="Discount Value" />
+          </div>
+          <div formGroupName="image">
+            <label>Image URL:</label>
+            <input formControlName="url" placeholder="Image URL" />
+            <label>Alt Text:</label>
+            <input formControlName="altText" placeholder="Alt Text" />
+          </div>
+        </div>
+        <button type="button" (click)="addColorVariant()">Add Color Variant</button>
+      </div>
+    </div>
+
+    <!-- Size-Color Variants -->
+    <div class="subsection" *ngIf="productItemForm.get('variantType')?.value === 'ColorAndSize'">
+      <h3>Size-Color Variants</h3>
+      <div formArrayName="sizeColorVariant">
+        <div *ngFor="let sizeColorVariant of sizeColorVariants.controls; let i = index" [formGroupName]="i" class="size-color-item">
+          <h4>Color {{ i + 1 }}</h4>
+          <label>Colors:</label>
+          <input formControlName="colors" placeholder="Colors (comma-separated)" />
+          <div formArrayName="sizes">
+            <div *ngFor="let size of getSizes(i).controls; let j = index" [formGroupName]="j" class="size-item">
+              <h5>Size {{ j + 1 }}</h5>
+              <label>Size:</label>
+              <input formControlName="size" placeholder="Size" />
+              <label>Stock Quantity:</label>
+              <input formControlName="stockQuantity" type="number" placeholder="Stock Quantity" />
+              <label>Price:</label>
+              <input formControlName="price" type="number" placeholder="Price" />
+              <div formGroupName="discount">
+                <label>Discount Type:</label>
+                <select formControlName="type">
+                  <option *ngFor="let type of discountTypes" [value]="type">{{ type }}</option>
+                </select>
+                <label>Discount Value:</label>
+                <input formControlName="value" type="number" placeholder="Discount Value" />
+              </div>
+            </div>
+            <button type="button" (click)="addSizeToSizeColorVariant(i)">Add Size</button>
+          </div>
+        </div>
+        <button type="button" (click)="addSizeColorVariant()">Add Size-Color Variant</button>
+      </div>
+    </div>
     <!-- Discount -->
-    <div formGroupName="discount">
-      <label>Variant Discount:</label>
-      <select formControlName="type">
-        <option *ngFor="let type of discountTypes" [value]="type">{{ type }}</option>
-      </select>
-      <label>Discount Value:</label>
-      <input formControlName="value" type="number" placeholder="Discount Value" />
+    <div class="subsection">
+      <h3>Discount</h3>
+      <p>You can apply discount on all the items added in this variant</p>
+      <div formGroupName="discount">
+        <label>Discount Type:</label>
+        <select formControlName="type">
+          <option *ngFor="let type of discountTypes" [value]="type">{{ type }}</option>
+        </select>
+        <label>Discount Value:</label>
+        <input formControlName="value" type="number" placeholder="Discount Value" />
+      </div>
     </div>
   </div>
-  <button type="button" (click)="addVariant()">Add Variant</button>
-</div>
 
 
+    
   <!-- Submit Button -->
-  <button type="submit">Submit</button>
+  <div class="section">
+    <button type="submit">Submit</button>
+  </div>
 </form>

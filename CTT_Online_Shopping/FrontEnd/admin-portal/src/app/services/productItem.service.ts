@@ -10,6 +10,6 @@ export class ProductItemService {
   constructor(private http: HttpClient) {}
 
   addProductItem(productItem: ProductItemCommand): Observable<any> {
-    return this.http.post(`${this.apiUrl}/add-item`, productItem);
+    return this.http.post(`${this.apiUrl}/add`, productItem);
   }
 }

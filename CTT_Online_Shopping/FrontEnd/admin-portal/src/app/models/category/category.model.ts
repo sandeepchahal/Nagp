@@ -1,4 +1,3 @@
-import { FilterAttributeType, Gender } from '../category/enums';
 import { SubCategoryCommand, SubCategoryViewBase } from './subCategory.model';
 
 export interface FilterAttributeBase {

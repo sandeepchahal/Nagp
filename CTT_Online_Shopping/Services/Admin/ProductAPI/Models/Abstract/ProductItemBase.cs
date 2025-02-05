@@ -1,6 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 using ProductAPI.Enums;
 
 namespace ProductAPI.Models.Abstract;
@@ -9,39 +7,66 @@ public abstract class ProductItemBase
 {
     [Required]
     public string ProductId { get; set; } = string.Empty;
-    [Required]
-    public string Name { get; set; } = string.Empty;
-    public Discount? ProductLevelDiscount { get; set; }
+    public string VariantType { get; set; } = string.Empty;
 }
 
-public  class ProductVariantBase
-{
-    public List<ProductFeaturesBase> Attributes { get; set; } = new(); 
-    public List<ImagesBase> Images { get; set; } = new();
-    public Discount? Discount { get; set; }
+public class ProductVariantBase
+{ 
+    public List<ImagesBase>? Images { get; set; } // only add images when going by size
+    public Discount Discount { get; set; } = new();
 }
 
-public abstract class ProductFeaturesBase
-{
-    public Dictionary<string, string> Features { get; set; } = new(); 
-    public int StockQuantity { get; set; }  // Stock per variant remaining
-    public decimal Price { get; set; }  // Price per variant
-}
-public class ProductVariant : ProductVariantBase
+public class ProductVariantDb : ProductVariantBase
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public bool IsDiscountApplied { get; set; } = false;
+    public List<ProductVariantSizeDb>? SizeVariant { get; set; }  // Nullable Size Variant
+    public List<ProductVariantColorDb>? ColorVariant { get; set; }  // Nullable Color Variant
+    public List<ProductVariantSizeColorDb>? SizeColorVariant { get; set; }  // Nullable Size-Color Variant
 }
 
 public class ImagesBase
 {
     public string Url { get; set; } = string.Empty;
     public string AltText { get; set; } = string.Empty;
-    public bool IsPrimary { get; set; } = false;
     public int OrderNumber { get; set; }
 }
 public class Discount
 {
-    public string Type { get; set; } = nameof(DiscountEnum.Percentage);
+    public string Type { get; set; } = string.Empty;
     public decimal Value { get; set; } 
+}
+
+public class ProductVariantSizeColorBase
+{
+    public string Color { get; set; } = string.Empty;
+    public List<ProductVariantSizeBase> Sizes { get; set; } = new();
+}
+public class ProductVariantColorBase
+{
+    public string Color { get; set; } = string.Empty;
+    public int StockQuantity { get; set; }
+    public decimal Price { get; set; }
+    public Discount? Discount { get; set; }
+    public ImagesBase Image { get; set; } = new ImagesBase();
+}
+public class ProductVariantSizeBase
+{
+    public string Size { get; set; } = string.Empty;
+    public int StockQuantity { get; set; }
+    public decimal Price { get; set; }
+    public Discount? Discount { get; set; }
+}
+
+public class ProductVariantSizeColorDb:ProductVariantSizeColorBase
+{
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+}
+public class ProductVariantColorDb:ProductVariantColorBase
+{
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+}
+public class ProductVariantSizeDb:ProductVariantSizeBase
+{
+    public string Id { get; set; } = Guid.NewGuid().ToString();
 }

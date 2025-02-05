@@ -34,6 +34,5 @@ export interface ProductDetailView extends ProductView {}
 export interface ImagesBase {
   url: string;
   altText: string;
-  isPrimary: boolean;
-  orderNumber: number;
+  orderNumber?: number;
 }

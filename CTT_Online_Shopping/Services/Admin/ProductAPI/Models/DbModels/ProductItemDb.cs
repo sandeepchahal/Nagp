@@ -9,7 +9,5 @@ public class ProductItemDb:ProductItemBase
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; } = string.Empty;
-    public bool IsDiscountApplied { get; set; } = false;
-    public List<ProductVariant> Variants { get; set; } = new();
-
+    public ProductVariantDb Variants { get; set; } = new();
 }

@@ -6,8 +6,35 @@ form {
   border-radius: 5px;
 }
 
-div {
+.section {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.subsection {
   margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+
+.image-item,
+.size-item,
+.color-item,
+.size-color-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.size-color-item .size-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
 label {
@@ -31,40 +58,14 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-top: 10px;
 }
 
 button:hover {
   background-color: #0056b3;
 }
 
-h3, h4 {
-  margin-top: 20px;
+h2, h3, h4, h5 {
+  margin-top: 0;
   margin-bottom: 10px;
-}
-.variant-border {
-  border: 2px solid #4CAF50;
-  padding: 15px;
-  margin: 15px 0;
-  border-radius: 8px;
-  background-color: #f9fff9;
-}
-
-.attribute-border {
-  border: 2px dashed #2196F3;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 6px;
-  background-color: #f0f8ff;
-}
-
-.feature-border {
-  border: 1px solid #FF9800;
-  padding: 8px;
-  margin: 8px 0;
-  border-radius: 4px;
-  background-color: #fffaf0;
-}
-
-button {
-  margin: 5px 0;
 }

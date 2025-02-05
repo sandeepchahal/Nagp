@@ -1,120 +1,170 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
+  FormArray,
   FormBuilder,
   FormGroup,
-  FormArray,
-  Validators,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { ProductItemService } from '../../../services/productItem.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DiscountType, VariantType } from '../../../models/enums';
+import { ProductItemCommand } from '../../../models/productItem/productItem.model';
 import { CommonModule } from '@angular/common';
-import {
-  DiscountType,
-  ProductItemCommand,
-} from '../../../models/productItem/productItem.model';
+import { ProductItemService } from '../../../services/productItem.service';
 
 @Component({
   selector: 'app-add-product-item',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule],
   templateUrl: './add-product-item.component.html',
   styleUrls: ['./add-product-item.component.css'],
 })
 export class AddProductItemComponent {
-  productForm: FormGroup;
+  productItemForm: FormGroup;
   discountTypes = Object.values(DiscountType);
+  variantTypes = Object.values(VariantType);
+  productId: string;
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute) {
-    this.productForm = this.fb.group({
-      productId: ['', Validators.required],
-      name: ['', Validators.required],
-      productLevelDiscount: this.fb.group({
-        type: [DiscountType.None, Validators.required],
-        value: [0, [Validators.required, Validators.min(0)]],
-      }),
-      variants: this.fb.array([]),
-    });
-
-    this.addVariant(); // Add one variant by default
-  }
-  ngOnInit(): void {
-    const productId = this.route.snapshot.paramMap.get('id'); // Get 'id' from URL
-    if (productId) {
-      this.productForm.get('productId')?.setValue(productId); // Set Product ID
-      this.productForm.get('productId')?.disable(); // Disable the field
-    }
-  }
-
-  get variants(): FormArray {
-    return this.productForm.get('variants') as FormArray;
-  }
-
-  addVariant(): void {
-    const variantGroup = this.fb.group({
-      attributes: this.fb.array([]),
-      images: this.fb.array([]),
-      discount: this.fb.group({
-        type: [DiscountType.None, Validators.required],
-        value: [0, [Validators.required, Validators.min(0)]],
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private productItemService: ProductItemService,
+    private router: Router
+  ) {
+    this.productId = this.route.snapshot.paramMap.get('id') || ''; // Get product ID from URL
+    this.productItemForm = this.fb.group({
+      productId: [
+        { value: this.productId, disabled: true },
+        Validators.required,
+      ],
+      variantType: [VariantType.Size, Validators.required], // Default to Size
+      variant: this.fb.group({
+        images: this.fb.array([]),
+        discount: this.fb.group({
+          type: [DiscountType.None, Validators.required],
+          value: [0, [Validators.required, Validators.min(0)]],
+        }),
+        sizeVariant: this.fb.array([]),
+        colorVariant: this.fb.array([]),
+        sizeColorVariant: this.fb.array([]),
       }),
     });
 
-    this.variants.push(variantGroup);
-    this.addAttribute(this.variants.length - 1); // Add one attribute by default
-    this.addImage(this.variants.length - 1); // Add one image by default
+    this.addImage(); // Add one image by default
   }
 
-  getAttributes(variantIndex: number): FormArray {
-    return this.variants.at(variantIndex).get('attributes') as FormArray;
+  get variant(): FormGroup {
+    return this.productItemForm.get('variant') as FormGroup;
   }
 
-  addAttribute(variantIndex: number): void {
-    const attributeGroup = this.fb.group({
-      features: this.fb.array([this.createFeature()]), // Add one feature input by default
-      stockQuantity: [0, [Validators.required, Validators.min(0)]],
-      price: [0, [Validators.required, Validators.min(0)]],
-    });
-
-    this.getAttributes(variantIndex).push(attributeGroup);
+  get images(): FormArray {
+    return this.variant.get('images') as FormArray;
   }
 
-  createFeature(): FormGroup {
-    return this.fb.group({
-      value: [''],
-    });
-  }
-
-  getFeatures(variantIndex: number, attributeIndex: number): FormArray {
-    return this.getAttributes(variantIndex)
-      .at(attributeIndex)
-      .get('features') as FormArray;
-  }
-
-  addFeature(variantIndex: number, attributeIndex: number): void {
-    this.getFeatures(variantIndex, attributeIndex).push(this.createFeature());
-  }
-
-  getImages(variantIndex: number): FormArray {
-    return this.variants.at(variantIndex).get('images') as FormArray;
-  }
-
-  addImage(variantIndex: number): void {
-    this.getImages(variantIndex).push(
+  addImage(): void {
+    const imageIndex = this.images.length + 1;
+    this.images.push(
       this.fb.group({
         url: ['', Validators.required],
-        altText: [''],
-        orderNumber: [0, [Validators.required, Validators.min(0)]],
+        altText: [`image-${imageIndex}`],
+        orderNumber: [imageIndex, [Validators.required, Validators.min(1)]],
+      })
+    );
+  }
+
+  get sizeVariants(): FormArray {
+    return this.variant.get('sizeVariant') as FormArray;
+  }
+
+  addSizeVariant(): void {
+    const sizeIndex = this.sizeVariants.length + 1;
+    this.sizeVariants.push(
+      this.fb.group({
+        size: ['', Validators.required],
+        stockQuantity: [0, [Validators.required, Validators.min(0)]],
+        price: [0, [Validators.required, Validators.min(0)]],
+        discount: this.fb.group({
+          type: [DiscountType.None, Validators.required],
+          value: [0, [Validators.required, Validators.min(0)]],
+        }),
+      })
+    );
+  }
+
+  get colorVariants(): FormArray {
+    return this.variant.get('colorVariant') as FormArray;
+  }
+
+  addColorVariant(): void {
+    const colorIndex = this.colorVariants.length + 1;
+    this.colorVariants.push(
+      this.fb.group({
+        color: ['', Validators.required],
+        stockQuantity: [0, [Validators.required, Validators.min(0)]],
+        price: [0, [Validators.required, Validators.min(0)]],
+        discount: this.fb.group({
+          type: [DiscountType.None, Validators.required],
+          value: [0, [Validators.required, Validators.min(0)]],
+        }),
+        image: this.fb.group({
+          url: ['', Validators.required],
+          altText: [`color-${colorIndex}`],
+        }),
+      })
+    );
+  }
+
+  get sizeColorVariants(): FormArray {
+    return this.variant.get('sizeColorVariant') as FormArray;
+  }
+
+  addSizeColorVariant(): void {
+    const sizeColorIndex = this.sizeColorVariants.length + 1;
+    this.sizeColorVariants.push(
+      this.fb.group({
+        colors: ['', Validators.required],
+        sizes: this.fb.array([]),
+      })
+    );
+    this.addSizeToSizeColorVariant(this.sizeColorVariants.length - 1); // Add one size by default
+  }
+
+  getSizes(sizeColorVariantIndex: number): FormArray {
+    return this.sizeColorVariants
+      .at(sizeColorVariantIndex)
+      .get('sizes') as FormArray;
+  }
+
+  addSizeToSizeColorVariant(sizeColorVariantIndex: number): void {
+    const sizeIndex = this.getSizes(sizeColorVariantIndex).length + 1;
+    this.getSizes(sizeColorVariantIndex).push(
+      this.fb.group({
+        size: ['', Validators.required],
+        stockQuantity: [0, [Validators.required, Validators.min(0)]],
+        price: [0, [Validators.required, Validators.min(0)]],
+        discount: this.fb.group({
+          type: [DiscountType.None, Validators.required],
+          value: [0, [Validators.required, Validators.min(0)]],
+        }),
       })
     );
   }
 
   onSubmit(): void {
-    if (this.productForm.valid) {
-      const product: ProductItemCommand = this.productForm.value;
-      console.log('Product to be submitted:', product);
-      // Call your API service here to submit the product
+    if (this.productItemForm.valid) {
+      const productItem: ProductItemCommand = {
+        ...this.productItemForm.getRawValue(), // Include disabled fields
+      };
+      console.log('Product Item to be submitted:', productItem);
+      // Call your API service here to submit the product item
+      this.productItemService.addProductItem(productItem).subscribe({
+        next: () => {
+          alert('Category added successfully');
+          this.router.navigate(['/product']);
+        },
+        error: () => alert('Error adding category'),
+      });
     } else {
       console.error('Form is invalid');
     }

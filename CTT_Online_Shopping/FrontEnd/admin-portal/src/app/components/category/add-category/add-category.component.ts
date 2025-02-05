@@ -3,7 +3,7 @@ import { CategoryService } from '../../../services/category.service';
 import { FormsModule } from '@angular/forms';
 
 import { CategoryCommand } from '../../../models/category/category.model';
-import { Gender, FilterAttributeType } from '../../../models/category/enums';
+import { Gender, FilterAttributeType } from '../../../models/enums';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 

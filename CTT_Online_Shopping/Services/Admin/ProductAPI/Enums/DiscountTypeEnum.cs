@@ -1,7 +1,8 @@
 namespace ProductAPI.Enums;
 
-public enum DiscountEnum
+public enum DiscountTypeEnum
 {
+    None,
     Fixed,
     Percentage
 }

@@ -5,7 +5,7 @@ import {
 } from '../../../models/category/category.model';
 import { CategoryService } from '../../../services/category.service';
 import { CommonModule } from '@angular/common';
-import { FilterAttributeType, Gender } from '../../../models/category/enums';
+import { FilterAttributeType, Gender } from '../../../models/enums';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 

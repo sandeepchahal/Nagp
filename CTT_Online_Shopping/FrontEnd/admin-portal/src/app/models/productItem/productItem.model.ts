@@ -1,3 +1,4 @@
+import { DiscountType, VariantType } from '../enums';
 import { ImagesBase } from '../product/product.model';
 
 export interface Discount {
@@ -5,40 +6,77 @@ export interface Discount {
   value: number;
 }
 
-export interface ProductFeaturesBase {
-  features: { [key: string]: string };
-  stockQuantity: number;
-  price: number;
+export interface ProductItemBase {
+  productId: string;
+  variantType: VariantType;
 }
 
 export interface ProductVariantBase {
-  attributes: ProductFeaturesBase[];
-  images: ImagesBase[];
+  images?: ImagesBase[];
   discount?: Discount;
 }
 
 export interface ProductVariant extends ProductVariantBase {
   id: string;
   isDiscountApplied: boolean;
+  sizeVariant?: ProductVariantSizeBase[];
+  colorVariant?: ProductVariantColorBase[];
+  sizeColorVariant?: ProductVariantSizeColorBase[];
 }
 
-export interface ProductItemBase {
-  productId: string;
-  name: string;
-  productLevelDiscount?: Discount;
+export interface ProductVariantSizeColorBase {
+  colors: string; // for each color, we have multiple size options
+  sizes: ProductVariantSizeBase[];
+}
+
+export interface ProductVariantColorBase {
+  color: string;
+  stockQuantity: number;
+  price: number;
+  discount?: Discount;
+  image: ImagesBase;
+}
+
+export interface ProductVariantSizeBase {
+  size: string;
+  stockQuantity: number;
+  price: number;
+  discount?: Discount;
+}
+
+export interface ProductVariantSizeColor extends ProductVariantSizeColorBase {
+  id: string;
+}
+
+export interface ProductVariantColor extends ProductVariantColorBase {
+  id: string;
+}
+
+export interface ProductVariantSize extends ProductVariantSizeBase {
+  id: string;
+}
+
+// post
+export interface ProductVariantCommand extends ProductVariantBase {
+  sizeVariant?: ProductVariantSizeBase[];
+  colorVariant?: ProductVariantColorBase[];
+  sizeColorVariant?: ProductVariantSizeColorBase[];
 }
 
 export interface ProductItemCommand extends ProductItemBase {
-  variants: ProductVariantBase[];
+  variant: ProductVariantCommand;
 }
 
-export interface ProductItemView extends ProductItemBase, ProductVariant {
-  variants: ProductVariant[];
+// view
+export interface ProductVariantView extends ProductVariantBase {
+  id: string;
+  isDiscountApplied: boolean;
+  sizeVariant?: ProductVariantSizeBase[];
+  colorVariant?: ProductVariantColorBase[];
+  sizeColorVariant?: ProductVariantSizeColorBase[];
 }
 
-// enums
-export enum DiscountType {
-  None = 'None',
-  Fixed = 'Fixed',
-  Percentage = 'Percentage',
+export interface ProductItemView extends ProductItemBase {
+  id: string;
+  variants: ProductVariantView[];
 }

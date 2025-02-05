@@ -5,7 +5,7 @@ import {
   CategoryCommand,
   CategoryView,
 } from '../../../models/category/category.model';
-import { Gender, FilterAttributeType } from '../../../models/category/enums';
+import { Gender, FilterAttributeType } from '../../../models/enums';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Mapper } from '../../../helpers/mapper.service';

@@ -15,7 +15,7 @@
         <tr *ngFor="let category of categories" (click)="showCategoryDetails(category)">
             <td>{{ category.id }}</td>   
           <td>{{ category.gender }}</td>
-          <td>{{ category.mainCategory }}</td>
+          <td>{{ category.name }}</td>
           <td>{{ category.subCategories[0].name }}</td> <!-- Example: Category Type -->
           <td>{{ category.subCategories[0].slug || 'No Slug' }}</td> <!-- Example: Subcategory slug -->
           <td>{{ category.subCategories.length }}</td>
@@ -37,14 +37,7 @@
     <ul>
       <li *ngFor="let subCategory of selectedCategory.subCategories">
         <strong>{{ subCategory.name }}</strong> - {{ subCategory.slug }}
-        <ul>
-          <li *ngFor="let filter of subCategory.filterAttributes">
-            <strong>{{ filter.name }} ({{ filter.type }}):</strong>
-            <ul>
-              <li *ngFor="let option of filter.options">{{ option }}</li>
-            </ul>
-          </li>
-        </ul>
+  
       </li>
     </ul>
   </div>

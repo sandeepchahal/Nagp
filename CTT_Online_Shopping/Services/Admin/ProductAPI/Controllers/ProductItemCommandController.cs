@@ -7,11 +7,12 @@ namespace ProductAPI.Controllers;
 public partial class ProductItemController
 {
     // Add a new product item
-    [HttpPost("add/{id}")]
-    public async Task<IActionResult> AddProductItem(string id, [FromBody] ProductItemCommand productItem)
+    [HttpPost("add")]
+    public async Task<IActionResult> AddProductItem([FromBody] ProductItemCommand productItem)
     {
         try
         {
+            if (string.IsNullOrEmpty(productItem.ProductId)) return BadRequest("product id is required");
             var productItemDb = ProductItemMapper.MapToDomainModel(productItem);
             await productItemCollection.InsertOneAsync(productItemDb);
             
