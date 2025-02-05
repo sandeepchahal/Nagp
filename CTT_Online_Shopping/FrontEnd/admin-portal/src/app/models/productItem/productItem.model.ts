@@ -71,9 +71,9 @@ export interface ProductItemCommand extends ProductItemBase {
 export interface ProductVariantView extends ProductVariantBase {
   id: string;
   isDiscountApplied: boolean;
-  sizeVariant?: ProductVariantSizeBase[];
-  colorVariant?: ProductVariantColorBase[];
-  sizeColorVariant?: ProductVariantSizeColorBase[];
+  sizeVariant?: ProductVariantSize[];
+  colorVariant?: ProductVariantColor[];
+  sizeColorVariant?: ProductVariantSizeColor[];
 }
 
 export interface ProductItemView extends ProductItemBase {

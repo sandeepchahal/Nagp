@@ -12,6 +12,7 @@ namespace ProductAPI.Controllers;
 public partial class ProductItemController(
     IMongoCollection<ProductItemDb> productItemCollection,
     IProductItemEventService productItemEventService,
+    IProductItemDbService productItemDbService,
     IProductDbService productDbService):ControllerBase
 {
     [HttpGet("get-all")]
@@ -32,6 +33,19 @@ public partial class ProductItemController(
                 result.Add(mapper);
             }
             return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+    
+    [HttpGet("get/{id}")]
+    public async Task<IActionResult> GetById(string id)
+    {
+        try
+        {
+            return Ok(await productItemDbService.GetAsync(id));
         }
         catch (Exception ex)
         {

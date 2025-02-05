@@ -1,0 +1,66 @@
+<div class="product-detail" *ngIf="productItem">
+    <!-- Left Side: Image Section -->
+    <div class="image-section">
+      <!-- Main Image -->
+      <div class="main-image">
+        <img [src]="productItem.variant.images![selectedImageIndex].url" [alt]="productItem.variant.images![selectedImageIndex]?.altText" />
+      </div>
+  
+      <!-- Thumbnails -->
+      <div class="thumbnails">
+        <div
+          *ngFor="let image of productItem.variant.images; let i = index"
+          class="thumbnail"
+          [class.active]="i === selectedImageIndex"
+          (click)="selectImage(i)"
+        >
+          <img [src]="image.url" [alt]="image.altText" />
+        </div>
+      </div>
+    </div>
+  
+    <!-- Right Side: Product Details -->
+    <div class="details-section">
+      <!-- Product Name -->
+      <h1>{{ productItem.product.name }}</h1>
+  
+      <!-- Product Description -->
+      <p class="description">{{ productItem.product.description }}</p>
+  
+      <!-- Variant Buttons -->
+      <div class="variant-buttons">
+        <div *ngIf="getVariantType() === 'Size'">
+          <h3>Select Size</h3>
+          <div class="button-group">
+            <button *ngFor="let button of getVariantButtons()" class="variant-button">
+              {{ button.label }}
+            </button>
+          </div>
+        </div>
+  
+        <div *ngIf="getVariantType() === 'Color'">
+          <h3>Select Color</h3>
+          <div class="button-group">
+            <button *ngFor="let button of getVariantButtons()" class="variant-button">
+              {{ button.label }}
+            </button>
+          </div>
+        </div>
+  
+        <div *ngIf="getVariantType() === 'SizeColor'">
+          <h3>Select Color</h3>
+          <div class="button-group">
+            <button *ngFor="let button of getVariantButtons()" class="variant-button">
+              {{ button.label.split(' - ')[0] }} <!-- Show only color -->
+            </button>
+          </div>
+          <h3>Select Size</h3>
+          <div class="button-group">
+            <button *ngFor="let button of getVariantButtons()" class="variant-button">
+              {{ button.label.split(' - ')[1] }} <!-- Show only size -->
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

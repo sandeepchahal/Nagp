@@ -7,6 +7,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { VariantType } from '../../../models/enums';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-product-item',
@@ -18,7 +19,10 @@ import { VariantType } from '../../../models/enums';
 export class ListProductItemComponent implements OnInit {
   productItems: ProductItemView[] = [];
 
-  constructor(private productItemService: ProductItemService) {}
+  constructor(
+    private productItemService: ProductItemService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadProductItems();
@@ -28,7 +32,6 @@ export class ListProductItemComponent implements OnInit {
     this.productItemService.getProductItems().subscribe({
       next: (data) => {
         this.productItems = data;
-        console.log('product items', this.productItems);
       },
       error: (err) => console.error('Error fetching product items:', err),
     });
@@ -48,5 +51,8 @@ export class ListProductItemComponent implements OnInit {
         ? productItemView.variant.sizeColorVariant?.length
         : 0;
     }
+  }
+  goToDetail(id: string) {
+    this.router.navigate(['/product/item/detail', id]);
   }
 }
