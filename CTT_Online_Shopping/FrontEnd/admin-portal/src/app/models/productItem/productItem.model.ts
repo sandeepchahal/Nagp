@@ -26,6 +26,7 @@ export interface ProductVariant extends ProductVariantBase {
 
 export interface ProductVariantSizeColorBase {
   colors: string; // for each color, we have multiple size options
+  image: ImagesBase; // for each color, we need to add the image
   sizes: ProductVariantSizeBase[];
 }
 

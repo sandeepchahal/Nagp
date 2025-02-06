@@ -69,3 +69,56 @@ h2, h3, h4, h5 {
   margin-top: 0;
   margin-bottom: 10px;
 }
+.size-color-item {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.size-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.size-color-item h4,
+.size-item h5 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.size-color-item label,
+.size-item label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.size-color-item input,
+.size-item input,
+.size-color-item select,
+.size-item select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.size-color-item button,
+.size-item button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.size-color-item button:hover,
+.size-item button:hover {
+  background-color: #0056b3;
+}

@@ -40,6 +40,7 @@ public class Discount
 public class ProductVariantSizeColorBase
 {
     public string Color { get; set; } = string.Empty;
+    public ImagesBase Image { get; set; } = new ImagesBase();
     public List<ProductVariantSizeBase> Sizes { get; set; } = new();
 }
 public class ProductVariantColorBase

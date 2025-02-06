@@ -16,6 +16,9 @@ import { CommonModule } from '@angular/common';
 export class DetailProductItemComponent {
   productItem!: ProductItemView;
   selectedImageIndex = 0; // Track the currently selected image
+  selectedVariant: { label: string; value: string; price: number } | null =
+    null; // Track the selected variant
+  currentPrice: number | null = null; // Track the current price
 
   constructor(
     private route: ActivatedRoute,
@@ -33,11 +36,34 @@ export class DetailProductItemComponent {
     this.productItemService.getProductItemById(productId).subscribe({
       next: (data) => {
         this.productItem = data;
-        console.log('id', productId);
-        console.log('Product Item', data);
+        // Set the default price based on the first variant
+        console.log(data);
+        this.setDefaultPrice();
       },
       error: (err) => console.error('Error fetching product item:', err),
     });
+  }
+
+  setDefaultPrice(): void {
+    if (!this.productItem || !this.productItem.variant) return;
+
+    switch (this.productItem.variantType) {
+      case VariantType.Size:
+        this.currentPrice =
+          this.productItem.variant?.sizeVariant?.[0]?.price || null;
+        break;
+      case VariantType.Color:
+        this.currentPrice =
+          this.productItem.variant?.colorVariant?.[0]?.price || null;
+        break;
+      case VariantType.ColorAndSize:
+        this.currentPrice =
+          this.productItem.variant?.sizeColorVariant?.[0]?.sizes?.[0]?.price ||
+          null;
+        break;
+      default:
+        this.currentPrice = null;
+    }
   }
 
   selectImage(index: number): void {
@@ -47,7 +73,8 @@ export class DetailProductItemComponent {
   getVariantType(): string {
     return this.productItem?.variantType || '';
   }
-  getVariantButtons(): { label: string; value: string }[] {
+
+  getVariantButtons(): { label: string; value: string; price: number }[] {
     if (!this.productItem || !this.productItem.variant) return [];
 
     const variant = this.productItem.variant;
@@ -58,6 +85,7 @@ export class DetailProductItemComponent {
           variant.sizeVariant?.map((v) => ({
             label: v.size || '', // Display the size as the label
             value: v.id || '', // Use the id as the value
+            price: v.price || 0,
           })) || []
         );
 
@@ -66,6 +94,7 @@ export class DetailProductItemComponent {
           variant.colorVariant?.map((v) => ({
             label: v.color || '', // Display the color as the label
             value: v.id || '', // Use the id as the value
+            price: v.price || 0,
           })) || []
         );
 
@@ -74,6 +103,7 @@ export class DetailProductItemComponent {
           variant.sizeColorVariant?.map((sc) => ({
             label: `${sc.colors} - ${sc.sizes?.[0]?.size || ''}`, // Combine color and size
             value: sc.id || '', // Use the id as the value
+            price: sc.sizes[0].price || 0,
           })) || []
         );
 
@@ -82,8 +112,13 @@ export class DetailProductItemComponent {
     }
   }
 
-  onVariantSelect(button: { label: string; value: string }): void {
-    // this.selectedVariant = button;
+  onVariantSelect(button: {
+    label: string;
+    value: string;
+    price: number;
+  }): void {
+    this.selectedVariant = button;
+    this.currentPrice = button.price;
     console.log('Selected Variant:', button);
     // You can make an API call here later to fetch additional details based on the selected variant
   }

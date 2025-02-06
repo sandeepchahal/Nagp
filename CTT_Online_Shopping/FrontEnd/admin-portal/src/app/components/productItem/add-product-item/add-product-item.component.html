@@ -87,37 +87,45 @@
     </div>
 
     <!-- Size-Color Variants -->
-    <div class="subsection" *ngIf="productItemForm.get('variantType')?.value === 'ColorAndSize'">
-      <h3>Size-Color Variants</h3>
-      <div formArrayName="sizeColorVariant">
-        <div *ngFor="let sizeColorVariant of sizeColorVariants.controls; let i = index" [formGroupName]="i" class="size-color-item">
-          <h4>Color {{ i + 1 }}</h4>
-          <label>Colors:</label>
-          <input formControlName="colors" placeholder="Colors (comma-separated)" />
-          <div formArrayName="sizes">
-            <div *ngFor="let size of getSizes(i).controls; let j = index" [formGroupName]="j" class="size-item">
-              <h5>Size {{ j + 1 }}</h5>
-              <label>Size:</label>
-              <input formControlName="size" placeholder="Size" />
-              <label>Stock Quantity:</label>
-              <input formControlName="stockQuantity" type="number" placeholder="Stock Quantity" />
-              <label>Price:</label>
-              <input formControlName="price" type="number" placeholder="Price" />
-              <div formGroupName="discount">
-                <label>Discount Type:</label>
-                <select formControlName="type">
-                  <option *ngFor="let type of discountTypes" [value]="type">{{ type }}</option>
-                </select>
-                <label>Discount Value:</label>
-                <input formControlName="value" type="number" placeholder="Discount Value" />
-              </div>
-            </div>
-            <button type="button" (click)="addSizeToSizeColorVariant(i)">Add Size</button>
-          </div>
+    <div formArrayName="sizeColorVariant">
+      <div *ngFor="let sizeColorVariant of sizeColorVariants.controls; let i = index" [formGroupName]="i" class="size-color-item">
+        <h4>Color {{ i + 1 }}</h4>
+        <label>Colors:</label>
+        <input formControlName="color" placeholder="Color" />
+    
+        <!-- Image Section -->
+        <div formGroupName="image">
+          <label>Image URL:</label>
+          <input formControlName="url" placeholder="Image URL" required />
+          <label>Alt Text:</label>
+          <input formControlName="altText" placeholder="Alt Text" />
         </div>
-        <button type="button" (click)="addSizeColorVariant()">Add Size-Color Variant</button>
+    
+        <!-- Sizes Section -->
+        <div formArrayName="sizes">
+          <div *ngFor="let size of getSizes(i).controls; let j = index" [formGroupName]="j" class="size-item">
+            <h5>Size {{ j + 1 }}</h5>
+            <label>Size:</label>
+            <input formControlName="size" placeholder="Size" required />
+            <label>Stock Quantity:</label>
+            <input formControlName="stockQuantity" type="number" placeholder="Stock Quantity" required />
+            <label>Price:</label>
+            <input formControlName="price" type="number" placeholder="Price" required />
+            <div formGroupName="discount">
+              <label>Discount Type:</label>
+              <select formControlName="type" required>
+                <option *ngFor="let type of discountTypes" [value]="type">{{ type }}</option>
+              </select>
+              <label>Discount Value:</label>
+              <input formControlName="value" type="number" placeholder="Discount Value" required />
+            </div>
+          </div>
+          <button type="button" (click)="addSizeToSizeColorVariant(i)">Add Size</button>
+        </div>
       </div>
+      <button type="button" (click)="addSizeColorVariant()">Add Size-Color Variant</button>
     </div>
+
     <!-- Discount -->
     <div class="subsection">
       <h3>Discount</h3>

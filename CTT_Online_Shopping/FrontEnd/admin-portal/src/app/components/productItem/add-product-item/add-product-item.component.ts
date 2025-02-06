@@ -123,7 +123,11 @@ export class AddProductItemComponent {
     const sizeColorIndex = this.sizeColorVariants.length + 1;
     this.sizeColorVariants.push(
       this.fb.group({
-        colors: ['', Validators.required],
+        color: ['', Validators.required],
+        image: this.fb.group({
+          url: ['', Validators.required], // Ensure URL is required
+          altText: [`color-${sizeColorIndex}`], // Default alt text
+        }),
         sizes: this.fb.array([]),
       })
     );
@@ -160,10 +164,10 @@ export class AddProductItemComponent {
       // Call your API service here to submit the product item
       this.productItemService.addProductItem(productItem).subscribe({
         next: () => {
-          alert('Category added successfully');
-          this.router.navigate(['/product']);
+          alert('Product Item added successfully');
+          this.router.navigate(['/product/items']);
         },
-        error: () => alert('Error adding category'),
+        error: () => alert('Error adding Product item'),
       });
     } else {
       console.error('Form is invalid');

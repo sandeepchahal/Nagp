@@ -17,9 +17,7 @@ public static class ProductItemMapper
             Variant = new ProductVariantDb()
             {
                 Discount = request.Variant.Discount,
-                Images = (Enum.TryParse(request.VariantType, out VariantTypeEnum variantType) && variantType == VariantTypeEnum.Size)
-                    ? request.Variant.Images
-                    : new List<ImagesBase>(),
+                Images = request.Variant.Images,
                 IsDiscountApplied = (Enum.TryParse(request.Variant.Discount.Type, out DiscountTypeEnum discountType) && discountType != DiscountTypeEnum.None),
                 ColorVariant = request.Variant.ColorVariant is { Count: > 0 }
                     ? request.Variant.ColorVariant.Select(col => new ProductVariantColorDb()
@@ -45,7 +43,8 @@ public static class ProductItemMapper
                         ? request.Variant.SizeColorVariant.Select(col => new ProductVariantSizeColorDb()
                         {
                             Color = col.Color,
-                            Sizes = col.Sizes
+                            Sizes = col.Sizes,
+                            Image = col.Image
                         }).ToList()
                         : null
             },
