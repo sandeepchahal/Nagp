@@ -1,0 +1,7 @@
+<form (ngSubmit)="addBrand()" #brandForm="ngForm">
+    <label>Brand Name:</label>
+    <input type="text" [(ngModel)]="brand.name" name="brandName" required />
+  
+    <button type="submit">Add Brand</button>
+  </form>
+  

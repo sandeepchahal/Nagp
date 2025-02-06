@@ -72,6 +72,7 @@ public partial class ProductController(
                 Id = category!.Id,
                 Gender = category.Gender,
                 Name = category.Name,
+                
                 SubCategory = category.SubCategories.Where(col => col.Id == product.SubCategoryId).Select(col =>
                     new SubCategoryView()
                     {

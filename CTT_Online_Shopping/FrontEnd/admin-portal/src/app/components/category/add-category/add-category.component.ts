@@ -1,9 +1,17 @@
 import { Component } from '@angular/core';
 import { CategoryService } from '../../../services/category.service';
 import { FormsModule } from '@angular/forms';
-
 import { CategoryCommand } from '../../../models/category/category.model';
 import { Gender, FilterAttributeType } from '../../../models/enums';
+import {
+  MenCategories,
+  WomenCategories,
+  MenSubategoryClothings,
+  MenSubcategoryAccesstories,
+  WomenSubcategoryIndianAndWesternWear,
+  WomenSubcategoryWesternWear,
+  WomenSubcategoryAccessories,
+} from '../../../models/enums';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -17,12 +25,14 @@ import { Router } from '@angular/router';
 export class AddCategoryComponent {
   genders = Object.values(Gender);
   filterTypes = Object.values(FilterAttributeType);
-
   category: CategoryCommand = {
     gender: Gender.Male,
     name: '',
     subCategories: [],
   };
+
+  categoryList: string[] = Object.values(MenCategories); // Default to men's categories
+  subCategoryList: string[] = [];
 
   constructor(
     private categoryService: CategoryService,
@@ -44,19 +54,51 @@ export class AddCategoryComponent {
       options: [],
     });
   }
+
+  updateCategories(): void {
+    this.categoryList =
+      this.category.gender === Gender.Male
+        ? Object.values(MenCategories)
+        : Object.values(WomenCategories);
+    this.category.name = ''; // Reset category name when gender changes
+    this.updateSubCategories();
+  }
+
+  updateSubCategories(): void {
+    if (this.category.gender === Gender.Male) {
+      if (this.category.name === MenCategories.Clothing) {
+        this.subCategoryList = Object.values(MenSubategoryClothings);
+      } else if (this.category.name === MenCategories.Accessories) {
+        this.subCategoryList = Object.values(MenSubcategoryAccesstories);
+      }
+    } else if (this.category.gender === Gender.Female) {
+      if (this.category.name === WomenCategories.IndianWesternWear) {
+        this.subCategoryList = Object.values(
+          WomenSubcategoryIndianAndWesternWear
+        );
+      } else if (this.category.name === WomenCategories.WesternWear) {
+        this.subCategoryList = Object.values(WomenSubcategoryWesternWear);
+      } else if (this.category.name === WomenCategories.Accessories) {
+        this.subCategoryList = Object.values(WomenSubcategoryAccessories);
+      }
+    }
+  }
+
+  updateSlug(index: number): void {
+    const subCategory = this.category.subCategories[index];
+    subCategory.slug = `${this.category.gender.toLowerCase()}-${subCategory.name
+      .toLowerCase()
+      .replace(/ /g, '-')}`;
+  }
+
   addCategory(): void {
-    // Ensure each filter attribute has options as a string, then split it into an array of strings
     this.category.subCategories.forEach((subCategory) => {
       subCategory.filterAttributes.forEach((attribute) => {
-        // Check if options is a string (not already an array)
-        console.log('att', attribute);
-        console.log('type', typeof attribute.options);
         if (typeof attribute.options === 'string') {
-          // Split the comma-separated string into an array
           attribute.options = (attribute.options as string)
             .split(',')
             .map((option) => option.trim())
-            .filter((option) => option.length > 0); // Remove empty strings
+            .filter((option) => option.length > 0);
         }
       });
     });

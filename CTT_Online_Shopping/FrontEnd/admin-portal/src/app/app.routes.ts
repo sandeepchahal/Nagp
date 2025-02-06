@@ -9,8 +9,13 @@ import { DetailProductComponent } from './components/product/detail-product/deta
 import { AddProductItemComponent } from './components/productItem/add-product-item/add-product-item.component';
 import { ListProductItemComponent } from './components/productItem/list-product-item/list-product-item.component';
 import { DetailProductItemComponent } from './components/productItem/detail-product-item/detail-product-item.component';
+import { ListBrandComponent } from './components/brand/list-brand/list-brand.component';
+import { AddBrandComponent } from './components/brand/add-brand/add-brand.component';
 
 export const routes: Routes = [
+  { path: 'brands', component: ListBrandComponent },
+  { path: 'brand/add', component: AddBrandComponent },
+
   { path: 'category', component: ListCategoryComponent },
   { path: 'category/add', component: AddCategoryComponent },
   { path: 'edit-category/:id', component: EditCategoryComponent },

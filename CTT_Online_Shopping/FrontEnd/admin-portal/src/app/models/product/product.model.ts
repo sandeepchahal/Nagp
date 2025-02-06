@@ -1,9 +1,10 @@
+import { BrandCommand } from '../brand/brand.model';
 import { CategoryViewBase } from '../category/category.model';
 import { SubCategoryViewBase } from '../category/subCategory.model';
 
 export interface ProductBase {
   name: string;
-  brand: string;
+  brand: BrandCommand;
   description: string;
   categoryId: string;
   subCategoryId: string;

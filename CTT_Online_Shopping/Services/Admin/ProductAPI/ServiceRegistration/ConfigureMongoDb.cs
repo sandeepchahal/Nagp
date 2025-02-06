@@ -46,6 +46,8 @@ public static class ConfigurationDbRegistration
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<CategoryDb>("categories"));
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<ProductDb>("products"));
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<ProductItemDb>("productItems"));
+        services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<BrandDb>("brands"));
+
     }
     private static string GetConnectionString(IConfiguration configuration)
     {
@@ -56,8 +58,8 @@ public static class ConfigurationDbRegistration
         var mongoDbPort = configuration["MongoDB:Port"];
         
         // Fetch sensitive data from environment variables
-        var username = "admin";//Environment.GetEnvironmentVariable("MONGODB_USERNAME");
-        var password = "admin123";// Environment.GetEnvironmentVariable("MONGODB_PASSWORD");
+        var username = "sandeepchahal433";//Environment.GetEnvironmentVariable("MONGODB_USERNAME");
+        var password = "rPF0elBciQaRY7Ml";// Environment.GetEnvironmentVariable("MONGODB_PASSWORD");
         
         // Ensure the required parameters are not null
         if (string.IsNullOrEmpty(database) || string.IsNullOrEmpty(clusterName) ||
@@ -69,8 +71,9 @@ public static class ConfigurationDbRegistration
         // Encode the username and password
         var encodedUsername = HttpUtility.UrlEncode(username, Encoding.UTF8);
         var encodedPassword = HttpUtility.UrlEncode(password, Encoding.UTF8);
-
-        var connectionString = $"mongodb://{encodedUsername}:{encodedPassword}@{mongoDbHost}:{mongoDbPort}/{database}?authSource=admin";
+        
+        //mongodb+srv://sandeepchahal433:<db_password>@nagp-ctt-online-shoppin.rgktl.mongodb.net/?retryWrites=true&w=majority&appName=NAGP-CTT-Online-Shopping
+        var connectionString = $"mongodb+srv://{encodedUsername}:{encodedPassword}@nagp-ctt-online-shoppin.{mongoDbHost}/?retryWrites=true&w=majority&appName={encodedUsername}";
         return connectionString;
     }
 }

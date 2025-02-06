@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input'; // For input elements
 import { MatAutocompleteModule } from '@angular/material/autocomplete'; // For autocomplete
 import { CategoryService } from '../../../services/category.service';
 import { CategoryView } from '../../../models/category/category.model';
+import { BrandCommand } from '../../../models/brand/brand.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -27,7 +28,7 @@ import { Router } from '@angular/router';
 export class AddProductComponent {
   product: ProductCommand = {
     name: '',
-    brand: '',
+    brand: { name: '' },
     description: '',
     categoryId: '',
     subCategoryId: '',

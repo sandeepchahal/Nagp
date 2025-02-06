@@ -34,7 +34,9 @@ public class ImagesBase
 public class Discount
 {
     public string Type { get; set; } = string.Empty;
-    public decimal Value { get; set; } 
+    public decimal Value { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
 }
 
 public class ProductVariantSizeColorBase
@@ -57,6 +59,8 @@ public class ProductVariantSizeBase
     public int StockQuantity { get; set; }
     public decimal Price { get; set; }
     public Discount? Discount { get; set; }
+    
+    public decimal DiscountedPrice { get; set; }
 }
 
 public class ProductVariantSizeColorDb:ProductVariantSizeColorBase
@@ -66,6 +70,7 @@ public class ProductVariantSizeColorDb:ProductVariantSizeColorBase
 public class ProductVariantColorDb:ProductVariantColorBase
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
+    public decimal DiscountedPrice { get; set; }
 }
 public class ProductVariantSizeDb:ProductVariantSizeBase
 {
