@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductItemView } from '../../../models/productItem/productItem.model';
+import {
+  ProductItemView,
+  ProductVariantSizeColor,
+} from '../../../models/productItem/productItem.model';
 import { ActivatedRoute } from '@angular/router';
 import { VariantType } from '../../../models/enums';
 import { ProductItemService } from '../../../services/productItem.service';
@@ -16,10 +19,15 @@ import { CommonModule } from '@angular/common';
 export class DetailProductItemComponent implements OnInit {
   productItem!: ProductItemView;
   selectedImageIndex = 0; // Track the currently selected image
-  selectedVariant: { label: string; value: string; price: number } | null =
-    null; // Track the selected variant
+  selectedVariant: {
+    label: string;
+    value: string;
+    price: number;
+    stockQuantity: number;
+  } | null = null; // Track the selected variant
   currentPrice: number | null = null; // Track the current price
   selectedColorIndex = 0; // Track the selected color index for ColorAndSize variant
+  isImageZoomed = false; // Track if the main image is zoomed
 
   constructor(
     private route: ActivatedRoute,
@@ -73,7 +81,12 @@ export class DetailProductItemComponent implements OnInit {
     return this.productItem?.variantType || '';
   }
 
-  getVariantButtons(): { label: string; value: string; price: number }[] {
+  getVariantButtons(): {
+    label: string;
+    value: string;
+    price: number;
+    stockQuantity: number;
+  }[] {
     if (!this.productItem || !this.productItem.variant) return [];
 
     const variant = this.productItem.variant;
@@ -85,6 +98,7 @@ export class DetailProductItemComponent implements OnInit {
             label: v.size || '',
             value: v.id || '',
             price: v.price || 0,
+            stockQuantity: v.stockQuantity || 0,
           })) || []
         );
 
@@ -94,6 +108,7 @@ export class DetailProductItemComponent implements OnInit {
             label: v.color || '',
             value: v.id || '',
             price: v.price || 0,
+            stockQuantity: v.stockQuantity || 0,
           })) || []
         );
 
@@ -101,10 +116,11 @@ export class DetailProductItemComponent implements OnInit {
         const selectedColorVariant =
           variant.sizeColorVariant?.[this.selectedColorIndex];
         return (
-          selectedColorVariant?.sizes.map((s) => ({
+          selectedColorVariant?.sizes?.map((s) => ({
             label: s.size || '',
             value: selectedColorVariant.id || '',
             price: s.price || 0,
+            stockQuantity: s.stockQuantity || 0,
           })) || []
         );
 
@@ -117,6 +133,7 @@ export class DetailProductItemComponent implements OnInit {
     label: string;
     value: string;
     price: number;
+    stockQuantity: number;
   }): void {
     this.selectedVariant = button;
     this.currentPrice = button.price;
@@ -126,8 +143,30 @@ export class DetailProductItemComponent implements OnInit {
   onColorSelect(index: number): void {
     this.selectedColorIndex = index;
     this.selectedVariant = null; // Reset selected variant when color changes
-    this.currentPrice =
-      this.productItem.variant.sizeColorVariant?.[index]?.sizes?.[0]?.price ||
-      null;
+    const selectedColorVariant =
+      this.productItem.variant.sizeColorVariant?.[index];
+    this.currentPrice = selectedColorVariant?.sizes?.[0]?.price || null;
+  }
+
+  toggleImageZoom(): void {
+    this.isImageZoomed = !this.isImageZoomed;
+  }
+
+  getAvailableColorsForSize(size: string): string[] {
+    if (
+      !this.productItem ||
+      !this.productItem.variant ||
+      this.productItem.variantType !== VariantType.ColorAndSize
+    )
+      return [];
+
+    return (
+      this.productItem.variant.sizeColorVariant
+        ?.filter((colorVariant: ProductVariantSizeColor) =>
+          colorVariant.sizes.some((s) => s.size === size && s.stockQuantity > 0)
+        )
+        .map((colorVariant: ProductVariantSizeColor) => colorVariant.colors) ??
+      []
+    );
   }
 }

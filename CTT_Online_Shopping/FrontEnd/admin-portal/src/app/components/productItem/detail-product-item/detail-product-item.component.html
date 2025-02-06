@@ -2,7 +2,7 @@
   <!-- Left Side: Image Section -->
   <div class="image-section">
     <!-- Main Image -->
-    <div class="main-image">
+    <div class="main-image" [class.zoomed]="isImageZoomed" (click)="toggleImageZoom()">
       <img
         [src]="productItem.variant.images![selectedImageIndex]?.url"
         [alt]="productItem.variant.images![selectedImageIndex]?.altText"
@@ -45,9 +45,13 @@
             *ngFor="let button of getVariantButtons()"
             class="variant-button"
             [class.selected]="selectedVariant?.value === button.value"
+            [disabled]="button.stockQuantity <= 0"
             (click)="onVariantSelect(button)"
           >
             {{ button.label }}
+            <span class="stock-quantity" *ngIf="button.stockQuantity > 0">
+              {{ button.stockQuantity }} in stock
+            </span>
           </button>
         </div>
       </div>
@@ -59,9 +63,13 @@
             *ngFor="let button of getVariantButtons()"
             class="variant-button"
             [class.selected]="selectedVariant?.value === button.value"
+            [disabled]="button.stockQuantity <= 0"
             (click)="onVariantSelect(button)"
           >
             {{ button.label }}
+            <span class="stock-quantity" *ngIf="button.stockQuantity > 0">
+              {{ button.stockQuantity }} in stock
+            </span>
           </button>
         </div>
       </div>
@@ -85,9 +93,13 @@
             *ngFor="let button of getVariantButtons()"
             class="variant-button"
             [class.selected]="selectedVariant?.value === button.value"
+            [disabled]="button.stockQuantity <= 0"
             (click)="onVariantSelect(button)"
           >
             {{ button.label }}
+            <span class="stock-quantity" *ngIf="button.stockQuantity > 0">
+              {{ button.stockQuantity }} in stock
+            </span>
           </button>
         </div>
       </div>

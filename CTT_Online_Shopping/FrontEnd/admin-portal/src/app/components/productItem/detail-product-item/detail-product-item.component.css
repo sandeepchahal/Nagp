@@ -16,6 +16,13 @@
   width: 100%;
   overflow: hidden;
   border-radius: 8px;
+  cursor: zoom-in;
+  transition: transform 0.3s ease;
+}
+
+.main-image.zoomed {
+  transform: scale(1.5);
+  cursor: zoom-out;
 }
 
 .responsive-image {
@@ -87,6 +94,7 @@ h1 {
 }
 
 .variant-button {
+  position: relative;
   padding: 10px 15px;
   background-color: #f4f4f4;
   border: 1px solid #ddd;
@@ -106,6 +114,19 @@ h1 {
   background-color: #007bff;
   color: white;
   border-color: #007bff;
+}
+
+.variant-button:disabled {
+  background-color: #ddd;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.stock-quantity {
+  display: block;
+  font-size: 0.8rem;
+  color: #555;
+  margin-top: 5px;
 }
 
 .color-group {
