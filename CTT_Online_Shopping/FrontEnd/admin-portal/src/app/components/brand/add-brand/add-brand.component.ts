@@ -15,6 +15,7 @@ import { BrandService } from '../../../services/brand.service';
 export class AddBrandComponent {
   brand: BrandCommand = {
     name: '',
+    id: '',
   };
 
   constructor(private brandService: BrandService, private router: Router) {}

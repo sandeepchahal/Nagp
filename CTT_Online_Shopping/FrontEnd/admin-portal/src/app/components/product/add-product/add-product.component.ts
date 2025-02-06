@@ -6,11 +6,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input'; // For input elements
-import { MatAutocompleteModule } from '@angular/material/autocomplete'; // For autocomplete
+import {
+  MatAutocompleteModule,
+  MatAutocompleteSelectedEvent,
+} from '@angular/material/autocomplete'; // For autocomplete
 import { CategoryService } from '../../../services/category.service';
 import { CategoryView } from '../../../models/category/category.model';
-import { BrandCommand } from '../../../models/brand/brand.model';
+import { BrandCommand, BrandView } from '../../../models/brand/brand.model';
 import { Router } from '@angular/router';
+import { BrandService } from '../../../services/brand.service';
 
 @Component({
   selector: 'app-add-product',
@@ -28,7 +32,7 @@ import { Router } from '@angular/router';
 export class AddProductComponent {
   product: ProductCommand = {
     name: '',
-    brand: { name: '' },
+    brand: { name: '', id: '' },
     description: '',
     categoryId: '',
     subCategoryId: '',
@@ -37,10 +41,11 @@ export class AddProductComponent {
   categories: CategoryView[] = []; // All categories fetched from the API
   filteredCategories: CategoryView[] = []; // Filtered categories based on user input
   filteredSubCategories: any[] = []; // Filtered subcategories based on selected category
-
+  brands: BrandView[] = [];
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
+    private brandService: BrandService,
     private router: Router
   ) {}
 
@@ -48,9 +53,11 @@ export class AddProductComponent {
     // Fetch all categories when the component initializes
     this.categoryService.getCategories().subscribe((categories) => {
       this.categories = categories;
-      this.filteredCategories = categories; // Initially, show all categories
-      console.log('categories', this.categories);
-      console.log('filteredCategories', this.filteredCategories);
+      this.filteredCategories = categories;
+    });
+
+    this.brandService.getAll().subscribe((data) => {
+      this.brands = data;
     });
   }
 
@@ -102,6 +109,24 @@ export class AddProductComponent {
   // Select subcategory from the list
   onSubCategorySelected(event: any): void {
     this.product.subCategoryId = event.option.value;
+  }
+
+  onBrandInputChange() {
+    this.brands = this.brands.filter((brand) =>
+      brand.name
+        .toLowerCase()
+        .includes(this.product.brand.id?.toString().toLowerCase() || '')
+    );
+  }
+
+  onBrandSelected(event: MatAutocompleteSelectedEvent) {
+    const selectedBrand = this.brands.find(
+      (brand) => brand.id === event.option.value
+    );
+    if (selectedBrand) {
+      this.product.brand.id = selectedBrand.id;
+      this.product.brand.name = selectedBrand.name;
+    }
   }
 
   onSubmit() {

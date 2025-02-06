@@ -19,7 +19,6 @@
     <div *ngFor="let attr of subCategory.filterAttributes; let j = index" class="filter-attribute">
       <input type="text" [(ngModel)]="attr.name" name="attrName{{ i }}{{ j }}" placeholder="Attribute Name" required />
 
-      <label>Type:</label>
       <select [(ngModel)]="attr.type" name="type{{ i }}{{ j }}" required>
         <option *ngFor="let type of filterTypes" [value]="type">{{ type }}</option>
       </select>

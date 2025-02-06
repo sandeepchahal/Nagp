@@ -10,7 +10,7 @@ namespace ProductAPI.Controllers;
 public class BrandController(IMongoCollection<BrandDb> brandCollection):ControllerBase
 {
     // GET: api/brand
-    [HttpGet]
+    [HttpGet("get-all")]
     public async Task<ActionResult<IEnumerable<BrandView>>> GetAll()
     {
         var brands = await brandCollection.Find(_ => true)
@@ -20,7 +20,7 @@ public class BrandController(IMongoCollection<BrandDb> brandCollection):Controll
     }
 
     // GET: api/brand/{id}
-    [HttpGet("{id}")]
+    [HttpGet("get/{id}")]
     public async Task<ActionResult<BrandView>> GetById(string id)
     {
         var brand = await brandCollection.Find(b => b.Id == id)
@@ -36,7 +36,7 @@ public class BrandController(IMongoCollection<BrandDb> brandCollection):Controll
     }
 
     // POST: api/brand
-    [HttpPost]
+    [HttpPost("add")]
     public async Task<IActionResult> Add([FromBody] BrandCommand command)
     {
         if (string.IsNullOrWhiteSpace(command.Name))

@@ -1,25 +1,70 @@
-.sub-div {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
+/* General form styling */
+form {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+select, input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Subcategory section */
+.sub-div {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  background-color: #fff;
+}
+
+.sub-div h4 {
+  margin-top: 0;
+  color: #555;
+}
+
+/* Filter attribute section */
 .filter-attribute {
   margin-top: 10px;
   padding: 10px;
   border: 1px solid #eee;
-  border-radius: 5px;
+  border-radius: 4px;
+  background-color: #fafafa;
+}
+
+.filter-attribute input {
+  margin-bottom: 10px;
+}
+
+/* Buttons */
+button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .add-filter-btn {
   background-color: #007bff;
   color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
 }
 
 .add-filter-btn:hover {
@@ -29,10 +74,6 @@
 .add-subcategory-btn {
   background-color: #28a745;
   color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
   margin-top: 10px;
 }
 
@@ -41,18 +82,21 @@
 }
 
 .submit-btn-div {
+  text-align: right;
   margin-top: 20px;
 }
 
 .submit-btn-div button {
   background-color: #dc3545;
   color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 .submit-btn-div button:hover {
   background-color: #c82333;
+}
+
+/* Readonly input styling */
+input[readonly] {
+  background-color: #f1f1f1;
+  cursor: not-allowed;
 }

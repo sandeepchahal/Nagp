@@ -86,9 +86,12 @@ export class AddCategoryComponent {
 
   updateSlug(index: number): void {
     const subCategory = this.category.subCategories[index];
-    subCategory.slug = `${this.category.gender.toLowerCase()}-${subCategory.name
-      .toLowerCase()
-      .replace(/ /g, '-')}`;
+    const slug =
+      `${this.category.gender.toLowerCase()}-${subCategory.name.toLowerCase()}`
+        .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric characters with -
+        .replace(/-+/g, '-') // Replace multiple - with single -
+        .replace(/^-|-$/g, ''); // Remove leading or trailing -
+    subCategory.slug = slug;
   }
 
   addCategory(): void {

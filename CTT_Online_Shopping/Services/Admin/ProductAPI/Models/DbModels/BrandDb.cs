@@ -6,7 +6,4 @@ namespace ProductAPI.Models.DbModels;
 
 public class BrandDb:BrandBase
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = string.Empty;
 }
