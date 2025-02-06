@@ -66,18 +66,19 @@
         </div>
       </div>
 
-      <div *ngIf="getVariantType() === 'SizeColor'">
+      <div *ngIf="getVariantType() === 'ColorAndSize'">
         <h3>Select Color</h3>
-        <div class="button-group">
-          <button
-            *ngFor="let button of getVariantButtons()"
-            class="variant-button"
-            [class.selected]="selectedVariant?.value === button.value"
-            (click)="onVariantSelect(button)"
+        <div class="color-group">
+          <div
+            *ngFor="let colorVariant of productItem.variant.sizeColorVariant; let i = index"
+            class="color-item"
+            [class.selected]="i === selectedColorIndex"
+            (click)="onColorSelect(i)"
           >
-            {{ button.label.split(' - ')[0] }} <!-- Show only color -->
-          </button>
+            <img [src]="colorVariant.image.url" [alt]="colorVariant.image.altText" class="color-image" />
+          </div>
         </div>
+
         <h3>Select Size</h3>
         <div class="button-group">
           <button
@@ -86,15 +87,16 @@
             [class.selected]="selectedVariant?.value === button.value"
             (click)="onVariantSelect(button)"
           >
-            {{ button.label.split(' - ')[1] }} <!-- Show only size -->
+            {{ button.label }}
           </button>
         </div>
       </div>
     </div>
+
     <div class="detaill-section">
       <hr>
       <h1>Description</h1>
-      <p>{{productItem.product.description}}</p>
+      <p>{{ productItem.product.description }}</p>
     </div>
   </div>
 </div>
