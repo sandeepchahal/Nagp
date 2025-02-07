@@ -11,6 +11,9 @@ public abstract class ProductBase
     
     [Required]
     public string Description { get; set; } = string.Empty;
+    
+    [Required]
+    public string BrandId { get; set; } = null!;  // Reference to Main Category
 
     [Required]
     public string CategoryId { get; set; } = null!;  // Reference to Main Category

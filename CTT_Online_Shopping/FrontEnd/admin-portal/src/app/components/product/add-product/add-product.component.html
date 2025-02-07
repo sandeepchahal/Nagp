@@ -27,7 +27,7 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Brand</mat-label>
-      <input matInput [(ngModel)]="product.brand.id" name="brandId" [matAutocomplete]="autoBrand" (input)="onBrandInputChange()" required />
+      <input matInput [(ngModel)]="product.brandId" name="brandId" [matAutocomplete]="autoBrand" (input)="onBrandInputChange()" required />
       <mat-autocomplete #autoBrand="matAutocomplete" (optionSelected)="onBrandSelected($event)">
         <mat-option *ngFor="let brand of brands" [value]="brand.id">
           {{ brand.name }}

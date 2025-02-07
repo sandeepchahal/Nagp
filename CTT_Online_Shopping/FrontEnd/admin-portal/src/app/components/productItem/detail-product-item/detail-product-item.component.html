@@ -4,8 +4,8 @@
     <!-- Main Image -->
     <div class="main-image" [class.zoomed]="isImageZoomed" (click)="toggleImageZoom()">
       <img
-        [src]="productItem.variant.images![selectedImageIndex]?.url"
-        [alt]="productItem.variant.images![selectedImageIndex]?.altText"
+        [src]="productItem.variant.images![selectedImageIndex].url"
+        [alt]="productItem.variant.images![selectedImageIndex].altText"
         class="responsive-image"
       />
     </div>

@@ -16,6 +16,6 @@ public static class ConfigureServices
         serviceCollection.AddScoped<ICategoryDbService, CategoryDbService>();
         serviceCollection.AddScoped<IProductDbService, ProductDbService>();
         serviceCollection.AddScoped<IProductItemDbService, ProductItemDbService>();
-
+        serviceCollection.AddScoped<IBrandDbService, BrandDbService>();
     }
 }

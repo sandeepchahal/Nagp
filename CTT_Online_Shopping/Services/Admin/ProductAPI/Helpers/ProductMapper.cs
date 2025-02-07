@@ -12,7 +12,6 @@ public static class ProductMapper
         {
             Name = productDb.Name,
             Description = productDb.Description,
-            Brand = productDb.Brand,
             Images = new List<ImagesBase>(),
             Id = productDb.Id
         };

@@ -12,7 +12,8 @@ namespace ProductAPI.Controllers;
 public partial class ProductController(
     IMongoCollection<ProductDb> productCollection,
     IProductEventService productEventService,
-    ICategoryDbService categoryDbService) : ControllerBase
+    ICategoryDbService categoryDbService,
+    IBrandDbService brandDbService) : ControllerBase
 {
     [HttpGet("get-all")]
     public async Task<IActionResult> GetAllProducts()
@@ -29,6 +30,7 @@ public partial class ProductController(
             foreach (var productDb in products)
             {
                 var mapped = ProductMapper.MapToProductView(productDb);
+                mapped.Brand = await brandDbService.GetAsync(productDb.BrandId);
                 var category = await categoryDbService.GetAsync(productDb.CategoryId);
                 mapped.Category = new ProductCategoryView()
                 {
@@ -66,6 +68,7 @@ public partial class ProductController(
             }
 
             var mapped = ProductMapper.MapToProductView(product);
+            mapped.Brand = await brandDbService.GetAsync(product.BrandId);
             var category = await categoryDbService.GetAsync(product.CategoryId);
             mapped.Category = new ProductCategoryView()
             {

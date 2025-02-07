@@ -23,7 +23,7 @@
               name="subCategoryId" 
               [matAutocomplete]="autoSubCategory" 
               (input)="onSubCategoryInputChange()" 
-              [disabled]="!product.categoryId" 
+              [disabled]="!product.category.id" 
               required 
             />
             <mat-autocomplete #autoSubCategory="matAutocomplete" (optionSelected)="onSubCategorySelected($event)">
@@ -43,7 +43,7 @@
         <!-- Product Brand -->
         <mat-form-field appearance="fill">
           <mat-label>Brand</mat-label>
-          <input matInput [(ngModel)]="product.brand" name="brand" required />
+          <input matInput [(ngModel)]="product.brand.name" name="brand" required />
         </mat-form-field>
     
     

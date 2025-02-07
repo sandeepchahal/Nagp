@@ -5,6 +5,4 @@ namespace ProductAPI.Models.Commands;
 
 public class ProductCommand : ProductBase
 {
-    [Required]
-    public BrandCommand Brand { get; set; } = null!; 
 }

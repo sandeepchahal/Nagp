@@ -17,7 +17,7 @@ public class ProductItemDbService(IMongoCollection<ProductItemDb> productItemCol
                 return null;
             var mapper = ProductItemMapper.MapToProductViewModel(result);
             var product = await productDbService.GetAsync(mapper.ProductId);
-            mapper.Product = product is not null? ProductMapper.MapToProductView(product): new ProductView();
+            mapper.Product = product??new ProductView();
             return mapper;
         }
         catch (Exception e)

@@ -46,8 +46,8 @@ export class EditProductComponent {
     if (id) {
       this.productService.getProductById(id).subscribe((data) => {
         this.product = data;
-        this.product.categoryId = data.category.id;
-        this.product.subCategoryId = data.category.subCategory.id;
+        this.product.category.id = data.category.id;
+        this.product.category.subCategory.id = data.category.subCategory.id;
       });
     }
   }
@@ -60,13 +60,13 @@ export class EditProductComponent {
   }
   // Filter categories based on user input
   onCategoryInputChange(): void {
-    console.log(this.product.categoryId.toLowerCase());
-    if (this.product.categoryId) {
+    console.log(this.product.category.id.toLowerCase());
+    if (this.product.category.id) {
       // Filter categories locally
       this.filteredCategories = this.categories.filter((category) =>
         category.name
           .toLowerCase()
-          .includes(this.product.categoryId.toLowerCase())
+          .includes(this.product.category.id.toLowerCase())
       );
       console.log(this.filteredCategories);
     } else {
@@ -76,9 +76,9 @@ export class EditProductComponent {
 
   // Select category from the list
   onCategorySelected(event: any): void {
-    this.product.categoryId = event.option.value;
+    this.product.category.id = event.option.value;
     this.filteredSubCategories = this.filterSubCategoriesByCategory(
-      this.product.categoryId
+      this.product.category.id
     ); // Filter subcategories based on selected category
   }
   // Filter subcategories based on selected category
@@ -92,20 +92,20 @@ export class EditProductComponent {
 
   // Filter subcategories based on user input
   onSubCategoryInputChange(): void {
-    if (this.product.subCategoryId) {
+    if (this.product.category.subCategory.id) {
       // Filter subcategories locally based on user input
       this.filteredSubCategories = this.filteredSubCategories.filter(
         (subCategory) =>
           subCategory.name
             .toLowerCase()
-            .includes(this.product.subCategoryId.toLowerCase())
+            .includes(this.product.category.id.toLowerCase())
       );
     }
   }
 
   // Select subcategory from the list
   onSubCategorySelected(event: any): void {
-    this.product.subCategoryId = event.option.value;
+    this.product.category.subCategory.id = event.option.value;
   }
 
   onSubmit(): void {

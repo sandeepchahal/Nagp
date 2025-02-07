@@ -22,8 +22,8 @@ export class ProductService {
       },
     });
   }
-  getProducts(): Observable<ProductCategoryView[]> {
-    return this.http.get<ProductCategoryView[]>(`${this.apiUrl}/get-all`);
+  getProducts(): Observable<ProductView[]> {
+    return this.http.get<ProductView[]>(`${this.apiUrl}/get-all`);
   }
 
   getProductById(id: string): Observable<ProductView> {

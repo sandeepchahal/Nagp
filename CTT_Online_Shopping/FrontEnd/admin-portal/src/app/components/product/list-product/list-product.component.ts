@@ -31,7 +31,7 @@ import { MatFormFieldModule } from '@angular/material/form-field'; // For mat-fo
   styleUrl: './list-product.component.css',
 })
 export class ListProductComponent {
-  products: ProductCategoryView[] = [];
+  products: ProductView[] = [];
   // Define the columns to display
   displayedColumns: string[] = [
     'id',
@@ -49,12 +49,10 @@ export class ListProductComponent {
   }
 
   getProducts(): void {
-    this.productService
-      .getProducts()
-      .subscribe((data: ProductCategoryView[]) => {
-        this.products = data;
-        console.log(this.products);
-      });
+    this.productService.getProducts().subscribe((data: ProductView[]) => {
+      this.products = data;
+      console.log(this.products);
+    });
   }
 
   viewProductDetails(id: string): void {

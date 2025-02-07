@@ -32,7 +32,7 @@ import { BrandService } from '../../../services/brand.service';
 export class AddProductComponent {
   product: ProductCommand = {
     name: '',
-    brand: { name: '', id: '' },
+    brandId: '',
     description: '',
     categoryId: '',
     subCategoryId: '',
@@ -115,7 +115,7 @@ export class AddProductComponent {
     this.brands = this.brands.filter((brand) =>
       brand.name
         .toLowerCase()
-        .includes(this.product.brand.id?.toString().toLowerCase() || '')
+        .includes(this.product.brandId?.toString().toLowerCase() || '')
     );
   }
 
@@ -124,8 +124,7 @@ export class AddProductComponent {
       (brand) => brand.id === event.option.value
     );
     if (selectedBrand) {
-      this.product.brand.id = selectedBrand.id;
-      this.product.brand.name = selectedBrand.name;
+      this.product.brandId = selectedBrand.id;
     }
   }
 
@@ -146,7 +145,7 @@ export class AddProductComponent {
   private isValidProduct(product: ProductCommand): boolean {
     return !!(
       product.name &&
-      product.brand &&
+      product.brandId &&
       product.description &&
       product.categoryId &&
       product.subCategoryId

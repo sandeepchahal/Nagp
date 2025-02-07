@@ -20,11 +20,11 @@ public partial class ProductController
                 Description = product.Description,
                 SubCategoryId = product.SubCategoryId,
                 CategoryId = product.CategoryId,
-                Brand = new BrandDb(){Name = product.Name} 
+                BrandId = product.BrandId
             };
             await productCollection.InsertOneAsync(productDb);
             // send an event to search api
-            _ = productEventService.RaiseAddAsync(productDb);
+            //_ = productEventService.RaiseAddAsync(productDb);
             return Ok(new { message = "Product added successfully.", product = productDb });
         }
         catch (Exception ex)

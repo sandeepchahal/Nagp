@@ -52,6 +52,7 @@ public class ProductVariantColorBase
     public decimal Price { get; set; }
     public Discount? Discount { get; set; }
     public ImagesBase Image { get; set; } = new ImagesBase();
+    
 }
 public class ProductVariantSizeBase
 {
@@ -59,7 +60,6 @@ public class ProductVariantSizeBase
     public int StockQuantity { get; set; }
     public decimal Price { get; set; }
     public Discount? Discount { get; set; }
-    
     public decimal DiscountedPrice { get; set; }
 }
 

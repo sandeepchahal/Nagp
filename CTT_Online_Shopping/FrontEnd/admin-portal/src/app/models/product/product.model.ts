@@ -1,10 +1,10 @@
-import { BrandCommand } from '../brand/brand.model';
+import { BrandCommand, BrandView } from '../brand/brand.model';
 import { CategoryViewBase } from '../category/category.model';
 import { SubCategoryViewBase } from '../category/subCategory.model';
 
 export interface ProductBase {
   name: string;
-  brand: BrandCommand;
+  brandId: string;
   description: string;
   categoryId: string;
   subCategoryId: string;
@@ -12,12 +12,17 @@ export interface ProductBase {
 
 export interface ProductCommand extends ProductBase {}
 
-export interface ProductView extends ProductBase {
+export interface ProductViewBase {
+  name: string;
+  description: string;
   id: string;
-  discountPrice: number;
-  originalPrice: number;
-  overallRating: string;
-  numberOfReviews: number;
+  brand: BrandView;
+}
+export interface ProductView extends ProductViewBase {
+  // discountPrice: number;
+  // originalPrice: number;
+  // overallRating: string;
+  // numberOfReviews: number;
   category: ProductCategoryView;
   images: ImagesBase[];
 }
