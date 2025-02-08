@@ -40,7 +40,6 @@ export class AddProductItemComponent {
       ],
       variantType: [VariantType.Size, Validators.required], // Default to Size
       variant: this.fb.group({
-        images: this.fb.array([]),
         discount: this.fb.group({
           type: [DiscountType.None, Validators.required],
           value: [0, [Validators.required, Validators.min(0)]],
@@ -48,10 +47,9 @@ export class AddProductItemComponent {
         sizeVariant: this.fb.array([]),
         colorVariant: this.fb.array([]),
         sizeColorVariant: this.fb.array([]),
+        images: this.fb.array([]), // Add images array at the variant level
       }),
     });
-
-    this.addImage(); // Add one image by default
   }
 
   get variant(): FormGroup {
@@ -78,7 +76,6 @@ export class AddProductItemComponent {
   }
 
   addSizeVariant(): void {
-    const sizeIndex = this.sizeVariants.length + 1;
     this.sizeVariants.push(
       this.fb.group({
         size: ['', Validators.required],

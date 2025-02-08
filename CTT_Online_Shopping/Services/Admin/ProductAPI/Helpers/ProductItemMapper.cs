@@ -20,8 +20,8 @@ public static class ProductItemMapper
             Variant = new ProductVariantDb()
             {
                 Discount = request.Variant.Discount,
-                Images = request.Variant.Images,
                 IsDiscountApplied = discountAtProductLevelFlag,
+                Images = request.Variant.SizeVariant is {Count:>0}? request.Variant.Images: new(),
                 ColorVariant = request.Variant.ColorVariant is { Count: > 0 }
                     ? request.Variant.ColorVariant.Select(col => new ProductVariantColorDb()
                     {
@@ -46,14 +46,14 @@ public static class ProductItemMapper
                         ? request.Variant.SizeColorVariant.Select(col => new ProductVariantSizeColorDb()
                         {
                             Color = col.Color,
-                            Sizes = col.Sizes.Select(col=>new ProductVariantSizeBase()
+                            Sizes = col.Sizes.Select(productVariantSizeBase=>new ProductVariantSizeBase()
                             {
-                                Discount = col.Discount,
-                                Price = col.Price,
-                                StockQuantity = col.StockQuantity,
-                                Size = col.Size
+                                Discount = productVariantSizeBase.Discount,
+                                Price = productVariantSizeBase.Price,
+                                StockQuantity = productVariantSizeBase.StockQuantity,
+                                Size = productVariantSizeBase.Size
                             }).ToList(),
-                            Image = col.Image
+                            Image= col.Image
                         }).ToList()
                         : null
             },
@@ -63,7 +63,7 @@ public static class ProductItemMapper
         if (result.Variant.SizeVariant != null)
             foreach (var sizeVariant in result.Variant.SizeVariant)
             {
-                Enum.TryParse(result.Variant.Discount.Type, out DiscountTypeEnum sizeDiscountType);
+                Enum.TryParse(sizeVariant?.Discount?.Type, out DiscountTypeEnum sizeDiscountType);
                 sizeVariant.DiscountedPrice =
                     CalculateDiscount(sizeDiscountType, sizeVariant.Price, sizeVariant.Discount);
                 if (!discountAtProductLevelFlag) continue;
@@ -74,7 +74,7 @@ public static class ProductItemMapper
         if (result.Variant.ColorVariant != null)
             foreach (var colorVariant in result.Variant.ColorVariant)
             {
-                Enum.TryParse(result.Variant.Discount.Type, out DiscountTypeEnum sizeDiscountType);
+                Enum.TryParse(colorVariant?.Discount.Type, out DiscountTypeEnum sizeDiscountType);
                 colorVariant.DiscountedPrice =
                     CalculateDiscount(sizeDiscountType, colorVariant.Price, colorVariant.Discount);
                 if (!discountAtProductLevelFlag) continue;
@@ -86,9 +86,9 @@ public static class ProductItemMapper
         if (result.Variant.SizeColorVariant != null)
             foreach (var sizeColorVariant in result.Variant.SizeColorVariant)
             {
-                Enum.TryParse(request.Variant.Discount.Type, out DiscountTypeEnum sizeDiscountType);
                 foreach (var size in sizeColorVariant.Sizes)
                 {
+                    Enum.TryParse(size.Discount.Type, out DiscountTypeEnum sizeDiscountType);
                   size.DiscountedPrice=  CalculateDiscount(sizeDiscountType, size.Price, size.Discount);
                   if (!discountAtProductLevelFlag) continue;
                   Enum.TryParse(request.Variant.Discount.Type, out DiscountTypeEnum discountAtProuctLevelType);
@@ -100,7 +100,7 @@ public static class ProductItemMapper
         return result;
     }
 
-    public static ProductItemView MapToProductViewModel(ProductItemDb productItemDb)
+    public static ProductItemView MapToProductItemViewModel(ProductItemDb productItemDb)
     {
         return new ProductItemView()
         {
@@ -113,14 +113,12 @@ public static class ProductItemMapper
 
     private static decimal CalculateDiscount(DiscountTypeEnum discountTypeEnum, decimal price, Discount discount)
     {
-        if (discountTypeEnum == DiscountTypeEnum.Fixed)
+        return discountTypeEnum switch
         {
-            return price - discount.Value;
-        }
-        else
-        {
-            return price - (discount.Value * price / 100);
-        }
+            DiscountTypeEnum.None => 0,
+            DiscountTypeEnum.Fixed => price - discount.Value,
+            _ => price - (discount.Value * price / 100)
+        };
     }
     
 }

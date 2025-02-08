@@ -27,7 +27,7 @@ public partial class ProductItemController(
             }
 
             var result = new List<ProductItemView>();
-            foreach (var mapper in productItems.Select(productItem => ProductItemMapper.MapToProductViewModel(productItem)))
+            foreach (var mapper in productItems.Select(ProductItemMapper.MapToProductItemViewModel))
             {
                 mapper.Product =await productDbService.GetAsync(mapper.ProductId)?? new ProductView();
                 result.Add(mapper);
@@ -45,7 +45,10 @@ public partial class ProductItemController(
     {
         try
         {
-            return Ok(await productItemDbService.GetAsync(id));
+            var product = await productItemDbService.GetAsync(id);
+            if (product is null)
+                return NotFound("Product Id is not found");
+            return Ok(product);
         }
         catch (Exception ex)
         {

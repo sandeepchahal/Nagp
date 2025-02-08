@@ -7,6 +7,7 @@
         [src]="productItem.variant.images![selectedImageIndex].url"
         [alt]="productItem.variant.images![selectedImageIndex].altText"
         class="responsive-image"
+        [ngClass]="{'zoom-cursor': isImageZoomed}"
       />
     </div>
 
@@ -33,7 +34,16 @@
 
     <!-- Price -->
     <div class="price">
-      <strong>MRP: </strong> {{ currentPrice | currency:'INR' }}
+      <strong>MRP: </strong>
+      <span *ngIf="discountPrice > 0" class="original-price">
+        {{ selectedVariant.price | currency:'INR' }}
+      </span>
+      <span *ngIf="discountPrice > 0" class="discounted-price">
+        {{ selectedVariant.discountedPrice | currency:'INR' }}
+      </span>
+      <span *ngIf="discountPrice === 0">
+        {{ selectedVariant.price | currency:'INR' }}
+      </span>
     </div>
 
     <!-- Variant Buttons -->
@@ -44,13 +54,13 @@
           <button
             *ngFor="let button of getVariantButtons()"
             class="variant-button"
-            [class.selected]="selectedVariant?.value === button.value"
+            [class.selected]="selectedVariant.value === button.value"
             [disabled]="button.stockQuantity <= 0"
             (click)="onVariantSelect(button)"
           >
             {{ button.label }}
-            <span class="stock-quantity" *ngIf="button.stockQuantity > 0">
-              {{ button.stockQuantity }} in stock
+            <span class="stock-quantity" *ngIf="button.stockQuantity > 0 && button.stockQuantity <= 5">
+              {{ button.stockQuantity }} left
             </span>
           </button>
         </div>
@@ -62,13 +72,13 @@
           <button
             *ngFor="let button of getVariantButtons()"
             class="variant-button"
-            [class.selected]="selectedVariant?.value === button.value"
+            [class.selected]="selectedVariant.value === button.value"
             [disabled]="button.stockQuantity <= 0"
             (click)="onVariantSelect(button)"
           >
             {{ button.label }}
-            <span class="stock-quantity" *ngIf="button.stockQuantity > 0">
-              {{ button.stockQuantity }} in stock
+            <span class="stock-quantity" *ngIf="button.stockQuantity > 0 && button.stockQuantity <= 5">
+              {{ button.stockQuantity }} left
             </span>
           </button>
         </div>
@@ -92,13 +102,14 @@
           <button
             *ngFor="let button of getVariantButtons()"
             class="variant-button"
-            [class.selected]="selectedVariant?.value === button.value"
+            [class.selected]="selectedVariant.value === button.value"
+
             [disabled]="button.stockQuantity <= 0"
             (click)="onVariantSelect(button)"
           >
             {{ button.label }}
-            <span class="stock-quantity" *ngIf="button.stockQuantity > 0">
-              {{ button.stockQuantity }} in stock
+            <span class="stock-quantity" *ngIf="button.stockQuantity > 0 && button.stockQuantity <= 5">
+              {{ button.stockQuantity }} left
             </span>
           </button>
         </div>

@@ -6,26 +6,19 @@ export interface Discount {
   value: number;
 }
 
+//base classes
 export interface ProductItemBase {
   productId: string;
   variantType: VariantType;
 }
 
 export interface ProductVariantBase {
-  images?: ImagesBase[];
   discount?: Discount;
-}
-
-export interface ProductVariant extends ProductVariantBase {
-  id: string;
-  isDiscountApplied: boolean;
-  sizeVariant?: ProductVariantSizeBase[];
-  colorVariant?: ProductVariantColorBase[];
-  sizeColorVariant?: ProductVariantSizeColorBase[];
+  images: ImagesBase[];
 }
 
 export interface ProductVariantSizeColorBase {
-  colors: string; // for each color, we have multiple size options
+  color: string; // for each color, we have multiple size options
   image: ImagesBase; // for each color, we need to add the image
   sizes: ProductVariantSizeBase[];
 }
@@ -43,42 +36,56 @@ export interface ProductVariantSizeBase {
   stockQuantity: number;
   price: number;
   discount?: Discount;
+  discountedPrice: number;
+}
+
+// main classes
+
+export interface ProductVariantSizeView extends ProductVariantSizeBase {
+  id: string;
+}
+
+export interface ProductVariantColorView extends ProductVariantColorBase {
+  id: string;
+  discountedPrice: number;
 }
 
 export interface ProductVariantSizeColor extends ProductVariantSizeColorBase {
   id: string;
 }
 
-export interface ProductVariantColor extends ProductVariantColorBase {
+export interface ProductVariant extends ProductVariantBase {
   id: string;
-}
-
-export interface ProductVariantSize extends ProductVariantSizeBase {
-  id: string;
+  isDiscountApplied: boolean;
+  sizeVariant?: ProductVariantSizeView[];
+  colorVariant?: ProductVariantColorView[];
+  sizeColorVariant?: ProductVariantSizeColor[];
 }
 
 // post
-export interface ProductVariantCommand extends ProductVariantBase {
-  sizeVariant?: ProductVariantSizeBase[];
-  colorVariant?: ProductVariantColorBase[];
-  sizeColorVariant?: ProductVariantSizeColorBase[];
-}
-
 export interface ProductItemCommand extends ProductItemBase {
   variant: ProductVariantCommand;
 }
 
-// view
-export interface ProductVariantView extends ProductVariantBase {
-  id: string;
-  isDiscountApplied: boolean;
-  sizeVariant?: ProductVariantSize[];
-  colorVariant?: ProductVariantColor[];
-  sizeColorVariant?: ProductVariantSizeColor[];
+export interface ProductVariantCommand extends ProductVariantBase {
+  sizeVariant?: ProductVariantSizeBase[];
+  colorVariant?: ProductVariantColorBase[];
+  sizeColorVariant?: ProductVariantSizeColorBase[];
+  images: ImagesBase[];
 }
+
+// view
 
 export interface ProductItemView extends ProductItemBase {
   id: string;
   variant: ProductVariantView;
   product: ProductView;
+}
+
+export interface ProductVariantView extends ProductVariantBase {
+  id: string;
+  isDiscountApplied: boolean;
+  sizeVariant?: ProductVariantSizeView[];
+  colorVariant?: ProductVariantColorView[];
+  sizeColorVariant?: ProductVariantSizeColor[];
 }

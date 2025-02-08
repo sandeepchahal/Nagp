@@ -1,5 +1,6 @@
 using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.Mapping;
+using Elastic.Transport;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,25 +25,30 @@ public static class ConfigureServices
         serviceCollection.AddSingleton<ElasticsearchClient>(_ =>
         {
             var configuration = configurationManager;
-            // Read host, port, and default index from appsettings
-            var host = configuration["Elasticsearch:Host"];
-            var port = configuration["Elasticsearch:Port"];
-            var defaultIndex = configuration["Elasticsearch:Index"];
-            if (defaultIndex == null)
+
+            var cloudUrl = configuration["ElasticSearch:CloudUrl"]; // Update: Cloud URL instead of CloudId
+            var apiKey = configuration["ElasticSearch:api_key"];
+            var defaultIndex = configuration["ElasticSearch:Index"];
+
+            if (string.IsNullOrEmpty(cloudUrl))
+                throw new Exception("Elasticsearch CloudUrl is missing in the configuration");
+
+            if (string.IsNullOrEmpty(apiKey))
+                throw new Exception("Elasticsearch API Key is missing in the configuration");
+
+            if (string.IsNullOrEmpty(defaultIndex))
                 throw new Exception("Default index is missing in the configuration");
 
-            // Construct the URI for Elasticsearch
-            var elasticUri = $"{host}:{port}";
+            // Create Elasticsearch settings using Cloud URL and API Key
+            var settings = new ElasticsearchClientSettings(new Uri(cloudUrl))
+                .Authentication(new ApiKey(apiKey)) // API Key Authentication
+                .DefaultIndex(defaultIndex);
 
-            // Create Elasticsearch client settings
-            var settings = new ElasticsearchClientSettings(new Uri(elasticUri))
-                .DefaultIndex(defaultIndex); // Set the default index from configuration
-            var searchClient = new ElasticsearchClient(settings);
-            Task.Run(() => CreateProductMapping(searchClient));
-            return searchClient;
+            var client = new ElasticsearchClient(settings);
+            Task.Run(() => CreateProductMapping(client));
+            return client;
         });
     }
-
     public static void RegisterDbServices(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IProductService, ProductService>();

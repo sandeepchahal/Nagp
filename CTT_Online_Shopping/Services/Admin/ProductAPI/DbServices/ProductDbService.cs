@@ -5,7 +5,9 @@ using ProductAPI.Models.Query;
 
 namespace ProductAPI.DbServices;
 
-public class ProductDbService(IMongoCollection<ProductDb> productCollection, ICategoryDbService categoryDbService):IProductDbService
+public class ProductDbService(IMongoCollection<ProductDb> productCollection, 
+    ICategoryDbService categoryDbService,
+    IBrandDbService brandDbService):IProductDbService
 {
     public async Task<ProductView?> GetAsync(string productId)
     {
@@ -30,8 +32,9 @@ public class ProductDbService(IMongoCollection<ProductDb> productCollection, ICa
                     {
                         Id = col.Id,
                         Name = col.Name
-                    }).FirstOrDefault() ?? new SubCategoryView()
+                    }).FirstOrDefault() ?? new SubCategoryView(),
             };
+            mapped.Brand = await brandDbService.GetAsync(product.BrandId);
             return mapped;
         }
         catch (Exception ex)
