@@ -1,5 +1,6 @@
 using MongoDB.Driver;
 using ProductAPI.Models;
+using ProductAPI.Models.ProductItems;
 
 namespace ProductAPI.DbServices;
 
@@ -10,8 +11,8 @@ public class ProductItemDbService(IMongoCollection<ProductItem> productItemColle
         try
         {
             var result =
-                await productItemCollection.FindAsync(p => p.ProductId == productId);
-            return await result.ToListAsync();
+                await productItemCollection.Find(p => p.ProductId == productId).ToListAsync();
+            return result;
 
         }
         catch (Exception)

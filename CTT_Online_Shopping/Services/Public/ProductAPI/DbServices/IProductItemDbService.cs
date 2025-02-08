@@ -1,4 +1,5 @@
 using ProductAPI.Models;
+using ProductAPI.Models.ProductItems;
 
 namespace ProductAPI.DbServices;
 

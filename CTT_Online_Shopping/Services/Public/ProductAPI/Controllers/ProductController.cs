@@ -23,4 +23,35 @@ public class ProductController(IProductDbService productDbService)
         }
     }
     
+    
+    [HttpGet("get-all")] 
+    public async Task<IActionResult> GetAll()
+    {
+        try
+        {
+            var product = await productDbService.GetAll();
+            return Ok(product);
+        }
+        catch (Exception e)
+        {
+            return BadRequest("An error has occurred");
+        }
+    }
+    
+    
+
+    [HttpGet("category/{slug}")]
+    public async Task<IActionResult> GetBySubCategoryId(string slug)
+    {
+        try
+        {
+            var product = await productDbService.GetBySubCategorySlugAsync(slug);
+            return Ok(product);
+        }
+        catch (Exception e)
+        {
+            return BadRequest("An error has occurred");
+        }
+    }
+    
 }
