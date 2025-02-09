@@ -1,16 +1,20 @@
 <form (ngSubmit)="updateCategory()" #editForm="ngForm" *ngIf="category">
   <label>Gender:</label>
-  <select [(ngModel)]="category.gender" name="gender" required>
+  <select [(ngModel)]="category.gender" name="gender" (change)="updateCategories()" required>
     <option *ngFor="let g of genders" [value]="g">{{ g }}</option>
   </select>
 
   <label>Main Category:</label>
-  <input type="text" [(ngModel)]="category.name" name="name" required />
+  <select [(ngModel)]="category.name" name="mainCategory" (change)="updateSubCategories()" required>
+    <option *ngFor="let cat of categoryList" [value]="cat">{{ cat }}</option>
+  </select>
 
   <div *ngFor="let subCategory of category.subCategories; let i = index">
     <h4>Subcategory {{ i + 1 }}</h4>
-    <input type="text" [(ngModel)]="subCategory.name" name="name{{ i }}" placeholder="Subcategory Name" required />
-    <input type="text" [(ngModel)]="subCategory.slug" name="slug{{ i }}" placeholder="Slug" required />
+    <select [(ngModel)]="subCategory.name" name="subCategory{{ i }}" (change)="updateSlug(i)" required>
+      <option *ngFor="let subCat of subCategoryList" [value]="subCat">{{ subCat }}</option>
+    </select>
+    <input type="text" [(ngModel)]="subCategory.slug" name="slug{{ i }}" placeholder="Slug" readonly />
 
     <div *ngFor="let attr of subCategory.filterAttributes; let j = index">
       <input type="text" [(ngModel)]="attr.name" name="attrName{{ i }}{{ j }}" placeholder="Attribute Name" required />
