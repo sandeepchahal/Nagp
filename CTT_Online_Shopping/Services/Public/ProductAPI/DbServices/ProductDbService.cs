@@ -95,10 +95,8 @@ public class ProductDbService(
             case "Size":
                 if (productItem.Variants.SizeVariant != null)
                 {
-                    foreach (var sizeVariant in productItem.Variants.SizeVariant)
-                    {
-                        images.AddRange(sizeVariant.Images);
-                    }
+                    images.AddRange(productItem.Variants.Images);
+                 
                 }
 
                 break;
@@ -145,7 +143,7 @@ public class ProductDbService(
                         return new PriceBase
                         {
                             OriginalPrice = sizeVariant.Price,
-                            DiscountPrice = sizeVariant.DiscountedPrice,
+                            DiscountPrice = (int)sizeVariant.DiscountedPrice,
                             Discount = sizeVariant.Discount ?? new Discount()
                         };
                     }
@@ -162,7 +160,7 @@ public class ProductDbService(
                         return new PriceBase
                         {
                             OriginalPrice = colorVariant.Price,
-                            DiscountPrice = colorVariant.DiscountedPrice,
+                            DiscountPrice = (int)colorVariant.DiscountedPrice,
                             Discount = colorVariant.Discount ?? new Discount()
                         };
                     }
@@ -180,7 +178,7 @@ public class ProductDbService(
                         return new PriceBase
                         {
                             OriginalPrice = sizeVariant.Price,
-                            DiscountPrice = sizeVariant.DiscountedPrice,
+                            DiscountPrice = (int)sizeVariant.DiscountedPrice,
                             Discount = sizeVariant.Discount ?? new Discount()
                         };
                     }

@@ -18,7 +18,7 @@ public class PriceBase
 {
     public decimal OriginalPrice { get; set; } 
     
-    public decimal DiscountPrice { get; set; }
+    public int DiscountPrice { get; set; }
 
     public Discount Discount { get; set; } = new ();
 }

@@ -2,3 +2,11 @@
   max-height: 200px;
   object-fit: contain;
 }
+.card-img-top
+{
+  padding-top:10px;
+}
+.price-color
+{
+  color: rgb(237, 96, 2) !important;
+}

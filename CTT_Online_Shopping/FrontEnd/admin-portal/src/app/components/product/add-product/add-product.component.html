@@ -1,12 +1,17 @@
 <div class="product-add">
   <h1>Add Product</h1>
-
   <form (ngSubmit)="onSubmit()">
-
     <!-- Category Auto-suggestion -->
     <mat-form-field appearance="fill">
       <mat-label>Category</mat-label>
-      <input matInput [(ngModel)]="product.categoryId" name="categoryId" [matAutocomplete]="autoCategory" (input)="onCategoryInputChange()" required />
+      <input
+        matInput
+        [(ngModel)]="product.categoryId"
+        name="categoryId"
+        [matAutocomplete]="autoCategory"
+        (input)="onCategoryInputChange()"
+        required
+      />
       <mat-autocomplete #autoCategory="matAutocomplete" (optionSelected)="onCategorySelected($event)">
         <mat-option *ngFor="let category of filteredCategories" [value]="category.id">
           {{ category.name }}
@@ -14,10 +19,18 @@
       </mat-autocomplete>
     </mat-form-field>
 
-    <!-- SubCategory Auto-suggestion (Enabled only after category selection) -->
+    <!-- SubCategory Auto-suggestion -->
     <mat-form-field appearance="fill">
       <mat-label>SubCategory</mat-label>
-      <input matInput [(ngModel)]="product.subCategoryId" name="subCategoryId" [matAutocomplete]="autoSubCategory" (input)="onSubCategoryInputChange()" [disabled]="!product.categoryId" required />
+      <input
+        matInput
+        [(ngModel)]="product.subCategoryId"
+        name="subCategoryId"
+        [matAutocomplete]="autoSubCategory"
+        (input)="onSubCategoryInputChange()"
+        [disabled]="!product.categoryId"
+        required
+      />
       <mat-autocomplete #autoSubCategory="matAutocomplete" (optionSelected)="onSubCategorySelected($event)">
         <mat-option *ngFor="let subCategory of filteredSubCategories" [value]="subCategory.id">
           {{ subCategory.name }}
@@ -25,17 +38,23 @@
       </mat-autocomplete>
     </mat-form-field>
 
+    <!-- Brand Auto-suggestion -->
     <mat-form-field appearance="fill">
       <mat-label>Brand</mat-label>
-      <input matInput [(ngModel)]="product.brandId" name="brandId" [matAutocomplete]="autoBrand" (input)="onBrandInputChange()" required />
+      <input
+        matInput
+        [(ngModel)]="product.brandId"
+        name="brandId"
+        [matAutocomplete]="autoBrand"
+        (input)="onBrandInputChange()"
+        required
+      />
       <mat-autocomplete #autoBrand="matAutocomplete" (optionSelected)="onBrandSelected($event)">
         <mat-option *ngFor="let brand of brands" [value]="brand.id">
           {{ brand.name }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-    
-
 
     <!-- Product Name -->
     <mat-form-field appearance="fill">
@@ -43,12 +62,17 @@
       <input matInput [(ngModel)]="product.name" name="name" required />
     </mat-form-field>
 
-
-    <!-- Product Description -->
-    <mat-form-field appearance="fill">
+    <!-- Product Description (TinyMCE Editor) -->
+    <div class="mat-form-field">
       <mat-label>Description</mat-label>
-      <textarea matInput [(ngModel)]="product.description" name="description" required></textarea>
-    </mat-form-field>
+      <editor [(ngModel)]="product.description"
+      name="description" apiKey="uoekf9wyq7a3jc2vkvotddkco2llde2b2b847xeofo4bb6qc"
+  [init]="{
+    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+  }"
+></editor>
+    </div>
 
     <button mat-raised-button color="primary" type="submit">Add Product</button>
   </form>

@@ -15,6 +15,7 @@ import { CategoryView } from '../../../models/category/category.model';
 import { BrandCommand, BrandView } from '../../../models/brand/brand.model';
 import { Router } from '@angular/router';
 import { BrandService } from '../../../services/brand.service';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 @Component({
   selector: 'app-add-product',
@@ -25,6 +26,7 @@ import { BrandService } from '../../../services/brand.service';
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
+    EditorModule,
   ],
   templateUrl: './add-product.component.html',
   styleUrls: ['./add-product.component.css'],
@@ -42,6 +44,22 @@ export class AddProductComponent {
   filteredCategories: CategoryView[] = []; // Filtered categories based on user input
   filteredSubCategories: any[] = []; // Filtered subcategories based on selected category
   brands: BrandView[] = [];
+
+  // TinyMCE Configuration
+  editorConfig = {
+    height: 300,
+    menubar: false,
+    plugins: [
+      'advlist autolink lists link image charmap print preview anchor',
+      'searchreplace visualblocks code fullscreen',
+      'insertdatetime media table paste code help wordcount',
+    ],
+    toolbar:
+      'undo redo | formatselect | bold italic backcolor | \
+      alignleft aligncenter alignright alignjustify | \
+      bullist numlist outdent indent | removeformat | help', // Add your TinyMCE API key here
+  };
+
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
