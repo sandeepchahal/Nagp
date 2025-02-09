@@ -1,6 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using ProductAPI.Helper;
 using ProductAPI.Models.Categories;
 
 namespace ProductAPI.DbServices;
@@ -25,5 +26,12 @@ public class CategoryDbService(IMongoCollection<Category> categoryCollection):IC
         var subCategory = BsonSerializer.Deserialize<SubCategory>(subCategoryBson.AsBsonDocument);
         
         return subCategory;
+    }
+
+    public async Task<List<CategoryView>> GetAllCategories()
+    {
+        var result = await categoryCollection.Find(_ => true).ToListAsync();
+
+        return result.Select(category => CategoryHelper.MapToCategoryView(category)).ToList();
     }
 }

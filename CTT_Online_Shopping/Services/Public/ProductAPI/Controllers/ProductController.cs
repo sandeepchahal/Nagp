@@ -5,7 +5,7 @@ namespace ProductAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductController(IProductDbService productDbService)
+public class ProductController(IProductDbService productDbService, ICategoryDbService categoryDbService)
     : ControllerBase
 {
     
@@ -46,6 +46,19 @@ public class ProductController(IProductDbService productDbService)
         try
         {
             var product = await productDbService.GetBySubCategorySlugAsync(slug);
+            return Ok(product);
+        }
+        catch (Exception e)
+        {
+            return BadRequest("An error has occurred");
+        }
+    }
+    [HttpGet("categories")]
+    public async Task<IActionResult> GetAllCategories()
+    {
+        try
+        {
+            var product = await categoryDbService.GetAllCategories();
             return Ok(product);
         }
         catch (Exception e)

@@ -20,9 +20,8 @@ public class SubCategory
     public List<FilterAttribute> FilterAttributes { get; set; } = new();
 }
 
-
 public class Category
-{
+{ 
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; } = string.Empty;
