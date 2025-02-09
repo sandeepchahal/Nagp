@@ -32,4 +32,17 @@ public class ProductItemController(IProductItemDbService productItemDbService):C
             return BadRequest("An error has occurred");
         }
     }
+    [HttpGet("get-all")] 
+    public async Task<IActionResult> GetAll()
+    {
+        try
+        {
+            var product = await productItemDbService.GetAllAsync();
+            return Ok(product);
+        }
+        catch (Exception e)
+        {
+            return BadRequest("An error has occurred");
+        }
+    }
 }

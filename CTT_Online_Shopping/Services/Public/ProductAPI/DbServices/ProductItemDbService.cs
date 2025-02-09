@@ -35,4 +35,19 @@ public class ProductItemDbService(IMongoCollection<ProductItem> productItemColle
             throw;
         }
     }
+    
+    public async Task<List<ProductItem>> GetAllAsync()
+    {
+        try
+        {
+            var result =
+                await productItemCollection.Find(_ => true).ToListAsync();
+            return result;
+
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
 }

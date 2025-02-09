@@ -170,7 +170,7 @@ public class ProductDbService(
 
                 break;
 
-            case "SizeColor":
+            case "ColorAndSize":
                 if (productItem.Variants.SizeColorVariant != null)
                 {
                     var sizeColorVariant = productItem.Variants.SizeColorVariant.FirstOrDefault();

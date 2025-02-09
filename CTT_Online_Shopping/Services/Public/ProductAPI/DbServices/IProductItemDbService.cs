@@ -7,5 +7,6 @@ public interface IProductItemDbService
 {
     Task<List<ProductItem>?> GetByProductIdAsync(string productId);
     Task<ProductItem?> GetAsync(string id);
+    Task<List<ProductItem>> GetAllAsync();
 
 }
