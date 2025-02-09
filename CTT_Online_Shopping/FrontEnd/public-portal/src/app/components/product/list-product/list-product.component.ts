@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../../services/product.service';
 import { ProductView } from '../../../models/product.model';
 import { ActivatedRoute } from '@angular/router';
@@ -11,15 +11,21 @@ import { CommonModule } from '@angular/common';
   templateUrl: './list-product.component.html',
   styleUrl: './list-product.component.css',
 })
-export class ListProductComponent {
+export class ListProductComponent implements OnInit {
   products: ProductView[] = [];
+
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute
-  ) {
-    //get the  <a [routerLink]="'/product/category/' + sub.slug">{{ sub.name }}</a> from url
-    const slug = this.route.snapshot.paramMap.get('slug') || '';
-    this.GetProducts(slug);
+  ) {}
+
+  ngOnInit(): void {
+    // Subscribe to route parameter changes
+    this.route.paramMap.subscribe((params) => {
+      const slug = params.get('slug') || '';
+      console.log(slug); // Log the new slug
+      this.GetProducts(slug); // Fetch products based on the new slug
+    });
   }
 
   GetProducts(slug: string) {

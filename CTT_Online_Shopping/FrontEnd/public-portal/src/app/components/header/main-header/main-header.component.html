@@ -1,25 +1,28 @@
-<header class="main-header">
-    <div class="container">
-      <div class="logo">MCart</div>
-  
-      <nav class="nav-menu">
-        <ul class="menu-list">
-          <li class="menu-item" *ngFor="let gender of genderKeys">
-            <span class="gender-name">{{ gender }}</span>
-            <ul class="gender-dropdown">
-              <div class="category-grid">
-                <li *ngFor="let category of categoriesByGender[gender]" class="category-column">
-                  <span class="category-title">{{ category.name }}</span>
-                  <ul class="subcategory-list">
-                    <li *ngFor="let sub of category.subCategories">
-                      <a [routerLink]="'/product/category/' + sub.slug">{{ sub.name }}</a>
-                    </li>
-                  </ul>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">M-Cart</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown" *ngFor="let gender of genderKeys">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{gender}}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li *ngFor="let category of categoriesByGender[gender]" class="category-column">
+              <h6 class="dropdown-header">{{category.name}}</h6>
+              <ul class="subcategory-list">
+                <li *ngFor="let sub of category.subCategories">
+                  <a class="dropdown-item" (click)="showProducts(sub.slug)">{{ sub.name }}</a>
                 </li>
-              </div>
-            </ul>
-          </li>
-        </ul>
-      </nav>
+              </ul>
+              <hr class="dropdown-divider" >
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
-  </header>
+  </div>
+</nav>

@@ -3,23 +3,20 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HeaderService } from '../../../services/header.service';
 import { CategoryView } from '../../../models/category.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule],
   templateUrl: './main-header.component.html',
   styleUrl: './main-header.component.css',
 })
-export class MainHeaderComponent implements OnInit {
-  // Declare categoriesByGender with the correct type
+export class MainHeaderComponent {
   categoriesByGender: { [gender: string]: CategoryView[] } = {};
 
-  constructor(private headerService: HeaderService) {}
-
-  ngOnInit(): void {
+  constructor(private headerService: HeaderService, private router: Router) {
     this.headerService.getCategories().subscribe((data) => {
-      // Group categories by gender
       this.categoriesByGender = data.reduce((acc, category) => {
         if (!acc[category.gender]) {
           acc[category.gender] = [];
@@ -33,5 +30,9 @@ export class MainHeaderComponent implements OnInit {
   // Add a getter to return the keys of categoriesByGender
   get genderKeys(): string[] {
     return Object.keys(this.categoriesByGender);
+  }
+
+  showProducts(slug: string) {
+    this.router.navigate(['/product/category', slug]);
   }
 }
