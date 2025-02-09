@@ -1,0 +1,125 @@
+<div class="product-detail" *ngIf="productItem">
+    <!-- Left Side: Image Section -->
+    <div class="image-section">
+      <!-- Main Image -->
+      <div class="main-image" [class.zoomed]="isImageZoomed" (click)="toggleImageZoom()">
+        <img
+          [src]="productItem.variant.images![selectedImageIndex].url"
+          [alt]="productItem.variant.images![selectedImageIndex].altText"
+          class="responsive-image"
+          [ngClass]="{'zoom-cursor': isImageZoomed}"
+        />
+      </div>
+  
+      <!-- Thumbnails -->
+      <div class="thumbnails">
+        <div
+          *ngFor="let image of productItem.variant.images; let i = index"
+          class="thumbnail"
+          [class.active]="i === selectedImageIndex"
+          (click)="selectImage(i)"
+        >
+          <img [src]="image.url" [alt]="image.altText" class="responsive-image" />
+        </div>
+      </div>
+    </div>
+  
+    <!-- Right Side: Product Details -->
+    <div class="brand-section">
+      <!-- Product Name -->
+      <h1>{{ productItem.product.brand.name }}</h1>
+  
+      <!-- Product Description -->
+      <p class="product-name">{{ productItem.product.name }}</p>
+  
+      <!-- Price -->
+      <div class="price">
+        <strong>MRP: </strong>
+        <span *ngIf="discountPrice > 0" class="original-price">
+          {{ selectedVariant.price | currency:'INR' }}
+        </span>
+        <span *ngIf="discountPrice > 0" class="discounted-price">
+          {{ selectedVariant.discountedPrice | currency:'INR' }}
+        </span>
+        <span *ngIf="discountPrice === 0">
+          {{ selectedVariant.price | currency:'INR' }}
+        </span>
+      </div>
+  
+      <!-- Variant Buttons -->
+      <div class="variant-buttons">
+        <div *ngIf="getVariantType() === 'Size'">
+          <h3>Select Size</h3>
+          <div class="button-group">
+            <button
+              *ngFor="let button of getVariantButtons()"
+              class="variant-button"
+              [class.selected]="selectedVariant.value === button.value"
+              [disabled]="button.stockQuantity <= 0"
+              (click)="onVariantSelect(button)"
+            >
+              {{ button.label }}
+              <span class="stock-quantity" *ngIf="button.stockQuantity > 0 && button.stockQuantity <= 5">
+                {{ button.stockQuantity }} left
+              </span>
+            </button>
+          </div>
+        </div>
+  
+        <div *ngIf="getVariantType() === 'Color'">
+          <h3>Select Color</h3>
+          <div class="button-group">
+            <button
+              *ngFor="let button of getVariantButtons()"
+              class="variant-button"
+              [class.selected]="selectedVariant.value === button.value"
+              [disabled]="button.stockQuantity <= 0"
+              (click)="onVariantSelect(button)"
+            >
+              {{ button.label }}
+              <span class="stock-quantity" *ngIf="button.stockQuantity > 0 && button.stockQuantity <= 5">
+                {{ button.stockQuantity }} left
+              </span>
+            </button>
+          </div>
+        </div>
+  
+        <div *ngIf="getVariantType() === 'ColorAndSize'">
+          <h3>Select Color</h3>
+          <div class="color-group">
+            <div
+              *ngFor="let colorVariant of productItem.variant.sizeColorVariant; let i = index"
+              class="color-item"
+              [class.selected]="i === selectedColorIndex"
+              (click)="onColorSelect(i)"
+            >
+              <img [src]="colorVariant.image.url" [alt]="colorVariant.image.altText" class="color-image" />
+            </div>
+          </div>
+  
+          <h3>Select Size</h3>
+          <div class="button-group">
+            <button
+              *ngFor="let button of getVariantButtons()"
+              class="variant-button"
+              [class.selected]="selectedVariant.value === button.value"
+  
+              [disabled]="button.stockQuantity <= 0"
+              (click)="onVariantSelect(button)"
+            >
+              {{ button.label }}
+              <span class="stock-quantity" *ngIf="button.stockQuantity > 0 && button.stockQuantity <= 5">
+                {{ button.stockQuantity }} left
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+  
+      <div class="detaill-section">
+        <hr>
+        <h1>Description</h1>
+        <p>{{ productItem.product.description }}</p>
+      </div>
+    </div>
+  </div>

@@ -41,6 +41,8 @@ public class ProductView
     public string Id { get; set; } = string.Empty;
     public string ProductItemId { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
+    
+    public string Description { get; set; } = string.Empty;
     public Brand Brand { get; set; } = new();
     public PriceBase Price { get; set; } = new();
     public List<ImagesBase> Images { get; set; } = new();

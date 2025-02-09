@@ -1,1 +1,31 @@
-<p>list-product works!</p>
+<div class="product-container">
+    <!-- Filters Section (Left Side) -->
+    <div class="filters-section">
+      <h3>Filters</h3>
+      <!-- Add filter options here later -->
+    </div>
+  
+    <!-- Products Section -->
+    <div class="products-section">
+      <div *ngFor="let product of products" class="product-box">
+        <div class="product-image">
+          <img [src]="product.images[0].url" [alt]="product.images[0].altText" />
+        </div>
+        <div class="product-details">
+          <h3 class="product-name">{{ product.name }}</h3>
+          <p class="product-brand">{{ product.brand.name }}</p>
+          <div class="product-price">
+            <span class="original-price" *ngIf="product.price.discountPrice > 0">
+              ₹{{ product.price.originalPrice }}
+            </span>
+            <span class="discounted-price">
+              ₹{{ product.price.discountPrice || product.price.originalPrice }}
+            </span>
+            <span class="discount" *ngIf="product.price.discountPrice > 0">
+              {{ calculateDiscount(product.price) }}% off
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -10,6 +10,7 @@ public static class ProductHelper
         {
             Id = product.Id,
             Name = product.Name,
+            Description = product.Description
         };
     }
 }
