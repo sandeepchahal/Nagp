@@ -164,6 +164,7 @@ export class DetailProductComponent {
         this.cartItem.sizeId = this.selectedVariant.value;
         this.cartItem.sizeLabel = firstSizeVariant?.size ?? '';
         this.cartItem.colorId = firstColorVariant?.id;
+        this.cartItem.colorLabel = firstColorVariant?.color ?? '';
         this.cartItem.price = this.currentPrice;
         this.cartItem.discountedPrice = this.selectedVariant.discountedPrice;
         this.cartItem.imgUrl = firstColorVariant?.image.url ?? '';
@@ -268,11 +269,28 @@ export class DetailProductComponent {
       this.cartItem.sizeLabel = '';
     } else if (this.productItem.variantType === VariantType.ColorAndSize) {
       // Find index of the selected size-color variant
+
       const index = this.productItem.variants.sizeColorVariant?.findIndex(
-        (variant) => variant.id === button.value
+        (variant) => variant.sizes.some((col) => col.id == button.value)
       );
+      const sizeIndexResult =
+        index !== -1
+          ? this.productItem.variants.sizeColorVariant?.[index ?? 0].sizes.find(
+              (col) => col.id == button.value
+            )
+          : null;
+
+      console.log(index, sizeIndexResult);
       this.cartItem.imgUrl =
-        this.productItem.variants.colorVariant?.[index ?? 0].image.url ?? '';
+        this.productItem.variants.sizeColorVariant?.[index ?? 0].image.url ??
+        '';
+
+      this.cartItem.colorId =
+        this.productItem.variants.sizeColorVariant?.[index ?? 0].id ?? '';
+      this.cartItem.colorLabel =
+        this.productItem.variants.sizeColorVariant?.[index ?? 0].color ?? '';
+      this.cartItem.sizeId = button.value;
+      this.cartItem.sizeLabel = button.label;
       //this.selectedImageIndex = index !== undefined && index !== -1 ? index : 0;
     } else {
       this.cartItem.sizeId = button.value;
@@ -288,15 +306,17 @@ export class DetailProductComponent {
     const selectedColorVariant =
       this.productItem.variants.sizeColorVariant?.[index];
     this.selectedColorId = selectedColorVariant?.id ?? '';
+
     this.cartItem.colorId = selectedColorVariant?.id;
+    this.cartItem.colorLabel = selectedColorVariant?.color ?? '';
 
     // Update the main image section with the selected color's images
-
+    console.log('selectedColorVariant', selectedColorVariant);
     if (selectedColorVariant?.image.url != null) {
       const index = this.productItem.variants.sizeColorVariant?.findIndex(
         (col) => col.id === selectedColorVariant.id
       );
-
+      this.cartItem.imgUrl = selectedColorVariant.image.url;
       this.selectedImageIndex = index !== undefined && index !== -1 ? index : 0;
     }
 
@@ -305,6 +325,7 @@ export class DetailProductComponent {
       const firstSizeVariant = selectedColorVariant.sizes[0];
       this.cartItem.sizeId = firstSizeVariant.id;
       this.cartItem.sizeLabel = firstSizeVariant.size;
+
       this.selectedVariant = {
         label: firstSizeVariant.size || '',
         value: firstSizeVariant.id || '',
