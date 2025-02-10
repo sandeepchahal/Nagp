@@ -4,8 +4,8 @@
       <!-- Main Image -->
       <div class="main-image" [class.zoomed]="isImageZoomed" (click)="toggleImageZoom()">
         <img
-          [src]="productItem.variant.images![selectedImageIndex].url"
-          [alt]="productItem.variant.images![selectedImageIndex].altText"
+          [src]="productItem.variants.images![selectedImageIndex].url"
+          [alt]="productItem.variants.images![selectedImageIndex].altText"
           class="responsive-image"
           [ngClass]="{'zoom-cursor': isImageZoomed}"
         />
@@ -14,7 +14,7 @@
       <!-- Thumbnails -->
       <div class="thumbnails">
         <div
-          *ngFor="let image of productItem.variant.images; let i = index"
+          *ngFor="let image of productItem.variants.images; let i = index"
           class="thumbnail"
           [class.active]="i === selectedImageIndex"
           (click)="selectImage(i)"
@@ -88,7 +88,7 @@
           <h3>Select Color</h3>
           <div class="color-group">
             <div
-              *ngFor="let colorVariant of productItem.variant.sizeColorVariant; let i = index"
+              *ngFor="let colorVariant of productItem.variants.sizeColorVariant; let i = index"
               class="color-item"
               [class.selected]="i === selectedColorIndex"
               (click)="onColorSelect(i)"

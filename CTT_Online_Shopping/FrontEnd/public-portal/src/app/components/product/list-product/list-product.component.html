@@ -12,7 +12,7 @@
       <div class="col-md-9">
         <div class="row row-cols-1 row-cols-md-3 g-4">
           <div class="col" *ngFor="let product of products">
-            <div class="card h-100">
+            <div class="card h-100" (click)="goToDetail(product.productItemId)">
               <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
               <div class="card-body text-center">
                 <h5 class="card-title">{{ product.brand.name }}</h5>

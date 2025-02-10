@@ -1,10 +1,13 @@
 using MongoDB.Driver;
+using ProductAPI.Helper;
 using ProductAPI.Models;
 using ProductAPI.Models.ProductItems;
+using ProductAPI.Models.Products;
 
 namespace ProductAPI.DbServices;
 
-public class ProductItemDbService(IMongoCollection<ProductItem> productItemCollection):IProductItemDbService
+public class ProductItemDbService(
+    IMongoCollection<ProductItem> productItemCollection ):IProductItemDbService
 {
     public async Task<List<ProductItem>?> GetByProductIdAsync(string productId)
     {
@@ -21,16 +24,18 @@ public class ProductItemDbService(IMongoCollection<ProductItem> productItemColle
         }
     }
 
-    public async Task<ProductItem?> GetAsync(string id)
+    public async Task<ProductItemView?> GetAsync(string productItemId)
     {
         try
         {
-            var result =
-                await productItemCollection.FindAsync(p => p.Id == id);
-            return await result.FirstOrDefaultAsync();
-
+            var productItem = await productItemCollection.FindAsync(col => col.Id == productItemId);
+            var result = await productItem.FirstOrDefaultAsync();
+            if (result is null)
+                return null;
+            var mapper = ProductItemHelper.MapToProductItemViewModel(result);
+            return mapper;
         }
-        catch (Exception)
+        catch (Exception e)
         {
             throw;
         }

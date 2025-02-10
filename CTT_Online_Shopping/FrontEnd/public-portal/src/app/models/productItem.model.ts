@@ -78,7 +78,7 @@ export interface ProductVariantCommand extends ProductVariantBase {
 
 export interface ProductItemView extends ProductItemBase {
   id: string;
-  variant: ProductVariantView;
+  variants: ProductVariantView;
   product: ProductView;
 }
 

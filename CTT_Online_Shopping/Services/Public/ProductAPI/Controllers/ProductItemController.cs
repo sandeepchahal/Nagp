@@ -1,10 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using ProductAPI.DbServices;
+using ProductAPI.Helper;
+using ProductAPI.Models.Brands;
+using ProductAPI.Models.Products;
 
 namespace ProductAPI.Controllers;
 
 [Route("api/product/item")]
-public class ProductItemController(IProductItemDbService productItemDbService):ControllerBase
+public class ProductItemController(
+    IProductItemDbService productItemDbService,
+    IMongoCollection<Product> productCollection, 
+    IBrandDbService brandDbService):ControllerBase
 {
     [HttpGet("get-by-product/{pid}")] 
     public async Task<IActionResult> GetProductById(string pid)
@@ -24,8 +31,21 @@ public class ProductItemController(IProductItemDbService productItemDbService):C
     {
         try
         {
-            var product = await productItemDbService.GetAsync(id);
-            return product is null? NotFound("Product Item id is not found") : Ok(product);
+            var productItem = await productItemDbService.GetAsync(id);
+            if (productItem is null)
+            {
+                return NotFound("Product is not found");
+            }
+            var product = await productCollection.Find(p =>p.Id == productItem.ProductId).FirstOrDefaultAsync();
+            var productView = ProductHelper.MapToProductView(product);
+            productView.Brand = await brandDbService.GetAsync(product.BrandId) ?? new Brand();
+            productItem.Product = productView;
+            
+            productItem.Product.Images = ProductHelper.GetImages(productItem!);
+            productItem.Product.Price = ProductHelper.GetPrice(productItem!);
+            productItem.Product.ProductItemId = productItem.Id;
+            
+            return Ok(productItem);
         }
         catch (Exception e)
         {

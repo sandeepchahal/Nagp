@@ -59,49 +59,49 @@ export class DetailProductComponent {
   setVariantImages() {
     if (this.productItem.variantType === VariantType.Color) {
       // Push all images from colorVariant
-      if (this.productItem.variant.colorVariant) {
-        this.productItem.variant.colorVariant.forEach((variant) => {
+      if (this.productItem.variants.colorVariant) {
+        this.productItem.variants.colorVariant.forEach((variant) => {
           if (variant.image) {
-            this.productItem.variant.images.push(variant.image);
+            this.productItem.variants.images.push(variant.image);
           }
         });
       }
     } else if (this.productItem.variantType === VariantType.ColorAndSize) {
       // Push all images from each sizeColorVariant entry
-      if (this.productItem.variant.sizeColorVariant) {
-        this.productItem.variant.sizeColorVariant.forEach((variant) => {
-          this.productItem.variant.images.push(variant.image);
+      if (this.productItem.variants.sizeColorVariant) {
+        this.productItem.variants.sizeColorVariant.forEach((variant) => {
+          this.productItem.variants.images.push(variant.image);
         });
       }
     }
   }
 
   setDefaultPrice(): void {
-    if (!this.productItem || !this.productItem.variant) return;
+    if (!this.productItem || !this.productItem.variants) return;
 
     switch (this.productItem.variantType) {
       case VariantType.Size:
         this.selectedVariant = {
-          label: this.productItem.variant.sizeVariant?.[0]?.size || '',
-          value: this.productItem.variant.sizeVariant?.[0]?.id || '',
-          price: this.productItem.variant.sizeVariant?.[0]?.price || 0,
+          label: this.productItem.variants.sizeVariant?.[0]?.size || '',
+          value: this.productItem.variants.sizeVariant?.[0]?.id || '',
+          price: this.productItem.variants.sizeVariant?.[0]?.price || 0,
           stockQuantity:
-            this.productItem.variant.sizeVariant?.[0]?.stockQuantity || 0,
+            this.productItem.variants.sizeVariant?.[0]?.stockQuantity || 0,
           discountedPrice:
-            this.productItem.variant.sizeVariant?.[0]?.discountedPrice || 0,
+            this.productItem.variants.sizeVariant?.[0]?.discountedPrice || 0,
         };
         this.currentPrice = this.selectedVariant.price;
         this.discountPrice = this.selectedVariant.discountedPrice;
         break;
       case VariantType.Color:
         this.selectedVariant = {
-          label: this.productItem.variant.colorVariant?.[0]?.color || '',
-          value: this.productItem.variant.colorVariant?.[0]?.id || '',
-          price: this.productItem.variant.colorVariant?.[0]?.price || 0,
+          label: this.productItem.variants.colorVariant?.[0]?.color || '',
+          value: this.productItem.variants.colorVariant?.[0]?.id || '',
+          price: this.productItem.variants.colorVariant?.[0]?.price || 0,
           stockQuantity:
-            this.productItem.variant.colorVariant?.[0]?.stockQuantity || 0,
+            this.productItem.variants.colorVariant?.[0]?.stockQuantity || 0,
           discountedPrice:
-            this.productItem.variant.colorVariant?.[0]?.discountedPrice || 0,
+            this.productItem.variants.colorVariant?.[0]?.discountedPrice || 0,
         };
         this.currentPrice = this.selectedVariant.price;
         this.discountPrice = this.selectedVariant.discountedPrice;
@@ -109,7 +109,7 @@ export class DetailProductComponent {
         break;
       case VariantType.ColorAndSize:
         const firstColorVariant =
-          this.productItem.variant.sizeColorVariant?.[0];
+          this.productItem.variants.sizeColorVariant?.[0];
         const firstSizeVariant = firstColorVariant?.sizes?.[0];
         this.selectedVariant = {
           label: firstSizeVariant?.size || '',
@@ -142,9 +142,9 @@ export class DetailProductComponent {
     stockQuantity: number;
     discountedPrice: number;
   }[] {
-    if (!this.productItem || !this.productItem.variant) return [];
+    if (!this.productItem || !this.productItem.variants) return [];
 
-    const variant = this.productItem.variant;
+    const variant = this.productItem.variants;
     switch (this.productItem.variantType) {
       case VariantType.Size:
         return (
@@ -203,13 +203,13 @@ export class DetailProductComponent {
 
     if (this.productItem.variantType === VariantType.Color) {
       // Find index of the selected color variant
-      const index = this.productItem.variant.colorVariant?.findIndex(
+      const index = this.productItem.variants.colorVariant?.findIndex(
         (col) => col.id === button.value
       );
       this.selectedImageIndex = index !== undefined && index !== -1 ? index : 0;
     } else if (this.productItem.variantType === VariantType.ColorAndSize) {
       // Find index of the selected size-color variant
-      const index = this.productItem.variant.sizeColorVariant?.findIndex(
+      const index = this.productItem.variants.sizeColorVariant?.findIndex(
         (variant) => variant.id === button.value
       );
       this.selectedImageIndex = index !== undefined && index !== -1 ? index : 0;
@@ -222,13 +222,13 @@ export class DetailProductComponent {
 
     // Get the selected color variant
     const selectedColorVariant =
-      this.productItem.variant.sizeColorVariant?.[index];
+      this.productItem.variants.sizeColorVariant?.[index];
 
     console.log('Selected Color Variant:', selectedColorVariant);
 
     // Update the main image section with the selected color's images
     if (selectedColorVariant?.image.url != null) {
-      const index = this.productItem.variant.sizeColorVariant?.findIndex(
+      const index = this.productItem.variants.sizeColorVariant?.findIndex(
         (col) => col.id === selectedColorVariant.id
       );
 
@@ -261,13 +261,13 @@ export class DetailProductComponent {
   getAvailableColorsForSize(size: string): string[] {
     if (
       !this.productItem ||
-      !this.productItem.variant ||
+      !this.productItem.variants ||
       this.productItem.variantType !== VariantType.ColorAndSize
     )
       return [];
 
     return (
-      this.productItem.variant.sizeColorVariant
+      this.productItem.variants.sizeColorVariant
         ?.filter((colorVariant: ProductVariantSizeColor) =>
           colorVariant.sizes.some((s) => s.size === size && s.stockQuantity > 0)
         )

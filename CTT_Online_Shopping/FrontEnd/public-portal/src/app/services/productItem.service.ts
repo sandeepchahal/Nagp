@@ -9,7 +9,7 @@ import {
   providedIn: 'root',
 })
 export class ProductItemService {
-  private apiUrl = 'http://localhost:5267/api/product/'; // Update with your API URL
+  private apiUrl = 'http://localhost:5267/api/product'; // Update with your API URL
   constructor(private http: HttpClient) {}
 
   addProductItem(productItem: ProductItemCommand): Observable<any> {
@@ -20,7 +20,7 @@ export class ProductItemService {
   }
   getProductItemById(productItemId: string): Observable<ProductItemView> {
     return this.http.get<ProductItemView>(
-      `${this.apiUrl}/get/${productItemId}`
+      `${this.apiUrl}/item/get/${productItemId}`
     );
   }
 }

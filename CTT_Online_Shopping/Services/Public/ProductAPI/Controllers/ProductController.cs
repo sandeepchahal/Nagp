@@ -66,5 +66,4 @@ public class ProductController(IProductDbService productDbService, ICategoryDbSe
             return BadRequest("An error has occurred");
         }
     }
-    
 }

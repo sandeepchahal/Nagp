@@ -4,6 +4,7 @@ import { ProductView } from '../../../models/product.model';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TruncatePipe } from '../../../truncate.pipe';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-product',
@@ -17,7 +18,8 @@ export class ListProductComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -47,5 +49,8 @@ export class ListProductComponent implements OnInit {
       );
     }
     return 0;
+  }
+  goToDetail(id: string) {
+    this.router.navigate(['/product/item', id]);
   }
 }

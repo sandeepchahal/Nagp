@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using ProductAPI.Models.Common;
+using ProductAPI.Models.Products;
 
 namespace ProductAPI.Models.ProductItems;
 
@@ -84,5 +85,9 @@ public class ProductItem
     
     [BsonElement("variants")]
     public ProductVariant Variants { get; set; } = new();
-    
+}
+
+public class ProductItemView : ProductItem
+{
+    public ProductView Product { get; set; } = new ();
 }
