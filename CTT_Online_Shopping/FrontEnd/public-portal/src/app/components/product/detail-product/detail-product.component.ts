@@ -236,8 +236,10 @@ export class DetailProductComponent {
     this.currentPrice = button.price;
     this.discountPrice = button.discountedPrice;
     console.log('Selected Variant:', button);
-    this.cartItem.price = button.price;
+    this.cartItem.sizeId = button.value;
+    this.cartItem.sizeLabel = button.label;
     this.cartItem.discountedPrice = button.discountedPrice;
+    this.cartItem.price = button.price;
 
     // check the variant type
     // if color or size&color, then get the index of item and set

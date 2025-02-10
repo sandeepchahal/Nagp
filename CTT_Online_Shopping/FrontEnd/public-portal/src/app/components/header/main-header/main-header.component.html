@@ -34,10 +34,18 @@
         </li>
         
         <!-- Cart Button -->
-        <li class="nav-item me-3">
+         <!-- Cart Button -->
+         <li class="nav-item me-3">
           <a href="#" class="btn btn-outline-primary position-relative">
             <i class="bi bi-cart"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount" style="display: none;">0</span>
+            <!-- Update the cart count badge -->
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              id="cartCount"
+              [style.display]="cartCount > 0 ? 'block' : 'none'"
+            >
+              {{ cartCount }}
+            </span>
           </a>
         </li>
         <app-popup-cart></app-popup-cart>

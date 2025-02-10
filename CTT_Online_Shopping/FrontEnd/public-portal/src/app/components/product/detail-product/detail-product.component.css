@@ -15,12 +15,15 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
+    text-align: center;
   }
   
   .main-image img {
     width: 100%;
     height: auto;
+    min-height: 500px;
     transition: transform 0.3s ease;
+
   }
   
   .main-image.zoomed img {
