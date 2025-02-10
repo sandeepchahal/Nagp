@@ -98,9 +98,9 @@
     transition: background-color 0.3s ease;
   }
   
-  .variant-button.selected {
-    border-color: #007bff;
-    background-color: #007bff;
+  .selected {
+    border-color: #323639;
+    background-color: #323639;
     color: #fff;
   }
   
@@ -112,7 +112,7 @@
   
   .stock-quantity {
     font-size: 0.875rem;
-    color: #dc3545;
+    color: #dc8635;
     margin-left: 0.5rem;
   }
   
@@ -168,4 +168,8 @@
   .color-group img {
     max-height: 150px; /* Adjust as needed */
     width: auto;
+  }
+  .margin-right20
+  {
+    margin-right: 20px;
   }

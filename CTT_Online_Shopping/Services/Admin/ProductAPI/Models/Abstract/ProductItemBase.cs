@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace ProductAPI.Models.Abstract;
 
@@ -19,8 +20,14 @@ public class ProductVariantSizeColorBase
 {
     public string Color { get; set; } = string.Empty;
     public ImagesBase Image { get; set; } = new();
-    public List<ProductVariantSizeBase> Sizes { get; set; } = new();
+   
 }
+public class ProductVariantSizeColorDbBase:ProductVariantSizeColorBase
+{
+    public List<ProductVariantSizeWithOutImageDb> Sizes { get; set; } = new();
+}
+
+
 public class ProductVariantColorBase
 {
     public string Color { get; set; } = string.Empty;
@@ -47,13 +54,13 @@ public class ProductVariantDb : ProductVariantBase
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public bool IsDiscountApplied { get; set; } = false;
-    public List<ProductVariantSizeDb>? SizeVariant { get; set; }  // Nullable Size Variant
+    public List<ProductVariantSizeWithImageDb>? SizeVariant { get; set; }  // Nullable Size Variant
     public List<ProductVariantColorDb>? ColorVariant { get; set; }  // Nullable Color Variant
     public List<ProductVariantSizeColorDb>? SizeColorVariant { get; set; }  // Nullable Size-Color Variant
 }
 
 
-public class ProductVariantSizeColorDb:ProductVariantSizeColorBase
+public class ProductVariantSizeColorDb:ProductVariantSizeColorDbBase
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
 }
@@ -62,11 +69,17 @@ public class ProductVariantColorDb:ProductVariantColorBase
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public decimal DiscountedPrice { get; set; }
 }
-public class ProductVariantSizeDb:ProductVariantSizeWithImage
+public class ProductVariantSizeWithImageDb:ProductVariantSizeWithImage
 {
+    [BsonElement("id")]
     public string Id { get; set; } = Guid.NewGuid().ToString();
 }
 
+public class ProductVariantSizeWithOutImageDb:ProductVariantSizeBase
+{
+    [BsonElement("id")]
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+}
 public class ImagesBase
 {
     public string Url { get; set; } = string.Empty;

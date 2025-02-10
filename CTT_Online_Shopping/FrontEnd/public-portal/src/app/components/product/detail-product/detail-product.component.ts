@@ -169,8 +169,10 @@ export class DetailProductComponent {
         );
 
       case VariantType.ColorAndSize:
+        console.log('selected variant', this.selectedVariant);
         const selectedColorVariant =
           variant.sizeColorVariant?.[this.selectedColorIndex];
+        console.log('variant.sizeColorVariant', variant.sizeColorVariant);
         return (
           selectedColorVariant?.sizes?.map((s) => ({
             label: s.size || '',
@@ -275,4 +277,6 @@ export class DetailProductComponent {
       []
     );
   }
+  addToBag() {}
+  addToWishlist() {}
 }

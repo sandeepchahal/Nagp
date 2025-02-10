@@ -33,7 +33,7 @@ public static class ProductItemMapper
                     }).ToList()
                     : null,
                 SizeVariant = request.Variant.SizeVariant is { Count: > 0 }
-                    ? request.Variant.SizeVariant.Select(col => new ProductVariantSizeDb()
+                    ? request.Variant.SizeVariant.Select(col => new ProductVariantSizeWithImageDb()
                     {
                         Discount = col.Discount,
                         Price = col.Price,
@@ -46,7 +46,7 @@ public static class ProductItemMapper
                         ? request.Variant.SizeColorVariant.Select(col => new ProductVariantSizeColorDb()
                         {
                             Color = col.Color,
-                            Sizes = col.Sizes.Select(productVariantSizeBase=>new ProductVariantSizeBase()
+                            Sizes = col.Sizes.Select(productVariantSizeBase=>new ProductVariantSizeWithOutImageDb()
                             {
                                 Discount = productVariantSizeBase.Discount,
                                 Price = productVariantSizeBase.Price,

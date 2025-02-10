@@ -2,3 +2,10 @@ li
 {
 list-style: none;
 }
+.dropdown-wide {
+    min-width: 250px;
+  }
+  #loginbtn
+  {
+    margin-left: 20px;
+  }
