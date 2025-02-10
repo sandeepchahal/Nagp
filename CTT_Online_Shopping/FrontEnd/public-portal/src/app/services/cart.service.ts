@@ -21,7 +21,9 @@ export class CartService {
   showPopup$ = this.showPopupSubject.asObservable(); // Observable for popup visibility
   popupData$ = this.popupDataSubject.asObservable(); // Observable for popup data
 
-  constructor() {}
+  constructor() {
+    this.loadCartFromLocalStorage();
+  }
 
   addToCart(item: CartItem) {
     let existingItem: CartItem | undefined;
@@ -55,6 +57,7 @@ export class CartService {
     );
     this.cartItemsSubject.next([...this.cartItems]); // Emit new array reference
 
+    this.saveCartToLocalStorage();
     // Pass the updated or newly added item to the popup
     this.showPopup(existingItem ? { ...existingItem } : { ...item });
   }
@@ -89,25 +92,27 @@ export class CartService {
     }
   }
 
-  // cart.service.ts (updateCartItem method)
   updateCartItem(item: CartItem, increment: boolean): void {
     const existingItem = this.findCartItem(item);
+    console.log('existingItem', existingItem);
     if (existingItem) {
-      // If increment is true, increase the order count; otherwise, decrease it
+      // Update the order count
       if (increment) {
         existingItem.orderCount++;
       } else {
-        // Ensure the order count does not go below 1
         if (existingItem.orderCount > 1) {
           existingItem.orderCount--;
         }
       }
-
-      // Recalculate price for this item
+      console.log('existingItem', existingItem);
+      // Recalculate the total price for this item
       existingItem.totalPrice =
-        existingItem.orderCount * existingItem.discountedPrice;
+        existingItem.orderCount *
+        (existingItem.discountedPrice !== 0
+          ? existingItem.discountedPrice
+          : existingItem.price);
 
-      // Emit the updated cart items array
+      // Emit the updated cart items
       this.cartItemsSubject.next([...this.cartItems]);
       this.saveCartToLocalStorage();
     }
@@ -115,12 +120,13 @@ export class CartService {
 
   // Find an item in the cart based on variantType (size, color, etc.)
   private findCartItem(item: CartItem): CartItem | undefined {
+    console.log('findCartItem', item);
     return this.cartItems.find(
       (cartItem) =>
         (cartItem.variantType === 'Size' && cartItem.sizeId === item.sizeId) ||
         (cartItem.variantType === 'Color' &&
           cartItem.colorId === item.colorId) ||
-        (cartItem.variantType === 'SizeAndColor' &&
+        (cartItem.variantType === 'ColorAndSize' &&
           cartItem.sizeId === item.sizeId &&
           cartItem.colorId === item.colorId)
     );
@@ -133,11 +139,13 @@ export class CartService {
 
   // Load cart items from localStorage or sessionStorage (for persistence)
   private loadCartFromLocalStorage(): void {
-    const storedCartItems = localStorage.getItem('cartItems');
-    if (storedCartItems) {
-      this.cartItems = JSON.parse(storedCartItems);
-      this.cartCountSubject.next(this.cartItems.length);
-      this.cartItemsSubject.next(this.cartItems);
+    if (typeof localStorage !== 'undefined') {
+      const storedCartItems = localStorage.getItem('cartItems');
+      if (storedCartItems) {
+        this.cartItems = JSON.parse(storedCartItems);
+        this.cartCountSubject.next(this.cartItems.length);
+        this.cartItemsSubject.next(this.cartItems);
+      }
     }
   }
 }

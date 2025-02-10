@@ -31,30 +31,26 @@ export class ListCartComponent {
     this.calculateTotal();
   }
 
-  // Increase quantity
   increaseQuantity(item: CartItem): void {
-    this.cartService.updateCartItem(item, true); // Increment order count
-    this.calculateTotalPrice(); // Recalculate total price
+    this.cartService.updateCartItem(item, true);
+    this.calculateTotal();
   }
 
-  // Decrease quantity
   decreaseQuantity(item: CartItem): void {
-    this.cartService.updateCartItem(item, false); // Decrement order count
-    this.calculateTotalPrice(); // Recalculate total price
-  }
-
-  // Calculate the total price of all items in the cart
-  calculateTotalPrice(): void {
-    this.totalPrice = this.cartItems.reduce(
-      (acc, item) => acc + item.totalPrice,
-      0
-    );
+    this.cartService.updateCartItem(item, false);
+    this.calculateTotal();
   }
 
   calculateTotal(): void {
+    console.log(this.cartItems);
     this.totalPrice = this.cartItems.reduce((acc, item) => {
-      return acc + item.discountedPrice * item.orderCount;
+      return (
+        acc +
+        (item.discountedPrice !== 0 ? item.discountedPrice : item.price) *
+          item.orderCount
+      );
     }, 0);
+    console.log(this.totalPrice);
   }
 
   placeOrder(): void {
