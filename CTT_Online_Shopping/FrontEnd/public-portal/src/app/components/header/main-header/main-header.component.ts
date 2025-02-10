@@ -48,4 +48,7 @@ export class MainHeaderComponent implements OnInit {
   showProducts(slug: string) {
     this.router.navigate(['/product/category', slug]);
   }
+  goToCart() {
+    this.router.navigate(['cart']);
+  }
 }

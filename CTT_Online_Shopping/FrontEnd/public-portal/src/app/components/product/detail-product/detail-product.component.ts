@@ -44,6 +44,10 @@ export class DetailProductComponent {
     colorId: '',
     sizeId: '',
     sizeLabel: '',
+    productId: '',
+    productItemId: '',
+    orderCount: 0,
+    totalPrice: 0,
   };
 
   constructor(
@@ -67,6 +71,8 @@ export class DetailProductComponent {
         this.cartItem.brand = this.productItem.product.brand.name;
         this.cartItem.name = this.productItem.product.name;
         this.cartItem.variantType = this.productItem.variantType;
+        this.cartItem.productId = data.productId;
+        this.cartItem.productItemId = data.id;
         this.setVariantImages();
         this.setDefaultPrice();
       },
@@ -250,7 +256,7 @@ export class DetailProductComponent {
         (col) => col.id === button.value
       );
       this.selectedImageIndex = index !== undefined && index !== -1 ? index : 0;
-      this.cartItem.sizeId = button.value;
+      this.cartItem.colorId = button.value;
       this.cartItem.sizeLabel = button.label;
       this.cartItem.imgUrl =
         this.productItem.variants.colorVariant?.[index ?? 0].image.url ?? '';
