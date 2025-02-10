@@ -6,7 +6,7 @@
         <img
           [src]="productItem.variants.images![selectedImageIndex].url"
           [alt]="productItem.variants.images![selectedImageIndex].altText"
-          class="responsive-image"
+          class="img-fluid rounded"
           [ngClass]="{'zoom-cursor': isImageZoomed}"
         />
       </div>
@@ -19,7 +19,7 @@
           [class.active]="i === selectedImageIndex"
           (click)="selectImage(i)"
         >
-          <img [src]="image.url" [alt]="image.altText" class="responsive-image" />
+          <img [src]="image.url" [alt]="image.altText" class="img-fluid rounded" />
         </div>
       </div>
     </div>
@@ -93,7 +93,7 @@
               [class.selected]="i === selectedColorIndex"
               (click)="onColorSelect(i)"
             >
-              <img [src]="colorVariant.image.url" [alt]="colorVariant.image.altText" class="color-image" />
+              <img [src]="colorVariant.image.url" [alt]="colorVariant.image.altText" class="color-image img-fluid rounded" />
             </div>
           </div>
   

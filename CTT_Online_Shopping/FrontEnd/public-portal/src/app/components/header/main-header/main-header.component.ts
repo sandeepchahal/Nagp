@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { HeaderService } from '../../../services/header.service';
 import { CategoryView } from '../../../models/category.model';
 import { Router } from '@angular/router';
+import { PopupCartComponent } from '../../cart/popup-cart/popup-cart.component';
 
 @Component({
   selector: 'app-main-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PopupCartComponent],
   templateUrl: './main-header.component.html',
   styleUrl: './main-header.component.css',
 })

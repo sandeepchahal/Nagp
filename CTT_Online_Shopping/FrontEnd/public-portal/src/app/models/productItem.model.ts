@@ -20,7 +20,7 @@ export interface ProductVariantBase {
 export interface ProductVariantSizeColorBase {
   color: string; // for each color, we have multiple size options
   image: ImagesBase; // for each color, we need to add the image
-  sizes: ProductVariantSizeBase[];
+  sizes: ProductVariantSizeWithIdBase[];
 }
 
 export interface ProductVariantColorBase {
@@ -29,6 +29,9 @@ export interface ProductVariantColorBase {
   price: number;
   discount?: Discount;
   image: ImagesBase;
+}
+export interface ProductVariantSizeWithIdBase extends ProductVariantSizeBase {
+  id: string;
 }
 
 export interface ProductVariantSizeBase {

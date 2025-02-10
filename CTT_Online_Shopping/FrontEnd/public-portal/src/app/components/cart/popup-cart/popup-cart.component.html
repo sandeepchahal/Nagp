@@ -1,0 +1,20 @@
+<div class="popup bounce-in" *ngIf="showPopup">
+    <div class="popup-content">
+      <img [src]="popupData?.imgUrl" class="popup-image">
+      <div class="popup-details">
+        <p><strong>{{ popupData?.brand }}</strong></p>
+        <p>{{ popupData?.name }}</p>
+        <p>Price: 
+            <strong *ngIf="popupData?.discountedPrice !== 0; else originalPrice">
+              {{ popupData?.discountedPrice | currency:'INR' }}
+            </strong>
+            <ng-template #originalPrice>
+              <strong>{{ popupData?.price | currency:'INR' }}</strong>
+            </ng-template>
+          </p>
+          <p>Size - {{ popupData?.sizeLabel }}</p>
+        <p class="popup-count">🛒 Count: <strong>{{ cartCount }}</strong></p>
+      </div>
+    </div>
+  </div>
+  

@@ -9,11 +9,13 @@ namespace ProductAPI.Models.ProductItems;
 public class ProductVariantSizeBase
 {
     public string Size { get; set; } = string.Empty;
+    
     public int StockQuantity { get; set; }
     public decimal Price { get; set; }
     public Discount? Discount { get; set; }
     public decimal DiscountedPrice { get; set; }
 }
+
 public class ProductVariantBase
 {
     [BsonElement("discount")]
@@ -22,14 +24,14 @@ public class ProductVariantBase
     public List<ImagesBase>? Images { get; set; }
 }
 
-public class ProductVariantSize
+public class ProductVariantSizeWithOutImageDb:ProductVariantSizeBase
+{
+    [BsonElement("id")]
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+}
+public class ProductVariantSize:ProductVariantSizeBase
 {
     public string Id { get; set; } = null!;
-    public string Size { get; set; } = string.Empty;
-    public int StockQuantity { get; set; }
-    public decimal Price { get; set; }
-    public Discount Discount { get; set; } = new();
-    public decimal DiscountedPrice { get; set; }
     
     [BsonElement("images")]
     public List<ImagesBase> Images { get; set; } = new();
@@ -59,7 +61,7 @@ public class ProductVariantSizeColor
     public ImagesBase Image { get; set; } = new();
     
     [BsonElement("sizes")]
-    public List<ProductVariantSizeBase> Sizes { get; set; } = new();
+    public List<ProductVariantSizeWithOutImageDb> Sizes { get; set; } = new();
 }
 public class ProductVariant : ProductVariantBase
 {

@@ -9,6 +9,8 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { VariantType } from '../../../models/enums';
 import { ProductItemService } from '../../../services/productItem.service';
+import { CartService } from '../../../services/cart.service';
+import { CartItem } from '../../../models/cart.model';
 
 @Component({
   selector: 'app-detail-product',
@@ -31,10 +33,23 @@ export class DetailProductComponent {
   discountPrice: number = 0; // Track the discounted price
   selectedColorIndex = 0; // Track the selected color index for ColorAndSize variant
   isImageZoomed = false; // Track if the main image is zoomed
+  selectedColorId: string = '';
+  cartItem: CartItem = {
+    brand: '',
+    imgUrl: '',
+    name: '',
+    discountedPrice: 0,
+    price: 0,
+    variantType: '',
+    colorId: '',
+    sizeId: '',
+    sizeLabel: '',
+  };
 
   constructor(
     private route: ActivatedRoute,
-    private productItemService: ProductItemService
+    private productItemService: ProductItemService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -48,7 +63,10 @@ export class DetailProductComponent {
     this.productItemService.getProductItemById(productId).subscribe({
       next: (data) => {
         this.productItem = data;
-        console.log('Product item detail', this.productItem);
+        console.log('Product item detail', data);
+        this.cartItem.brand = this.productItem.product.brand.name;
+        this.cartItem.name = this.productItem.product.name;
+        this.cartItem.variantType = this.productItem.variantType;
         this.setVariantImages();
         this.setDefaultPrice();
       },
@@ -92,6 +110,14 @@ export class DetailProductComponent {
         };
         this.currentPrice = this.selectedVariant.price;
         this.discountPrice = this.selectedVariant.discountedPrice;
+        this.cartItem.price = this.currentPrice;
+        this.cartItem.discountedPrice = this.discountPrice;
+        this.cartItem.sizeId = this.productItem.variants.sizeVariant?.[0]?.id;
+        this.cartItem.sizeLabel =
+          this.productItem.variants.sizeVariant?.[0]?.size ?? '';
+
+        this.cartItem.imgUrl = this.productItem.variants.images[0].url;
+
         break;
       case VariantType.Color:
         this.selectedVariant = {
@@ -104,21 +130,34 @@ export class DetailProductComponent {
             this.productItem.variants.colorVariant?.[0]?.discountedPrice || 0,
         };
         this.currentPrice = this.selectedVariant.price;
+        this.cartItem.price = this.currentPrice;
+        this.cartItem.discountedPrice = this.selectedVariant.discountedPrice;
+        this.cartItem.imgUrl =
+          this.productItem.variants.colorVariant![0].image.url;
+        this.cartItem.colorId = this.productItem.variants.colorVariant?.[0]?.id;
         this.discountPrice = this.selectedVariant.discountedPrice;
         this.selectedImageIndex = 0; // Set the main image to the first image of the selected color
         break;
       case VariantType.ColorAndSize:
         const firstColorVariant =
           this.productItem.variants.sizeColorVariant?.[0];
+
         const firstSizeVariant = firstColorVariant?.sizes?.[0];
         this.selectedVariant = {
           label: firstSizeVariant?.size || '',
-          value: firstColorVariant?.id || '',
+          value: firstSizeVariant?.id || '',
           price: firstSizeVariant?.price || 0,
           stockQuantity: firstSizeVariant?.stockQuantity || 0,
           discountedPrice: firstSizeVariant?.discountedPrice || 0,
         };
         this.currentPrice = this.selectedVariant.price;
+        this.cartItem.sizeId = this.selectedVariant.value;
+        this.cartItem.sizeLabel = firstSizeVariant?.size ?? '';
+        this.cartItem.colorId = firstColorVariant?.id;
+        this.cartItem.price = this.currentPrice;
+        this.cartItem.discountedPrice = this.selectedVariant.discountedPrice;
+        this.cartItem.imgUrl = firstColorVariant?.image.url ?? '';
+        this.productItem.variants.sizeColorVariant;
         this.discountPrice = this.selectedVariant.discountedPrice;
         this.selectedImageIndex = 0; // Set the main image to the first image of the selected color
         break;
@@ -169,14 +208,12 @@ export class DetailProductComponent {
         );
 
       case VariantType.ColorAndSize:
-        console.log('selected variant', this.selectedVariant);
         const selectedColorVariant =
           variant.sizeColorVariant?.[this.selectedColorIndex];
-        console.log('variant.sizeColorVariant', variant.sizeColorVariant);
         return (
           selectedColorVariant?.sizes?.map((s) => ({
             label: s.size || '',
-            value: selectedColorVariant.id || '',
+            value: s.id || '',
             price: s.price || 0,
             stockQuantity: s.stockQuantity || 0,
             discountedPrice: s.discountedPrice || 0,
@@ -199,6 +236,8 @@ export class DetailProductComponent {
     this.currentPrice = button.price;
     this.discountPrice = button.discountedPrice;
     console.log('Selected Variant:', button);
+    this.cartItem.price = button.price;
+    this.cartItem.discountedPrice = button.discountedPrice;
 
     // check the variant type
     // if color or size&color, then get the index of item and set
@@ -209,12 +248,21 @@ export class DetailProductComponent {
         (col) => col.id === button.value
       );
       this.selectedImageIndex = index !== undefined && index !== -1 ? index : 0;
+      this.cartItem.sizeId = button.value;
+      this.cartItem.sizeLabel = button.label;
+      this.cartItem.imgUrl =
+        this.productItem.variants.colorVariant?.[index ?? 0].image.url ?? '';
     } else if (this.productItem.variantType === VariantType.ColorAndSize) {
       // Find index of the selected size-color variant
       const index = this.productItem.variants.sizeColorVariant?.findIndex(
         (variant) => variant.id === button.value
       );
-      this.selectedImageIndex = index !== undefined && index !== -1 ? index : 0;
+      this.cartItem.imgUrl =
+        this.productItem.variants.colorVariant?.[index ?? 0].image.url ?? '';
+      //this.selectedImageIndex = index !== undefined && index !== -1 ? index : 0;
+    } else {
+      this.cartItem.sizeId = button.value;
+      this.cartItem.sizeLabel = button.label;
     }
   }
 
@@ -225,10 +273,11 @@ export class DetailProductComponent {
     // Get the selected color variant
     const selectedColorVariant =
       this.productItem.variants.sizeColorVariant?.[index];
-
-    console.log('Selected Color Variant:', selectedColorVariant);
+    this.selectedColorId = selectedColorVariant?.id ?? '';
+    this.cartItem.colorId = selectedColorVariant?.id;
 
     // Update the main image section with the selected color's images
+
     if (selectedColorVariant?.image.url != null) {
       const index = this.productItem.variants.sizeColorVariant?.findIndex(
         (col) => col.id === selectedColorVariant.id
@@ -240,15 +289,19 @@ export class DetailProductComponent {
     // Update the selected variant with the first size of the selected color
     if (selectedColorVariant?.sizes?.[0]) {
       const firstSizeVariant = selectedColorVariant.sizes[0];
+      this.cartItem.sizeId = firstSizeVariant.id;
+      this.cartItem.sizeLabel = firstSizeVariant.size;
       this.selectedVariant = {
         label: firstSizeVariant.size || '',
-        value: selectedColorVariant.id || '',
+        value: firstSizeVariant.id || '',
         price: firstSizeVariant.price || 0,
         stockQuantity: firstSizeVariant.stockQuantity || 0,
         discountedPrice: firstSizeVariant.discountedPrice || 0,
       };
       this.currentPrice = this.selectedVariant.price;
       this.discountPrice = this.selectedVariant.discountedPrice;
+      this.cartItem.price = this.selectedVariant.price;
+      this.cartItem.discountedPrice = this.selectedVariant.discountedPrice;
     }
 
     console.log('Updated Selected Variant:', this.selectedVariant);
@@ -277,6 +330,13 @@ export class DetailProductComponent {
       []
     );
   }
-  addToBag() {}
-  addToWishlist() {}
+  addToBag() {
+    const cartItemCopy = { ...this.cartItem }; // Creates a shallow copy
+    console.log(cartItemCopy);
+    this.cartService.addToCart(cartItemCopy);
+  }
+
+  addToWishlist() {
+    console.log(this.selectedVariant);
+  }
 }
