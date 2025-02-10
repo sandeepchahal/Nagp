@@ -89,13 +89,26 @@ export class CartService {
     }
   }
 
-  // Update item in the cart (e.g., for modifying the quantity)
-  updateCartItem(item: CartItem): void {
+  // cart.service.ts (updateCartItem method)
+  updateCartItem(item: CartItem, increment: boolean): void {
     const existingItem = this.findCartItem(item);
-
     if (existingItem) {
-      existingItem.orderCount = item.orderCount; // Update the order count
-      this.cartItemsSubject.next([...this.cartItems]); // Emit the updated cart items array
+      // If increment is true, increase the order count; otherwise, decrease it
+      if (increment) {
+        existingItem.orderCount++;
+      } else {
+        // Ensure the order count does not go below 1
+        if (existingItem.orderCount > 1) {
+          existingItem.orderCount--;
+        }
+      }
+
+      // Recalculate price for this item
+      existingItem.totalPrice =
+        existingItem.orderCount * existingItem.discountedPrice;
+
+      // Emit the updated cart items array
+      this.cartItemsSubject.next([...this.cartItems]);
       this.saveCartToLocalStorage();
     }
   }

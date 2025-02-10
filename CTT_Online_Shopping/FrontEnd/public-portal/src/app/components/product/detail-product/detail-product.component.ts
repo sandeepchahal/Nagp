@@ -42,6 +42,7 @@ export class DetailProductComponent {
     price: 0,
     variantType: '',
     colorId: '',
+    colorLabel: '',
     sizeId: '',
     sizeLabel: '',
     productId: '',
@@ -141,6 +142,9 @@ export class DetailProductComponent {
         this.cartItem.imgUrl =
           this.productItem.variants.colorVariant![0].image.url;
         this.cartItem.colorId = this.productItem.variants.colorVariant?.[0]?.id;
+        this.cartItem.colorLabel =
+          this.productItem.variants.colorVariant?.[0].color ?? '';
+
         this.discountPrice = this.selectedVariant.discountedPrice;
         this.selectedImageIndex = 0; // Set the main image to the first image of the selected color
         break;
@@ -241,9 +245,8 @@ export class DetailProductComponent {
     this.selectedVariant = button;
     this.currentPrice = button.price;
     this.discountPrice = button.discountedPrice;
+
     console.log('Selected Variant:', button);
-    this.cartItem.sizeId = button.value;
-    this.cartItem.sizeLabel = button.label;
     this.cartItem.discountedPrice = button.discountedPrice;
     this.cartItem.price = button.price;
 
@@ -257,9 +260,12 @@ export class DetailProductComponent {
       );
       this.selectedImageIndex = index !== undefined && index !== -1 ? index : 0;
       this.cartItem.colorId = button.value;
-      this.cartItem.sizeLabel = button.label;
+      this.cartItem.colorLabel = button.label;
+
       this.cartItem.imgUrl =
         this.productItem.variants.colorVariant?.[index ?? 0].image.url ?? '';
+      this.cartItem.sizeId = '';
+      this.cartItem.sizeLabel = '';
     } else if (this.productItem.variantType === VariantType.ColorAndSize) {
       // Find index of the selected size-color variant
       const index = this.productItem.variants.sizeColorVariant?.findIndex(
@@ -342,9 +348,20 @@ export class DetailProductComponent {
     const cartItemCopy = { ...this.cartItem }; // Creates a shallow copy
     console.log(cartItemCopy);
     this.cartService.addToCart(cartItemCopy);
+    this.resetCartItem();
   }
 
   addToWishlist() {
     console.log(this.selectedVariant);
+  }
+  resetCartItem() {
+    this.cartItem.brand = '';
+    this.cartItem.colorId = '';
+    this.cartItem.colorLabel = '';
+    this.cartItem.sizeId = '';
+    this.cartItem.sizeLabel = '';
+    this.cartItem.imgUrl = '';
+    this.cartItem.discountedPrice = 0;
+    this.cartItem.price = 0;
   }
 }

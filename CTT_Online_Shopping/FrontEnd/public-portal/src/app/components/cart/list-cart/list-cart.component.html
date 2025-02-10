@@ -6,45 +6,6 @@
       Your cart is empty. Please add some items.
     </div>
   
-    <div *ngFor="let item of cartItems" class="card mb-3">
-      <div class="card-body d-flex align-items-center">
-        <div class="row w-100">
-          <!-- Product Image -->
-          <div class="col-md-2">
-            <img [src]="item.imgUrl" alt="Product Image" class="img-fluid">
-          </div>
-  
-          <!-- Product Details -->
-          <div class="col-md-6">
-            <h5 class="card-title">{{ item.name }} | {{ item.variantType }}</h5>
-            <p class="card-text">Brand: {{ item.brand }}</p>
-            <p class="card-text">Price: 
-                <strong *ngIf="item?.discountedPrice !== 0; else originalPrice">
-                    {{ item?.discountedPrice | currency:'INR' }}
-                  </strong>
-                  <ng-template #originalPrice>
-                    <strong>{{ item?.price | currency:'INR' }}</strong>
-                  </ng-template>
-            </p>
-          </div>
-  
-          <!-- Quantity Controls -->
-          <div class="col-md-2">
-            <button class="btn btn-outline-primary" (click)="decreaseQuantity(item)">-</button>
-            <span class="mx-2">{{ item.orderCount }}</span>
-            <button class="btn btn-outline-primary" (click)="increaseQuantity(item)">+</button>
-          </div>
-  
-          <!-- Remove Button -->
-          <div class="col-md-2 text-right">
-            <button class="btn btn-danger" (click)="removeItem(item)">
-              <i class="bi bi-trash"></i> Remove
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  
     <!-- Cart Summary -->
     <div class="cart-summary mt-4" *ngIf="cartItems.length>0">
       <table class="table table-striped">
@@ -60,10 +21,32 @@
         <tbody>
           <tr *ngFor="let item of cartItems">
             <td><img [src]="item.imgUrl" alt="Product Image" class="img-fluid small-img"></td>
-            <td>{{ item.name }}, {{ item.variantType }}</td>
-            <td>{{ item.discountedPrice | currency }}</td>
-            <td>{{ item.orderCount }}</td>
-            <td>{{ item.discountedPrice * item.orderCount | currency }}</td>
+            <td>
+                <p>{{ item.name }}</p>
+                <p *ngIf="item.sizeId != ''"> Size - {{ item.sizeLabel }}</p>
+                <p *ngIf="item.colorId != ''"> Color - {{ item.colorLabel }}</p>
+            </td>
+            <td>
+                <strong *ngIf="item?.discountedPrice !== 0; else originalPriceList">
+                {{ item?.discountedPrice | currency:'INR' }}
+              </strong>
+              <ng-template #originalPriceList>
+                <strong>{{ item?.price | currency:'INR' }}</strong>
+              </ng-template>
+            </td> 
+    
+            <!-- Quantity Controls -->
+        <div class="col-md-2">
+            <button class="btn btn-outline-primary" (click)="decreaseQuantity(item)">-</button>
+            <span class="mx-2">{{ item.orderCount }}</span>
+            <button class="btn btn-outline-primary" (click)="increaseQuantity(item)">+</button>
+          </div>
+            <td><strong *ngIf="item?.discountedPrice !== 0; else originalPriceTotal">
+                {{ item?.discountedPrice | currency:'INR' }}
+              </strong>
+              <ng-template #originalPriceTotal>
+                <strong>{{ item?.price | currency:'INR' }}</strong>
+              </ng-template></td>
           </tr>
         </tbody>
       </table>
@@ -75,9 +58,9 @@
           <p><strong>Shipping:</strong> {{ shipping | currency }}</p>
           <p><strong>Total Price:</strong> {{ (totalPrice + shipping) | currency }}</p>
         </div>
-        <div class="col-md-6 text-right">
-          <button class="btn btn-success btn-lg" (click)="placeOrder()">Place Order</button>
-        </div>
+      </div>
+      <div class="col-md-6 text-right">
+        <button class="btn btn-success btn-lg" (click)="placeOrder()">Place Order</button>
       </div>
     </div>
   </div>
