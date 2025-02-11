@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { UserService } from '../../../services/user.service';
 import { Router, RouterModule } from '@angular/router';
@@ -43,15 +43,15 @@ import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
               '2200065800-4qpttr0st49m03cae11a63qniop7pqgn.apps.googleusercontent.com'
-            ), // Replace with your Google Client ID
+            ),
           },
         ],
       } as SocialAuthServiceConfig,
     },
-    SocialAuthService, // Provide the SocialAuthService
+    SocialAuthService,
   ],
 })
-export class BillingInformationComponent {
+export class BillingInformationComponent implements OnInit {
   billingForm!: FormGroup;
   shippingForm!: FormGroup;
   isLoggedIn = false;
@@ -109,14 +109,21 @@ export class BillingInformationComponent {
         });
       });
     }
+    // Subscribe to social auth state changes
+    this.socialAuthService.authState.subscribe((user: SocialUser) => {
+      this.socialUser = user;
+      if (user) {
+        this.handleSocialLogin(user);
+      }
+    });
   }
   // Handle Google Sign-In
   handleSocialLogin(user: SocialUser): void {
     this.authService.googleLogin(user.idToken).subscribe(
       (response) => {
         console.log('Google login success', response);
-        // Store token and update login state
-        localStorage.setItem('token', response.token);
+        // Store token and navigate user
+        this.authService.setUserInfo(response.token);
         this.isLoggedIn = true;
       },
       (error) => {

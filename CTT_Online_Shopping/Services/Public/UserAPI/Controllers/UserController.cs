@@ -94,7 +94,7 @@ public class UserController(
 
             // Generate JWT Token
             var token = jwtTokenGeneration.GenerateToken(user);
-            return Ok(new { token });
+            return Ok(new { Token=token });
         }
         return BadRequest("Unsupported provider");
     }

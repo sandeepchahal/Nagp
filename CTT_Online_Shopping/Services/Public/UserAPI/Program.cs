@@ -30,19 +30,6 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.User.RequireUniqueEmail = true;
 });
 
-// builder.Services.AddAuthentication()
-//     .AddGoogle(options =>
-//     {
-//         options.ClientId = "your-client-id";
-//         options.ClientSecret = "your-client-secret";
-//     })
-//     .AddFacebook(options =>
-//     {
-//         options.AppId = "your-app-id";
-//         options.AppSecret = "your-app-secret";
-//     });
-
-
 // Allowing all origins for testing purposes (you can restrict to specific domains later)
 builder.Services.AddCors(options =>
 {
@@ -56,6 +43,8 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
+ConfigureMigration.ConfigureMigrationServices(app);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -16,6 +16,7 @@ import {
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -78,8 +79,7 @@ export class LoginComponent {
       (response) => {
         console.log('Google login success', response);
         // Store token and navigate user
-        localStorage.setItem('token', response.token); // Save the JWT token
-        this.router.navigate(['order/billing']); // Navigate to billing page validate-social-login
+        this.authService.setUserInfo(response.token);
       },
       (error) => {
         console.error('Google login error', error);
@@ -95,7 +95,10 @@ export class LoginComponent {
         console.log('Login success', response);
         // Store token and navigate user
         localStorage.setItem('token', response.token); // Save the JWT token
-        this.authService.googleLogin(response.token);
+        this.authService.googleLogin(response.token).subscribe((data) => {
+          localStorage.setItem('token', jwtDecode(data.token));
+        });
+
         this.router.navigate(['/billing']); // Navigate to billing page
       },
       (error) => {
