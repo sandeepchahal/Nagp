@@ -72,6 +72,9 @@ export class AddProductComponent {
     this.categoryService.getCategories().subscribe((categories) => {
       this.categories = categories;
       this.filteredCategories = categories;
+      this.filteredCategories.map((e) => {
+        e.name = `${e.name} (${e.gender})`;
+      });
     });
 
     this.brandService.getAll().subscribe((data) => {

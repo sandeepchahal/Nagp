@@ -1,4 +1,5 @@
 using ProductAPI.Enums;
+using ProductAPI.Events.Models;
 using ProductAPI.Models.Abstract;
 using ProductAPI.Models.Commands;
 using ProductAPI.Models.DbModels;
@@ -111,6 +112,7 @@ public static class ProductItemMapper
         };
     }
 
+    
     private static decimal CalculateDiscount(DiscountTypeEnum discountTypeEnum, decimal price, Discount discount)
     {
         return discountTypeEnum switch

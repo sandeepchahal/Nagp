@@ -11,27 +11,17 @@ public class ProductItemService(ElasticsearchClient elasticClient, ILogger<Produ
     {
         try
         {
-            // Step 1: Check if the product exists
-            var productExists = await elasticClient.ExistsAsync<Product>(productItemEvent.ProductId);
+            // Step 1: Insert the ProductItemEventModel directly into the database (Elasticsearch)
+            var indexResponse = await elasticClient.IndexAsync(productItemEvent);
 
-            if (productExists.Exists)
+            // Optional: You can log the successful insert
+            if (indexResponse.IsValidResponse)
             {
-                await elasticClient.UpdateAsync<Product, object>(
-                        productItemEvent.ProductId,
-                        u => u
-                            .Script(s => s
-                                .Source("ctx._source.items.add(params.newItem)")
-                                .Params(p => p.Add("newItem", new ProductItemEventModel()
-                                {
-                                    Id = productItemEvent.Id,
-                                    ProductId = productItemEvent.ProductId,
-                                    Attributes = productItemEvent.Attributes,
-                                    MinPrice = productItemEvent.MinPrice,
-                                    MaxPrice = productItemEvent.MaxPrice,
-                                    Name = productItemEvent.Name
-                                }))
-                            )
-                    );
+                logger.LogInformation($"Product Item with ID {productItemEvent.ProductItemId} successfully indexed.");
+            }
+            else
+            {
+                logger.LogWarning($"Failed to index Product Item with ID {productItemEvent.ProductItemId}. Response: {indexResponse.DebugInformation}");
             }
         }
         catch (Exception e)
@@ -39,6 +29,7 @@ public class ProductItemService(ElasticsearchClient elasticClient, ILogger<Produ
             logger.LogError($"An error occurred while indexing the product item. Error - {e.Message}");
         }
     }
+
 
     public async Task Update(string id, ProductItemEventModel productItemEventModel)
     {
@@ -66,19 +57,15 @@ public class ProductItemService(ElasticsearchClient elasticClient, ILogger<Produ
 
     private async Task<bool> IsProductItemExists(string productItemId)
     {
-        var searchResponse = await elasticClient.SearchAsync<Product>(s => s
+        var searchResponse = await elasticClient.SearchAsync<ProductItemEventModel>(s => s
             .Query(q => q
-                .Nested(n => n
-                    .Path(nameof(Product.Items).ToLower())
-                    .Query(nq => nq
-                        .Term(t => t
-                            .Field($"{nameof(Product.Items)}.{nameof(ProductItemEventModel.Id)}".ToLower())
-                            .Value(productItemId)
-                        )
-                    )
+                .Term(t => t
+                    .Field(f => f.ProductItemId) // Directly check the ProductItemId field
+                    .Value(productItemId)
                 )
             )
         );
         return searchResponse.Documents.Any();
     }
+
 }

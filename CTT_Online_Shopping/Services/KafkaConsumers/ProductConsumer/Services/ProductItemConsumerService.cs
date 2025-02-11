@@ -70,7 +70,7 @@ public class ProductItemConsumerService : BackgroundService
     private Task HandleUpdate(ProductItemEventModel productItemEventModel)
     {
         _logger.LogInformation($"Handling ProductItem Update Event \n: {productItemEventModel}");
-        _ = _productItemService.Update(productItemEventModel.Id!, productItemEventModel);
+        _ = _productItemService.Update(productItemEventModel.ProductId!, productItemEventModel);
         return Task.CompletedTask;
     }
 }

@@ -15,7 +15,8 @@ public partial class CategoryController
         {
             // Check if the main category already exists
             var existingCategory = await categoryCollection
-                .Find(c => c.MainCategory.Equals(category.MainCategory, StringComparison.OrdinalIgnoreCase))
+                .Find(c => c.MainCategory.Equals(category.MainCategory, StringComparison.OrdinalIgnoreCase)
+                 && c.Gender.Equals(category.Gender,StringComparison.OrdinalIgnoreCase))
                 .FirstOrDefaultAsync();
 
             if (existingCategory != null)

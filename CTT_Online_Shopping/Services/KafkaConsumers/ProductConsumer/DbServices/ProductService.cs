@@ -10,18 +10,18 @@ public class ProductService(ElasticsearchClient elasticClient, ILogger<ProductSe
     {
         try
         {
-            var product = new Product
-            {
-                Id = productEvent.Id!,
-                Name = productEvent.Name,
-                Brand = productEvent.Brand,
-                Category = productEvent.Category,
-                Description = productEvent.Description,
-                Items = new List<ProductItemEventModel>() // Initialize empty list of items
-            };
-
-            // Index the product in Elasticsearch
-            await elasticClient.IndexAsync(product, idx => idx.Index("products"));
+            // var product = new Product
+            // {
+            //     Id = productEvent.Id!,
+            //     Name = productEvent.Name,
+            //     Brand = productEvent.Brand,
+            //     Category = productEvent.Category,
+            //     Description = productEvent.Description,
+            //     Items = new List<ProductItemEventModel>() // Initialize empty list of items
+            // };
+            //
+            // // Index the product in Elasticsearch
+            // await elasticClient.IndexAsync(product, idx => idx.Index("products"));
         }
         catch (Exception e)
         {

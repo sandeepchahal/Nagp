@@ -11,7 +11,6 @@ namespace ProductAPI.Controllers;
 [Route("api/product/item")]
 public partial class ProductItemController(
     IMongoCollection<ProductItemDb> productItemCollection,
-    IProductItemEventService productItemEventService,
     IProductItemDbService productItemDbService,
     IProductDbService productDbService):ControllerBase
 {
