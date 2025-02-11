@@ -45,7 +45,9 @@ export class CartService {
     console.log('existingItem', existingItem);
     if (existingItem) {
       // If the item exists, increase the orderCount
-      existingItem.orderCount = (existingItem.orderCount || 1) + 1;
+      if (existingItem.stockQuantity > existingItem.orderCount) {
+        existingItem.orderCount = (existingItem.orderCount || 1) + 1;
+      }
     } else {
       // If item does not exist, initialize orderCount and add to cart
       item.orderCount = 1;
@@ -98,7 +100,9 @@ export class CartService {
     if (existingItem) {
       // Update the order count
       if (increment) {
-        existingItem.orderCount++;
+        if (existingItem.stockQuantity > existingItem.orderCount) {
+          existingItem.orderCount++;
+        }
       } else {
         if (existingItem.orderCount > 1) {
           existingItem.orderCount--;

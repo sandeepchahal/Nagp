@@ -49,6 +49,7 @@ export class DetailProductComponent {
     productItemId: '',
     orderCount: 0,
     totalPrice: 0,
+    stockQuantity: 0,
   };
 
   constructor(
@@ -124,6 +125,7 @@ export class DetailProductComponent {
           this.productItem.variants.sizeVariant?.[0]?.size ?? '';
 
         this.cartItem.imgUrl = this.productItem.variants.images[0].url;
+        this.cartItem.stockQuantity = this.selectedVariant.stockQuantity;
 
         break;
       case VariantType.Color:
@@ -146,6 +148,7 @@ export class DetailProductComponent {
           this.productItem.variants.colorVariant?.[0].color ?? '';
 
         this.discountPrice = this.selectedVariant.discountedPrice;
+        this.cartItem.stockQuantity = this.selectedVariant.stockQuantity;
         this.selectedImageIndex = 0; // Set the main image to the first image of the selected color
         break;
       case VariantType.ColorAndSize:
@@ -170,6 +173,7 @@ export class DetailProductComponent {
         this.cartItem.imgUrl = firstColorVariant?.image.url ?? '';
         this.productItem.variants.sizeColorVariant;
         this.discountPrice = this.selectedVariant.discountedPrice;
+        this.cartItem.stockQuantity = this.selectedVariant.stockQuantity;
         this.selectedImageIndex = 0; // Set the main image to the first image of the selected color
         break;
       default:
@@ -246,10 +250,10 @@ export class DetailProductComponent {
     this.selectedVariant = button;
     this.currentPrice = button.price;
     this.discountPrice = button.discountedPrice;
-
-    console.log('Selected Variant:', button);
+    console.log(button);
     this.cartItem.discountedPrice = button.discountedPrice;
     this.cartItem.price = button.price;
+    this.cartItem.stockQuantity = button.stockQuantity;
 
     // check the variant type
     // if color or size&color, then get the index of item and set
@@ -280,7 +284,6 @@ export class DetailProductComponent {
             )
           : null;
 
-      console.log(index, sizeIndexResult);
       this.cartItem.imgUrl =
         this.productItem.variants.sizeColorVariant?.[index ?? 0].image.url ??
         '';
@@ -299,7 +302,6 @@ export class DetailProductComponent {
   }
 
   onColorSelect(index: number): void {
-    console.log(index);
     this.selectedColorIndex = index;
 
     // Get the selected color variant
@@ -310,8 +312,6 @@ export class DetailProductComponent {
     this.cartItem.colorId = selectedColorVariant?.id;
     this.cartItem.colorLabel = selectedColorVariant?.color ?? '';
 
-    // Update the main image section with the selected color's images
-    console.log('selectedColorVariant', selectedColorVariant);
     if (selectedColorVariant?.image.url != null) {
       const index = this.productItem.variants.sizeColorVariant?.findIndex(
         (col) => col.id === selectedColorVariant.id
@@ -320,7 +320,6 @@ export class DetailProductComponent {
       this.selectedImageIndex = index !== undefined && index !== -1 ? index : 0;
     }
 
-    // Update the selected variant with the first size of the selected color
     if (selectedColorVariant?.sizes?.[0]) {
       const firstSizeVariant = selectedColorVariant.sizes[0];
       this.cartItem.sizeId = firstSizeVariant.id;
@@ -337,11 +336,8 @@ export class DetailProductComponent {
       this.discountPrice = this.selectedVariant.discountedPrice;
       this.cartItem.price = this.selectedVariant.price;
       this.cartItem.discountedPrice = this.selectedVariant.discountedPrice;
+      this.cartItem.stockQuantity = this.selectedVariant?.stockQuantity;
     }
-
-    console.log('Updated Selected Variant:', this.selectedVariant);
-    console.log('Current Price:', this.currentPrice);
-    console.log('Discount Price:', this.discountPrice);
   }
 
   toggleImageZoom(): void {
@@ -366,10 +362,9 @@ export class DetailProductComponent {
     );
   }
   addToBag() {
-    const cartItemCopy = { ...this.cartItem }; // Creates a shallow copy
-    console.log(cartItemCopy);
+    const cartItemCopy = { ...this.cartItem };
     this.cartService.addToCart(cartItemCopy);
-    this.resetCartItem();
+    // this.resetCartItem();
   }
 
   addToWishlist() {
@@ -383,6 +378,7 @@ export class DetailProductComponent {
     this.cartItem.sizeLabel = '';
     this.cartItem.imgUrl = '';
     this.cartItem.discountedPrice = 0;
+    this.cartItem.stockQuantity = 0;
     this.cartItem.price = 0;
   }
 }

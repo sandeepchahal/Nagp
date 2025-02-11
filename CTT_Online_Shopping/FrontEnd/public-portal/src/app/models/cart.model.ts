@@ -13,4 +13,5 @@ export interface CartItem {
   name: string;
   orderCount: number;
   totalPrice: number;
+  stockQuantity: number;
 }

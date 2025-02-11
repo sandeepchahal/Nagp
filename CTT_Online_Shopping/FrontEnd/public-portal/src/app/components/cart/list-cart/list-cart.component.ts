@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CartItem } from '../../../models/cart.model';
 import { CartService } from '../../../services/cart.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-cart',
@@ -16,7 +17,7 @@ export class ListCartComponent {
   totalPrice: number = 0;
   shipping: number = 10; // Example shipping cost
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private router: Router) {}
 
   ngOnInit(): void {
     this.cartService.getCartItems().subscribe((items) => {
@@ -55,6 +56,6 @@ export class ListCartComponent {
 
   placeOrder(): void {
     console.log('Placing order with the following items:', this.cartItems);
-    // Logic to proceed with order placement
+    this.router.navigate(['/order/billing']);
   }
 }
