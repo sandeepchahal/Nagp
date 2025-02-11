@@ -14,7 +14,7 @@ public class JwtTokenGeneration(IConfiguration configuration):IJwtTokenGeneratio
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(ClaimTypes.Name, user.FullName),
+            new Claim(JwtRegisteredClaimNames.Name, user.FullName),
             new Claim("Provider", user.Provider)
         };
         var secretKey = configuration["JwtSettings:Key"];

@@ -55,13 +55,14 @@
             <i class="bi bi-person"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-end dropdown-wide" aria-labelledby="profileDropdown">
-            <li *ngIf="userName.length>0">Hi {{userName}}</li>
+            <li *ngIf="userName.length>0"> <p class="dropdown-item">Hi, {{userName}}</p></li>
             <li><a class="dropdown-item" >Orders</a></li>
-            <li><a class="dropdown-item" href="#">Wishlist</a></li>
+            <li><a class="dropdown-item" >Wishlist</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li>
+            <li *ngIf="!isLoggedIn">
               <app-login></app-login>
             </li>
+            <li *ngIf="isLoggedIn"><a class="dropdown-item" (click)="logout()" >Logout</a></li>
           </ul>
         </li>
       </ul>

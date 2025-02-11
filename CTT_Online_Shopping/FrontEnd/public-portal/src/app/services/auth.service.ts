@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = ' http://localhost:5190/api/user'; // Replace with your backend API URL
+  private apiUrl = ' http://localhost:5190/api/user';
 
   private userInfoSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
     null

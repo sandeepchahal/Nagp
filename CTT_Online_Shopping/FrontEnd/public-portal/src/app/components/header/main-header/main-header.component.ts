@@ -20,6 +20,7 @@ export class MainHeaderComponent implements OnInit {
   userName: string = '';
   categoriesByGender: { [gender: string]: CategoryView[] } = {};
   cartCount: number = 0; // Initialize cart count
+  isLoggedIn: boolean = false;
   constructor(
     private headerService: HeaderService,
     private router: Router,
@@ -47,14 +48,18 @@ export class MainHeaderComponent implements OnInit {
     this.authService.userInfo$.subscribe((userInfo) => {
       if (userInfo) {
         this.userName = userInfo.name; // Set username from decoded token
+        this.isLoggedIn = true;
+      } else {
+        this.userName = '';
+        this.isLoggedIn = false;
       }
     });
 
     if (this.authService.isAuthenticated()) {
       const token = localStorage.getItem('authToken')?.toString();
-      console.log(token);
       const decodedToken = this.authService.decodeToken(token!);
-      console.log('decodedToken', decodedToken);
+      this.userName = decodedToken.name;
+      this.isLoggedIn = true;
     }
   }
 
@@ -71,5 +76,8 @@ export class MainHeaderComponent implements OnInit {
   }
   goToLogin() {
     this.router.navigate(['user/login']);
+  }
+  logout() {
+    this.authService.logout();
   }
 }
