@@ -79,7 +79,7 @@ export class LoginComponent {
         console.log('Google login success', response);
         // Store token and navigate user
         localStorage.setItem('token', response.token); // Save the JWT token
-        this.router.navigate(['/billing']); // Navigate to billing page
+        this.router.navigate(['order/billing']); // Navigate to billing page validate-social-login
       },
       (error) => {
         console.error('Google login error', error);
@@ -95,6 +95,7 @@ export class LoginComponent {
         console.log('Login success', response);
         // Store token and navigate user
         localStorage.setItem('token', response.token); // Save the JWT token
+        this.authService.googleLogin(response.token);
         this.router.navigate(['/billing']); // Navigate to billing page
       },
       (error) => {

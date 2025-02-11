@@ -6,11 +6,12 @@ import { CategoryView } from '../../../models/category.model';
 import { Router } from '@angular/router';
 import { PopupCartComponent } from '../../cart/popup-cart/popup-cart.component';
 import { CartService } from '../../../services/cart.service';
+import { LoginComponent } from '../../user/login/login.component';
 
 @Component({
   selector: 'app-main-header',
   standalone: true,
-  imports: [CommonModule, PopupCartComponent],
+  imports: [CommonModule, PopupCartComponent, LoginComponent],
   templateUrl: './main-header.component.html',
   styleUrl: './main-header.component.css',
 })

@@ -5,8 +5,9 @@ using UserAPI.ServiceRegistrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApi();
 builder.Services.ConfigureDbServices();
 
 builder.Services.AddDbContext<UserDbContext>(options =>
@@ -42,6 +43,18 @@ builder.Services.Configure<IdentityOptions>(options =>
 //     });
 
 
+// Allowing all origins for testing purposes (you can restrict to specific domains later)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()  // You can also specify a domain like "https://yourfrontend.com"
+            .AllowAnyMethod()  // You can also specify the allowed HTTP methods like .AllowGet(), .AllowPost()...
+            .AllowAnyHeader(); // You can also specify headers if needed
+    });
+});
+
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -51,5 +64,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.MapControllers();
 app.Run();

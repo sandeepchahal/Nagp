@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'YOUR_BACKEND_API_URL'; // Replace with your backend API URL
+  private apiUrl = ' http://localhost:5190/api/user'; // Replace with your backend API URL
 
   isAuthenticated(): boolean {
     return !!localStorage.getItem('authToken');

@@ -156,3 +156,10 @@
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/obj/Debug/net9.0/UserAPI.pdb
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/obj/Debug/net9.0/UserAPI.genruntimeconfig.cache
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/obj/Debug/net9.0/ref/UserAPI.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/bin/Debug/net9.0/Google.Apis.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/bin/Debug/net9.0/Google.Apis.Auth.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/bin/Debug/net9.0/Google.Apis.Core.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/bin/Debug/net9.0/Newtonsoft.Json.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/bin/Debug/net9.0/System.Management.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/bin/Debug/net9.0/runtimes/win/lib/net7.0/System.Management.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/UserAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
