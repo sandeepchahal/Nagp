@@ -80,6 +80,18 @@ export class CartService {
     this.showPopupSubject.next(false);
   }
   getCartItems(): Observable<CartItem[]> {
+    // Try to get data from BehaviorSubject first
+    let currentCart = this.cartItemsSubject.value;
+
+    // If the cart in the subject is empty, fetch from local storage
+    if (!currentCart || currentCart.length === 0) {
+      const storedCart = localStorage.getItem('cartItems');
+      if (storedCart) {
+        currentCart = JSON.parse(storedCart);
+        this.cartItemsSubject.next(currentCart); // Update BehaviorSubject
+      }
+    }
+
     return this.cartItemsSubject.asObservable();
   }
 

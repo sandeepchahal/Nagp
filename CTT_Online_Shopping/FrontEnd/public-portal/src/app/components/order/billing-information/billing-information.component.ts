@@ -19,6 +19,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
+import { User } from '../../../models/user.model';
+import { CheckoutService } from '../../../services/checkout.service';
 
 @Component({
   selector: 'app-billing-information',
@@ -65,7 +67,8 @@ export class BillingInformationComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     public socialAuthService: SocialAuthService,
-    private router: Router
+    private router: Router,
+    private checkOutService: CheckoutService
   ) {}
 
   ngOnInit(): void {
@@ -114,6 +117,15 @@ export class BillingInformationComponent implements OnInit {
       this.socialUser = user;
       if (user) {
         this.handleSocialLogin(user);
+      }
+    });
+
+    // Subscribe to the userInfo$ observable to get updates
+    this.authService.userInfo$.subscribe((userInfo) => {
+      if (userInfo) {
+        this.isLoggedIn = true;
+      } else {
+        this.isLoggedIn = false;
       }
     });
   }
@@ -168,12 +180,30 @@ export class BillingInformationComponent implements OnInit {
   }
 
   proceedToCheckout(): void {
-    console.log(
-      'Proceeding with:',
-      this.billingForm.value,
-      this.shippingForm.value
-    );
-    this.router.navigate(['/order/review']);
+    const user: User = {
+      personalInformation: {
+        email: this.billingForm.value.email,
+        name: this.billingForm.value.fullName,
+        phone: this.billingForm.value.phone,
+      },
+      addressDetail: {
+        city: this.billingForm.value.city,
+        country: this.billingForm.value.country,
+        streetAddress: this.billingForm.value.address,
+        zipCode: this.billingForm.value.zip,
+        isShippingDifferent: this.shippingDifferent,
+      },
+    };
+    if (this.shippingDifferent) {
+      user.shippingInformation = {
+        city: this.billingForm.value.shipCity,
+        country: this.billingForm.value.shipCountry,
+        streetAddress: this.billingForm.value.shipAddress,
+        zipCode: this.billingForm.value.shipZip,
+      };
+    }
+    this.checkOutService.setUserData(user);
+    this.router.navigate(['/order/payment']);
   }
 
   // Navigate to login page

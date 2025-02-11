@@ -5,12 +5,14 @@ import { ListCartComponent } from './components/cart/list-cart/list-cart.compone
 import { BillingInformationComponent } from './components/order/billing-information/billing-information.component';
 import { PaymentComponent } from './components/order/payment/payment.component';
 import { LoginComponent } from './components/user/login/login.component';
+import { ReviewComponent } from './components/order/review/review.component';
 
 export const routes: Routes = [
   { path: 'product/category/:slug', component: ListProductComponent },
   { path: 'product/item/:id', component: DetailProductComponent },
   { path: 'cart', component: ListCartComponent },
   { path: 'order/billing', component: BillingInformationComponent },
+  { path: 'order/review', component: ReviewComponent },
   { path: 'order/payment', component: PaymentComponent },
   { path: 'user/login', component: LoginComponent },
 ];
