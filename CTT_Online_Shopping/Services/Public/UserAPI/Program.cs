@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UserAPI.DbContext;
+using UserAPI.ServiceRegistrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+builder.Services.ConfigureDbServices();
 
 builder.Services.AddDbContext<UserDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -38,6 +40,8 @@ builder.Services.Configure<IdentityOptions>(options =>
 //         options.AppId = "your-app-id";
 //         options.AppSecret = "your-app-secret";
 //     });
+
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

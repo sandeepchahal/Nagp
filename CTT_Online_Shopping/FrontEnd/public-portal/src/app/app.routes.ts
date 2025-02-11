@@ -4,6 +4,7 @@ import { DetailProductComponent } from './components/product/detail-product/deta
 import { ListCartComponent } from './components/cart/list-cart/list-cart.component';
 import { BillingInformationComponent } from './components/order/billing-information/billing-information.component';
 import { PaymentComponent } from './components/order/payment/payment.component';
+import { LoginComponent } from './components/user/login/login.component';
 
 export const routes: Routes = [
   { path: 'product/category/:slug', component: ListProductComponent },
@@ -11,4 +12,5 @@ export const routes: Routes = [
   { path: 'cart', component: ListCartComponent },
   { path: 'order/billing', component: BillingInformationComponent },
   { path: 'order/payment', component: PaymentComponent },
+  { path: 'user/login', component: LoginComponent },
 ];

@@ -51,4 +51,7 @@ export class MainHeaderComponent implements OnInit {
   goToCart() {
     this.router.navigate(['cart']);
   }
+  goToLogin() {
+    this.router.navigate(['user/login']);
+  }
 }
