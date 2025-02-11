@@ -187,21 +187,20 @@ export class BillingInformationComponent implements OnInit {
         phone: this.billingForm.value.phone,
       },
       addressDetail: {
-        city: this.billingForm.value.city,
-        country: this.billingForm.value.country,
-        streetAddress: this.billingForm.value.address,
-        zipCode: this.billingForm.value.zip,
-        isShippingDifferent: this.shippingDifferent,
+        city: this.shippingDifferent
+          ? this.shippingForm.value.shipCity
+          : this.billingForm.value.city,
+        country: this.shippingDifferent
+          ? this.shippingForm.value.shipCountry
+          : this.billingForm.value.city,
+        streetAddress: this.shippingDifferent
+          ? this.shippingForm.value.shipAddress
+          : this.billingForm.value.city,
+        zipCode: this.shippingDifferent
+          ? this.shippingForm.value.shipZip
+          : this.billingForm.value.city,
       },
     };
-    if (this.shippingDifferent) {
-      user.shippingInformation = {
-        city: this.billingForm.value.shipCity,
-        country: this.billingForm.value.shipCountry,
-        streetAddress: this.billingForm.value.shipAddress,
-        zipCode: this.billingForm.value.shipZip,
-      };
-    }
     this.checkOutService.setUserData(user);
     this.router.navigate(['/order/payment']);
   }

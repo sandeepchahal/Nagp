@@ -25,8 +25,13 @@ export class ReviewComponent {
     private cartService: CartService
   ) {
     this.user = this.checkoutService.getUserData();
-    console.log(this.user);
-    this.getCartItems();
+    console.log('user', this.user);
+    if (this.user != null) {
+      console.log(this.user);
+      this.getCartItems();
+    } else {
+      this.router.navigate(['cart']);
+    }
   }
 
   getCartItems() {
