@@ -1,7 +1,6 @@
 using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.Mapping;
 using Elastic.Transport;
-using Elastic.Transport.Products.Elasticsearch;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,7 +28,10 @@ public static class ConfigureServices
 
             var cloudId = configuration["ElasticSearch:CloudId"]; // Use CloudId instead of CloudUrl
             var apiKey = configuration["ElasticSearch:api_key"];
+            var cloudUrl = configuration["ElasticSearch:CloudUrl"];
             var defaultIndex = configuration["ElasticSearch:Index"];
+            var username = configuration["ElasticSearch:Username"]; 
+            var password = configuration["ElasticSearch:Password"];
 
             if (string.IsNullOrEmpty(cloudId))
                 throw new Exception("Elasticsearch CloudId is missing in the configuration");
@@ -40,12 +42,10 @@ public static class ConfigureServices
             if (string.IsNullOrEmpty(defaultIndex))
                 throw new Exception("Default index is missing in the configuration");
 
-            var nodePool = new CloudNodePool(cloudId, new ApiKey(apiKey));
             
-            // Create Elasticsearch settings using CloudId and API Key
-            var settings = new ElasticsearchClientSettings(nodePool)
-                .Authentication(new ApiKey(apiKey)) // API Key Authentication
-                .DefaultIndex(defaultIndex);
+
+            var settings = new ElasticsearchClientSettings(new Uri(cloudUrl!))
+                .Authentication(new BasicAuthentication(username!,password!)).DefaultIndex(defaultIndex);
             
             var client = new ElasticsearchClient(settings);
             
