@@ -202,7 +202,14 @@ namespace SearchAPI.Controllers
                     }
                 }
             }
-
+            // If brand is matched, add all subcategories for the brand and gender
+            if (matchedFields.Contains("subcategory"))
+            {
+                var d = new Dictionary<string, string>();
+                d.Add($"{productItem.Gender} {productItem.SubCategoryName}",
+                    $"gender={productItem.Gender}&subcategory={productItem.SubCategoryId}");
+                subcategories.Add(d);
+            }
             return subcategories.Distinct().ToList();
         }
 

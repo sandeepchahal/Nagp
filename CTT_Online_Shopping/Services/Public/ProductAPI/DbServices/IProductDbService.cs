@@ -9,4 +9,7 @@ public interface IProductDbService
     Task<List<Product>> GetAll();
     Task<List<ProductView>> GetBySubCategorySlugAsync(string slug);
 
+    Task<List<ProductView>> GetAsync(string? gender = null, string? brand = null, string? color = null,
+        string? subcategory = null);
+
 }

@@ -74,6 +74,9 @@ public class ProductController(IProductDbService productDbService, ICategoryDbSe
         [FromQuery] string? color = null,
         [FromQuery] string? subcategory = null)
     {
+        var result =
+            await productDbService.GetAsync(gender: gender, brand: brand, color: color, subcategory: subcategory);
+        
         return Ok();
     }
 }

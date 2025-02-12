@@ -1,6 +1,8 @@
+using MongoDB.Bson;
 using MongoDB.Driver;
 using ProductAPI.Helper;
 using ProductAPI.Models.Brands;
+using ProductAPI.Models.Categories;
 using ProductAPI.Models.Common;
 using ProductAPI.Models.ProductItems;
 using ProductAPI.Models.Products;
@@ -9,7 +11,9 @@ namespace ProductAPI.DbServices;
 
 public class ProductDbService(
     IMongoCollection<Product> productCollection,
+    IMongoCollection<Category> categoryCollection,
     IProductItemDbService productItemDbService,
+    
     IBrandDbService brandDbService,
     ICategoryDbService categoryDbService
 ) : IProductDbService
@@ -83,5 +87,55 @@ public class ProductDbService(
         }
     }
 
-   
+    public async Task<List<ProductView>> GetAsync(string? gender = null, 
+        string? brand = null, 
+        string? color = null, 
+        string? subcategory = null)
+    {
+        var pipeline = new List<BsonDocument>
+        {
+            // Step 1: Match products with the given subCategoryId
+            new BsonDocument("$match", new BsonDocument
+            {
+                { "subCategoryId", subcategory }
+            }),
+
+            // Step 2: Lookup category details for each product
+            new BsonDocument("$lookup", new BsonDocument
+            {
+                { "from", "categories" },  
+                { "localField", "categoryId" },   // categoryId from products
+                { "foreignField", "_id" },        // Matching with _id in categories
+                { "as", "CategoryData" }
+            }),
+
+            // Step 3: Unwind category data (if needed)
+            new BsonDocument("$unwind", new BsonDocument
+            {
+                { "path", "$CategoryData" },
+                { "preserveNullAndEmptyArrays", true }  // Preserve if no category found
+            }),
+
+            // Step 4: Project only required fields
+            new BsonDocument("$project", new BsonDocument
+            {
+                { "_id", 1 },
+                { "name", 1 },
+                { "CategoryData.name", 1 },  // Include category name (optional)
+                { "subCategoryId", 1 }
+            })  
+        };
+
+        // Execute the pipeline on `products` collection
+        var results = await productCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
+
+        // Convert results into ProductView
+        var finalProducts = results.Select(p => new ProductView
+        {
+            Id = p["_id"].AsString,
+            Name = p["name"].AsString,
+            
+        }).ToList();
+
+        return finalProducts;    }
 }
