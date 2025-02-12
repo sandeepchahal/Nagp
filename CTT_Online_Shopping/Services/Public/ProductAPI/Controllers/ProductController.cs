@@ -66,4 +66,14 @@ public class ProductController(IProductDbService productDbService, ICategoryDbSe
             return BadRequest("An error has occurred");
         }
     }
+    
+    [HttpGet("search")]
+    public async Task<IActionResult> GetProducts(
+        [FromQuery] string? gender = null, 
+        [FromQuery] string? brand = null, 
+        [FromQuery] string? color = null,
+        [FromQuery] string? subcategory = null)
+    {
+        return Ok();
+    }
 }

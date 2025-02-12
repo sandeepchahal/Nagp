@@ -4,6 +4,7 @@ import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchResponse } from '../../../models/searchResponse.model';
+import { ProductService } from '../../../services/product.service';
 
 @Component({
   selector: 'app-suggestion',
@@ -17,7 +18,10 @@ export class SuggestionComponent {
   suggestions: SearchResponse[] = [];
   searchSubject = new Subject<string>();
 
-  constructor(private searchService: SearchService) {
+  constructor(
+    private searchService: SearchService,
+    private productService: ProductService
+  ) {
     // Handle input changes with debounce
     this.searchSubject
       .pipe(
@@ -41,6 +45,10 @@ export class SuggestionComponent {
     this.searchQuery = suggestion.text;
     console.log(suggestion);
     this.suggestions = [];
+    // call the api
+    this.productService.getProducts(suggestion.value).subscribe((data: any) => {
+      console.log(data.text);
+    });
   }
   highlightMatch(text: string): string {
     if (!this.searchQuery) return text;
