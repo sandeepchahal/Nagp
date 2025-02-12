@@ -7,8 +7,10 @@ import { PaymentComponent } from './components/order/payment/payment.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { ReviewComponent } from './components/order/review/review.component';
 import { HomeComponent } from './components/home/home/home.component';
+import { FilterProductComponent } from './components/product/filter-product/filter-product.component';
 
 export const routes: Routes = [
+  { path: 'products', component: FilterProductComponent },
   { path: 'product/category/:slug', component: ListProductComponent },
   { path: 'product/item/:id', component: DetailProductComponent },
   { path: 'cart', component: ListCartComponent },

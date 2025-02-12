@@ -1,0 +1,57 @@
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Filters Section (Left Side) -->
+    <div class="col-md-3">
+      <div class="card p-3">
+        <h4 class="mb-3">Filters</h4>
+        <!-- Add filter options here later -->
+      </div>
+    </div>
+
+    <!-- Products Section -->
+    <div class="col-md-9">
+      <div class="row row-cols-1 row-cols-md-4 g-4"> <!-- Changed to 4 columns per row -->
+        <div class="col" *ngFor="let product of products">
+          <div *ngFor="let productItem of product.productItems" class="card h-100" (click)="goToDetail(productItem.id)">
+            <!-- Product Image -->
+            <img
+              [src]="productItem.images[0].url"
+              [alt]="productItem.images[0].altText"
+              class="card-img-top img-fluid"
+              style="height: 180px; object-fit: cover;"
+            />
+
+            <!-- Product Details -->
+            <div class="card-body text-center p-2">
+              <!-- Brand Name -->
+              <h6 class="card-title mb-1">{{ product.brand.name }}</h6>
+
+              <!-- Product Name (Truncated) -->
+              <p class="card-text text-muted small mb-1">
+                {{ product.name | truncate:15 }}
+              </p>
+
+              <!-- Price Section -->
+              <div class="product-price">
+                <!-- Discounted Price or Original Price -->
+                <span class="fw-bold text-dark price-color">
+                  ₹{{ productItem.price.discountPrice || productItem.price.originalPrice }}
+                </span>
+
+                <!-- Original Price (Strikethrough) -->
+                <span class="text-muted me-2 small" *ngIf="productItem.price.discountPrice > 0">
+                  <del>₹{{ productItem.price.originalPrice }}</del>
+                </span>
+
+                <!-- Discount Badge -->
+                <span class="badge bg-success ms-2 small" *ngIf="productItem.price.discountPrice > 0">
+                  {{ calculateDiscount(productItem.price) }}% off
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

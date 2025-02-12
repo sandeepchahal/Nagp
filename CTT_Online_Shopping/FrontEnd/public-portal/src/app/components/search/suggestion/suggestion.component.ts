@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchResponse } from '../../../models/searchResponse.model';
 import { ProductService } from '../../../services/product.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-suggestion',
@@ -20,7 +21,8 @@ export class SuggestionComponent {
 
   constructor(
     private searchService: SearchService,
-    private productService: ProductService
+    private productService: ProductService,
+    private router: Router
   ) {
     // Handle input changes with debounce
     this.searchSubject
@@ -43,12 +45,12 @@ export class SuggestionComponent {
 
   selectSuggestion(suggestion: any) {
     this.searchQuery = suggestion.text;
-    console.log(suggestion);
+    console.log(suggestion.value);
     this.suggestions = [];
-    // call the api
-    this.productService.getProducts(suggestion.value).subscribe((data: any) => {
-      console.log(data.text);
-    });
+    this.searchService.updateSearchQuery(suggestion.value);
+
+    // Navigate to the filter-product page
+    this.router.navigate(['/products']);
   }
   highlightMatch(text: string): string {
     if (!this.searchQuery) return text;

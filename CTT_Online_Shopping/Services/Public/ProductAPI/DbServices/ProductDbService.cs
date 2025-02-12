@@ -3,8 +3,6 @@ using MongoDB.Driver;
 using ProductAPI.Helper;
 using ProductAPI.Models.Brands;
 using ProductAPI.Models.Categories;
-using ProductAPI.Models.Common;
-using ProductAPI.Models.ProductItems;
 using ProductAPI.Models.Products;
 
 namespace ProductAPI.DbServices;
@@ -13,7 +11,6 @@ public class ProductDbService(
     IMongoCollection<Product> productCollection,
     IMongoCollection<Category> categoryCollection,
     IProductItemDbService productItemDbService,
-    
     IBrandDbService brandDbService,
     ICategoryDbService categoryDbService
 ) : IProductDbService
@@ -47,7 +44,6 @@ public class ProductDbService(
         {
             throw;
         }
-        
     }
 
     public async Task<List<ProductView>> GetBySubCategorySlugAsync(string slug)
@@ -57,7 +53,7 @@ public class ProductDbService(
             var subCategory = await categoryDbService.GetSubCategoryAsync(slug);
             if (subCategory == null)
                 return new List<ProductView>();
-            
+
             var productList = await productCollection.Find(col => col.SubCategoryId == subCategory.Id).ToListAsync();
             var result = new List<ProductView>();
 
@@ -87,9 +83,9 @@ public class ProductDbService(
         }
     }
 
-    public async Task<List<ProductView>> GetAsync(string? gender = null, 
-        string? brand = null, 
-        string? color = null, 
+    public async Task<List<ProductFilterView>> GetAsync(string? gender = null,
+        string? brand = null,
+        string? color = null,
         string? subcategory = null)
     {
         var pipeline = new List<BsonDocument>
@@ -103,9 +99,9 @@ public class ProductDbService(
             // Step 2: Lookup category details for each product
             new BsonDocument("$lookup", new BsonDocument
             {
-                { "from", "categories" },  
-                { "localField", "categoryId" },   // categoryId from products
-                { "foreignField", "_id" },        // Matching with _id in categories
+                { "from", "categories" },
+                { "localField", "categoryId" }, // categoryId from products
+                { "foreignField", "_id" }, // Matching with _id in categories
                 { "as", "CategoryData" }
             }),
 
@@ -113,29 +109,56 @@ public class ProductDbService(
             new BsonDocument("$unwind", new BsonDocument
             {
                 { "path", "$CategoryData" },
-                { "preserveNullAndEmptyArrays", true }  // Preserve if no category found
+                { "preserveNullAndEmptyArrays", true } // Preserve if no category found
             }),
 
-            // Step 4: Project only required fields
+            // Step 6: Project only required fields
             new BsonDocument("$project", new BsonDocument
             {
                 { "_id", 1 },
                 { "name", 1 },
-                { "CategoryData.name", 1 },  // Include category name (optional)
-                { "subCategoryId", 1 }
-            })  
+                { "description", 1 },
+                { "brandId", 1 }
+            })
         };
 
         // Execute the pipeline on `products` collection
         var results = await productCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
 
-        // Convert results into ProductView
-        var finalProducts = results.Select(p => new ProductView
+        List<ProductFilterView> finalResult = new();
+        foreach (var doc in results)
         {
-            Id = p["_id"].AsString,
-            Name = p["name"].AsString,
-            
-        }).ToList();
+            var id = doc["_id"].ToString();
+            var pf = new ProductFilterView()
+            {
+                Id = doc["_id"].ToString(),
+                Name = doc["name"].ToString(),
+                Description = doc["description"].ToString()
+            };
+            pf.Brand = await brandDbService.GetAsync(doc["brandId"].ToString()) ?? new Brand();
+            pf.ProductItems = await FetchProductItemFilterContents(doc["_id"].ToString());
+            finalResult.Add(pf);
+        }
 
-        return finalProducts;    }
+        return finalResult;
+    }
+
+    private async Task<List<ProductItemFilterContents>> FetchProductItemFilterContents(string productId)
+    {
+        var productItems = await productItemDbService.GetByProductIdAsync(productId);
+        var result = new List<ProductItemFilterContents>();
+
+        foreach (var item in productItems)
+        {
+            var productItemFilterContent = new ProductItemFilterContents()
+            {
+                Id = item.Id,
+                Images = ProductHelper.GetImages(item),
+                Price = ProductHelper.GetPrice(item)
+            };
+            result.Add(productItemFilterContent);
+        }
+
+        return result;
+    }
 }

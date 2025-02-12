@@ -77,6 +77,6 @@ public class ProductController(IProductDbService productDbService, ICategoryDbSe
         var result =
             await productDbService.GetAsync(gender: gender, brand: brand, color: color, subcategory: subcategory);
         
-        return Ok();
+        return Ok(result);
     }
 }

@@ -47,3 +47,20 @@ public class ProductView
     public PriceBase Price { get; set; } = new();
     public List<ImagesBase> Images { get; set; } = new();
 }
+
+public class ProductItemFilterContents
+{
+    public string Id { get; set; } = string.Empty;
+    public PriceBase Price { get; set; } = new();
+    public List<ImagesBase> Images { get; set; } = new();
+}
+
+public class ProductFilterView
+{
+    public string Id { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    
+    public string Description { get; set; } = string.Empty;
+    public Brand Brand { get; set; } = new();
+    public List<ProductItemFilterContents> ProductItems { get; set; } = new();
+}

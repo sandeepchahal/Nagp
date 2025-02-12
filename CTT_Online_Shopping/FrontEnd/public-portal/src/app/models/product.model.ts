@@ -32,3 +32,17 @@ export interface Discount {
   startDate: string; // You can use 'string' to represent ISO 8601 date format (e.g., '2025-02-09T00:00:00Z')
   endDate: string; // Same here for consistency
 }
+
+export interface ProductItemFilterContents {
+  id: string;
+  price: PriceBase;
+  images: ImagesBase[];
+}
+
+export interface ProductFilterView {
+  id: string;
+  name: string;
+  description: string;
+  brand: Brand;
+  productItems: ProductItemFilterContents[];
+}
