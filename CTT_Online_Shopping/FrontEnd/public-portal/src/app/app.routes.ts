@@ -6,6 +6,7 @@ import { BillingInformationComponent } from './components/order/billing-informat
 import { PaymentComponent } from './components/order/payment/payment.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { ReviewComponent } from './components/order/review/review.component';
+import { HomeComponent } from './components/home/home/home.component';
 
 export const routes: Routes = [
   { path: 'product/category/:slug', component: ListProductComponent },
@@ -15,4 +16,5 @@ export const routes: Routes = [
   { path: 'order/review', component: ReviewComponent },
   { path: 'order/payment', component: PaymentComponent },
   { path: 'user/login', component: LoginComponent },
+  { path: '', component: HomeComponent },
 ];

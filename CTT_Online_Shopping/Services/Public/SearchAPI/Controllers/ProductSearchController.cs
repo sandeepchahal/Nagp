@@ -17,7 +17,6 @@ namespace SearchAPI.Controllers
             _elasticClient = elasticClient;
         }
 
-        [HttpGet("text")]
         public async Task<IActionResult> SearchProduct([FromQuery] string query)
         {
             try
