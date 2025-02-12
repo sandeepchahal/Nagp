@@ -1,5 +1,7 @@
+using System.Text;
 using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.Core.Search;
+using Elastic.Clients.Elasticsearch.QueryDsl;
 using Microsoft.AspNetCore.Mvc;
 using SearchAPI.Models;
 
@@ -27,9 +29,8 @@ namespace SearchAPI.Controllers
                         .Bool(b => b
                             .Should
                             (
-                                // Match against key fields
                                 sh => sh.Match(m => m
-                                    .Field(f => f.Name)
+                                    .Field(f => f.Gender)
                                     .Query(query)
                                     .Fuzziness(new Fuzziness("Auto"))
                                 ),
@@ -44,14 +45,12 @@ namespace SearchAPI.Controllers
                                     .Fuzziness(new Fuzziness("Auto"))
                                 ),
                                 sh =>
-                                    sh.Nested(n => n
-                                        .Path(p => p.SizeColorVariant)
-                                        .Query(nq =>
-                                            nq.Match(mt => mt
-                                                .Field(f => f.SizeColorVariant.First().Color)
-                                                .Query(query)
-                                                .Fuzziness(new Fuzziness("Auto"))
-                                            )
+                                    sh.Nested(nc => nc
+                                        .Path("sizeColorVariant")
+                                        .Query(cq =>
+                                            cq.Match(m =>
+                                                m.Field("sizeColorVariant.color.color")
+                                                    .Query(query).Operator(Operator.And))
                                         )
                                     )
                             )
@@ -59,28 +58,129 @@ namespace SearchAPI.Controllers
                     )
                     .Highlight(h => h
                         .Fields(f => f
-                            .Add("name", new HighlightFieldDescriptor<ProductItemEventModel>())
+                            // .Add("name", new HighlightFieldDescriptor<ProductItemEventModel>())
+                            .Add("gender", new HighlightFieldDescriptor<ProductItemEventModel>())
                             .Add("subCategoryName", new HighlightFieldDescriptor<ProductItemEventModel>())
                             .Add("brand", new HighlightFieldDescriptor<ProductItemEventModel>())
-                            .Add("sizeColorVariant.color", new HighlightFieldDescriptor<ProductItemEventModel>())
-                            .Add("color", new HighlightFieldDescriptor<ProductItemEventModel>())
-                            .Add("sizeColorVariant.first().color",
-                                new HighlightFieldDescriptor<ProductItemEventModel>())
+                            .Add("sizeColorVariant.color.color", new HighlightFieldDescriptor<ProductItemEventModel>()
+                            )
                         )
                     )
                 );
 
                 if (!searchResponse.IsValidResponse)
                     throw new Exception($"Search failed: {searchResponse.DebugInformation}");
+                // Process search results and generate suggestions
+                var suggestions = new List<SuggestionResponse>();
 
-                // Return search results with highlights (if any)
-                var results = searchResponse.Hits.Select(hit => new
+                foreach (var hit in searchResponse.Hits)
                 {
-                    ProductItem = hit.Source, // The product item document
-                    Highlights = hit.Highlight // Highlighted terms (if any)
-                });
+                    var productItem = hit.Source;
+                    var highlights = hit.Highlight;
 
-                return Ok(results);
+                    // Determine which fields matched
+                    var matchedFields = new List<string>();
+                    if (highlights?.ContainsKey("gender") == true)
+                        matchedFields.Add("gender");
+                    if (highlights?.ContainsKey("subCategoryName") == true)
+                        matchedFields.Add("subcategory");
+                    if (highlights?.ContainsKey("brand") == true)
+                        matchedFields.Add("brand");
+                    if (highlights?.ContainsKey("sizeColorVariant.color.color") == true)
+                        matchedFields.Add("color");
+
+                    // Construct combined URL based on matched fields
+                    var urlBuilder = new StringBuilder("/search?");
+                    if (matchedFields.Contains("brand") && productItem?.Brand != null)
+                        urlBuilder.Append($"brand={productItem.Brand}&");
+                    if (matchedFields.Contains("gender") && productItem?.Brand != null)
+                        urlBuilder.Append($"gender={productItem.Gender}&");
+                    if (matchedFields.Contains("subcategory") && productItem?.SubCategoryId != null)
+                        urlBuilder.Append($"subcategory={productItem.SubCategoryId}&");
+                    
+                    if (matchedFields.Contains("color") && productItem?.SizeColorVariant != null)
+                    {
+                        foreach (var variant in productItem.SizeColorVariant)
+                        {
+                            if (variant?.Color != null && variant.Color.Color.Equals(query, StringComparison.OrdinalIgnoreCase))
+                            {
+                                urlBuilder.Append($"color={variant.Color.ColorId}&");
+                            }
+                        }
+                    }
+
+                    // Remove the trailing '&'
+                    var url = urlBuilder.ToString().TrimEnd('&');
+
+                    // Add individual suggestions for each matched field
+                    if (matchedFields.Contains("brand"))
+                    {
+                        suggestions.Add(new SuggestionResponse
+                        {
+                            Text = productItem?.Brand, // Full text of the brand
+                            Value = $"/search?brand={productItem?.Brand}" // URL for brand
+                        });
+                    }
+                    if (matchedFields.Contains("gender"))
+                    {
+                        suggestions.Add(new SuggestionResponse
+                        {
+                            Text = productItem?.Gender, // Full text of the subcategory
+                            Value = $"/search?gender={productItem?.Gender}" // URL for subcategory
+                        });
+                    }
+                    if (matchedFields.Contains("subcategory"))
+                    {
+                        suggestions.Add(new SuggestionResponse
+                        {
+                            Text = productItem?.SubCategoryName, // Full text of the subcategory
+                            Value = $"/search?subcategory={productItem?.SubCategoryId}" // URL for subcategory
+                        });
+                    }
+                    if (matchedFields.Contains("color"))
+                    {
+                        // Iterate through all matching nested documents
+                        foreach (var variant in productItem?.SizeColorVariant ?? Enumerable.Empty<ProductVariantSizeAndColorEventModel>())
+                        {
+                            if (variant?.Color != null && variant.Color.Color.Equals(query, StringComparison.OrdinalIgnoreCase))
+                            {
+                                suggestions.Add(new SuggestionResponse
+                                {
+                                    Text = variant.Color.Color, // Full text of the color
+                                    Value = $"/search?color={variant.Color.ColorId}" // URL for color
+                                });
+                            }
+                        }
+                    }
+
+                    // Add combined suggestion if multiple fields matched
+                    if (matchedFields.Count > 1)
+                    {
+                        suggestions.Add(new SuggestionResponse
+                        {
+                            Text = string.Join(" ", matchedFields.Select(f =>
+                            {
+                                return f switch
+                                {
+                                    "brand" => productItem?.Brand,
+                                    "gender" => productItem.Gender,
+                                    "subcategory" => productItem?.SubCategoryName,
+                                    "color" => productItem?.SizeColorVariant?.FirstOrDefault()?.Color?.Color,
+                                    _ => null
+                                };
+                            }).Where(t => t != null)), // Combined text
+                            Value = url // Combined URL
+                        });
+                    }
+                }
+
+                // Remove duplicate suggestions (if any)
+                var uniqueSuggestions = suggestions
+                    .GroupBy(s => s.Text) // Group by text
+                    .Select(g => g.First()) // Take the first suggestion in each group
+                    .ToList();
+
+                return Ok(uniqueSuggestions);
             }
             catch (Exception ex)
             {
