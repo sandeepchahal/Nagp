@@ -98,11 +98,19 @@ namespace SearchAPI.Controllers
                     if (matchedFields.Contains("subcategory") && productItem?.SubCategoryId != null)
                         urlBuilder.Append($"subcategory={productItem.SubCategoryId}&");
                     
+                    
                     if (matchedFields.Contains("color") && productItem?.SizeColorVariant != null)
                     {
+                        // Extract matched color names from highlights
+                        var matchedColors = highlights["sizeColorVariant.color.color"]
+                            .Select(h => h.Replace("<em>", "").Replace("</em>", "")) // Remove highlighting tags
+                            .Distinct()
+                            .ToList();
+
+                        // Iterate through all nested documents and add matching colors
                         foreach (var variant in productItem.SizeColorVariant)
                         {
-                            if (variant?.Color != null && variant.Color.Color.Equals(query, StringComparison.OrdinalIgnoreCase))
+                            if (variant?.Color != null && matchedColors.Contains(variant.Color.Color, StringComparer.OrdinalIgnoreCase))
                             {
                                 urlBuilder.Append($"color={variant.Color.ColorId}&");
                             }
@@ -142,7 +150,7 @@ namespace SearchAPI.Controllers
                         // Iterate through all matching nested documents
                         foreach (var variant in productItem?.SizeColorVariant ?? Enumerable.Empty<ProductVariantSizeAndColorEventModel>())
                         {
-                            if (variant?.Color != null && variant.Color.Color.Equals(query, StringComparison.OrdinalIgnoreCase))
+                            if (variant?.Color != null && highlights?["sizeColorVariant.color.color"]?.Any(h => h.Contains(variant.Color.Color, StringComparison.OrdinalIgnoreCase)) == true)
                             {
                                 suggestions.Add(new SuggestionResponse
                                 {
@@ -163,9 +171,11 @@ namespace SearchAPI.Controllers
                                 return f switch
                                 {
                                     "brand" => productItem?.Brand,
-                                    "gender" => productItem.Gender,
+                                    "gender" => productItem?.Gender,
                                     "subcategory" => productItem?.SubCategoryName,
-                                    "color" => productItem?.SizeColorVariant?.FirstOrDefault()?.Color?.Color,
+                                    "color" => productItem?.SizeColorVariant
+                                        ?.FirstOrDefault(v => highlights?["sizeColorVariant.color.color"]?.Any(h => h.Contains(v?.Color?.Color, StringComparison.OrdinalIgnoreCase)) == true)
+                                        ?.Color?.Color,
                                     _ => null
                                 };
                             }).Where(t => t != null)), // Combined text
