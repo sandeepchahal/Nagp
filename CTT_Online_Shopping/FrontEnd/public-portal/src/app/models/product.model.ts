@@ -46,3 +46,13 @@ export interface ProductFilterView {
   brand: Brand;
   productItems: ProductItemFilterContents[];
 }
+
+export interface ProductItemFilterFlatten {
+  id: string;
+  name: string;
+  description: string;
+  brand: Brand;
+  productItemId: string;
+  price: PriceBase;
+  images: ImagesBase[];
+}

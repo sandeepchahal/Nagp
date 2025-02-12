@@ -1,8 +1,10 @@
+using System.Diagnostics;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using ProductAPI.Helper;
 using ProductAPI.Models.Brands;
 using ProductAPI.Models.Categories;
+using ProductAPI.Models.ProductItems;
 using ProductAPI.Models.Products;
 
 namespace ProductAPI.DbServices;
@@ -123,42 +125,70 @@ public class ProductDbService(
         };
 
         // Execute the pipeline on `products` collection
-        var results = await productCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
+        var results = await productCollection.Aggregate<Product>(pipeline).ToListAsync();
 
         List<ProductFilterView> finalResult = new();
         foreach (var doc in results)
         {
-            var id = doc["_id"].ToString();
             var pf = new ProductFilterView()
             {
-                Id = doc["_id"].ToString(),
-                Name = doc["name"].ToString(),
-                Description = doc["description"].ToString()
+                Id = doc.Id,
+                Name = doc.Name,
+                Description = doc.Description
             };
-            pf.Brand = await brandDbService.GetAsync(doc["brandId"].ToString()) ?? new Brand();
-            pf.ProductItems = await FetchProductItemFilterContents(doc["_id"].ToString());
-            finalResult.Add(pf);
+            pf.Brand = await brandDbService.GetAsync(doc.BrandId) ?? new Brand();
+            pf.ProductItems = await FetchProductItemFilterContents(doc.Id, color);
+            if (pf.ProductItems.Any())
+            {
+                finalResult.Add(pf);
+            }
+            
         }
 
         return finalResult;
     }
 
-    private async Task<List<ProductItemFilterContents>> FetchProductItemFilterContents(string productId)
+    private async Task<List<ProductItemFilterContents>> FetchProductItemFilterContents(string productId, string? color= null)
     {
         var productItems = await productItemDbService.GetByProductIdAsync(productId);
         var result = new List<ProductItemFilterContents>();
 
         foreach (var item in productItems)
         {
-            var productItemFilterContent = new ProductItemFilterContents()
+            if (color != null)
+            {   
+                if(item.VariantType == "Size") continue;
+                if (!DoesColorMatch(item, color)) continue;
+                var productItemFilterContent = new ProductItemFilterContents()
+                {
+                    Id = item.Id,
+                    Images = ProductHelper.GetImages(item),
+                    Price = ProductHelper.GetPrice(item)
+                };
+                result.Add(productItemFilterContent);
+            }
+            else if (color == null)
             {
-                Id = item.Id,
-                Images = ProductHelper.GetImages(item),
-                Price = ProductHelper.GetPrice(item)
-            };
-            result.Add(productItemFilterContent);
+                var productItemFilterContent = new ProductItemFilterContents()
+                {
+                    Id = item.Id,
+                    Images = ProductHelper.GetImages(item),
+                    Price = ProductHelper.GetPrice(item)
+                };
+                result.Add(productItemFilterContent);
+            }
+            
         }
-
         return result;
     }
+
+    private bool DoesColorMatch(ProductItem item, string color)
+    {
+        return item.VariantType switch
+        {
+            "Color" => item.Variants.ColorVariant.Any(co => co.Id == color),
+            _ => item.Variants.SizeColorVariant.Any(co => co.Id == color)
+        };
+    }
+        
 }

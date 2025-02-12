@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { ProductFilterView } from '../../../models/product.model';
+import {
+  ProductFilterView,
+  ProductItemFilterFlatten,
+} from '../../../models/product.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { SearchResponse } from '../../../models/searchResponse.model';
@@ -15,7 +18,7 @@ import { TruncatePipe } from '../../../truncate.pipe';
   styleUrl: './filter-product.component.css',
 })
 export class FilterProductComponent {
-  products: ProductFilterView[] = [];
+  products: ProductItemFilterFlatten[] = [];
 
   constructor(
     private productService: ProductService,
@@ -28,7 +31,7 @@ export class FilterProductComponent {
     this.searchService.searchQuery$.subscribe((query) => {
       if (query) {
         this.productService.getProducts(query).subscribe((data) => {
-          this.products = data;
+          this.products = this.flattenProducts(data);
         });
       }
     });
@@ -49,5 +52,18 @@ export class FilterProductComponent {
   }
   goToDetail(id: string) {
     this.router.navigate(['/product/item', id]);
+  }
+  flattenProducts(products: ProductFilterView[]): ProductItemFilterFlatten[] {
+    return products.flatMap((product) =>
+      product.productItems.map((item) => ({
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        brand: product.brand,
+        productItemId: item.id,
+        price: item.price,
+        images: item.images,
+      }))
+    );
   }
 }

@@ -2,7 +2,7 @@
   <div class="row">
     <!-- Filters Section (Left Side) -->
     <div class="col-md-3">
-      <div class="card p-3">
+      <div class="p-3">
         <h4 class="mb-3">Filters</h4>
         <!-- Add filter options here later -->
       </div>
@@ -10,41 +10,41 @@
 
     <!-- Products Section -->
     <div class="col-md-9">
-      <div class="row row-cols-1 row-cols-md-4 g-4"> <!-- Changed to 4 columns per row -->
-        <div class="col" *ngFor="let product of products">
-          <div *ngFor="let productItem of product.productItems" class="card h-100" (click)="goToDetail(productItem.id)">
+      <div class="row row-cols-1 row-cols-md-4 g-4">
+        <!-- Flatten product items into a single loop -->
+          <div class="card" *ngFor="let productItem of products" (click)="goToDetail(productItem.productItemId)">
             <!-- Product Image -->
             <img
               [src]="productItem.images[0].url"
               [alt]="productItem.images[0].altText"
               class="card-img-top img-fluid"
-              style="height: 180px; object-fit: cover;"
+              style="height: 180px;"
             />
 
             <!-- Product Details -->
             <div class="card-body text-center p-2">
               <!-- Brand Name -->
-              <h6 class="card-title mb-1">{{ product.brand.name }}</h6>
+              <h6 class="card-title mb-1 small">{{ productItem.brand.name }}</h6>
 
               <!-- Product Name (Truncated) -->
-              <p class="card-text text-muted small mb-1">
-                {{ product.name | truncate:15 }}
+              <p class="card-text text-muted mb-1 small">
+                {{ productItem.name | truncate:15 }}
               </p>
 
               <!-- Price Section -->
-              <div class="product-price">
+              <div class="product-price small">
                 <!-- Discounted Price or Original Price -->
                 <span class="fw-bold text-dark price-color">
                   ₹{{ productItem.price.discountPrice || productItem.price.originalPrice }}
                 </span>
 
                 <!-- Original Price (Strikethrough) -->
-                <span class="text-muted me-2 small" *ngIf="productItem.price.discountPrice > 0">
+                <span class="text-muted me-2" *ngIf="productItem.price.discountPrice > 0">
                   <del>₹{{ productItem.price.originalPrice }}</del>
                 </span>
 
                 <!-- Discount Badge -->
-                <span class="badge bg-success ms-2 small" *ngIf="productItem.price.discountPrice > 0">
+                <span class="badge bg-success ms-2" *ngIf="productItem.price.discountPrice > 0">
                   {{ calculateDiscount(productItem.price) }}% off
                 </span>
               </div>
@@ -52,6 +52,5 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
 </div>
