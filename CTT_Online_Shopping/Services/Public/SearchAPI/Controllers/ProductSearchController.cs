@@ -70,126 +70,76 @@ namespace SearchAPI.Controllers
                 if (!searchResponse.IsValidResponse)
                     throw new Exception($"Search failed: {searchResponse.DebugInformation}");
                 // Process search results and generate suggestions
-                var suggestions = new List<SuggestionResponse>();
+         // Process search results and generate suggestions
+        var suggestions = new List<SuggestionResponse>();
 
-                foreach (var hit in searchResponse.Hits)
-                {
-                    var productItem = hit.Source;
-                    var highlights = hit.Highlight;
+        foreach (var hit in searchResponse.Hits)
+        {
+            var productItem = hit.Source;
+            var highlights = hit.Highlight;
+            var colorMatched = new List<string>();
+            // Determine which fields matched
+            var matchedFields = new List<string>();
+            if (highlights?.ContainsKey("brand") == true)
+                matchedFields.Add("brand");
+            if (highlights?.ContainsKey("gender") == true)
+                matchedFields.Add("gender");
+            if (highlights?.ContainsKey("subCategoryName") == true)
+                matchedFields.Add("subcategory");
+            if (highlights?.ContainsKey("sizeColorVariant.color.color") == true)
+                matchedFields.Add("color");
 
-                    // Determine which fields matched
-                    var matchedFields = new List<string>();
-                    if (highlights?.ContainsKey("gender") == true)
-                        matchedFields.Add("gender");
-                    if (highlights?.ContainsKey("subCategoryName") == true)
-                        matchedFields.Add("subcategory");
-                    if (highlights?.ContainsKey("brand") == true)
-                        matchedFields.Add("brand");
-                    if (highlights?.ContainsKey("sizeColorVariant.color.color") == true)
-                        matchedFields.Add("color");
+            // Construct base URL based on matched fields
+            var urlBuilder = new StringBuilder("/search?");
+            if (matchedFields.Contains("brand") && productItem?.Brand != null)
+                urlBuilder.Append($"brand={productItem.Brand}&");
+            if (matchedFields.Contains("gender") && productItem?.Gender != null)
+                urlBuilder.Append($"gender={productItem.Gender}&");
+            if (matchedFields.Contains("subcategory") && productItem?.SubCategoryId != null)
+                urlBuilder.Append($"subcategory={productItem.SubCategoryId}&");
 
-                    // Construct combined URL based on matched fields
-                    var urlBuilder = new StringBuilder("/search?");
-                    if (matchedFields.Contains("brand") && productItem?.Brand != null)
-                        urlBuilder.Append($"brand={productItem.Brand}&");
-                    if (matchedFields.Contains("gender") && productItem?.Brand != null)
-                        urlBuilder.Append($"gender={productItem.Gender}&");
-                    if (matchedFields.Contains("subcategory") && productItem?.SubCategoryId != null)
-                        urlBuilder.Append($"subcategory={productItem.SubCategoryId}&");
-                    
-                    
-                    if (matchedFields.Contains("color") && productItem?.SizeColorVariant != null)
-                    {
-                        // Extract matched color names from highlights
-                        var matchedColors = highlights["sizeColorVariant.color.color"]
-                            .Select(h => h.Replace("<em>", "").Replace("</em>", "")) // Remove highlighting tags
-                            .Distinct()
-                            .ToList();
-
-                        // Iterate through all nested documents and add matching colors
-                        foreach (var variant in productItem.SizeColorVariant)
-                        {
-                            if (variant?.Color != null && matchedColors.Contains(variant.Color.Color, StringComparer.OrdinalIgnoreCase))
-                            {
-                                urlBuilder.Append($"color={variant.Color.ColorId}&");
-                            }
-                        }
-                    }
-
-                    // Remove the trailing '&'
-                    var url = urlBuilder.ToString().TrimEnd('&');
-
-                    // Add individual suggestions for each matched field
-                    if (matchedFields.Contains("brand"))
-                    {
-                        suggestions.Add(new SuggestionResponse
-                        {
-                            Text = productItem?.Brand, // Full text of the brand
-                            Value = $"/search?brand={productItem?.Brand}" // URL for brand
-                        });
-                    }
-                    if (matchedFields.Contains("gender"))
-                    {
-                        suggestions.Add(new SuggestionResponse
-                        {
-                            Text = productItem?.Gender, // Full text of the subcategory
-                            Value = $"/search?gender={productItem?.Gender}" // URL for subcategory
-                        });
-                    }
-                    if (matchedFields.Contains("subcategory"))
-                    {
-                        suggestions.Add(new SuggestionResponse
-                        {
-                            Text = productItem?.SubCategoryName, // Full text of the subcategory
-                            Value = $"/search?subcategory={productItem?.SubCategoryId}" // URL for subcategory
-                        });
-                    }
-                    if (matchedFields.Contains("color"))
-                    {
-                        // Iterate through all matching nested documents
-                        foreach (var variant in productItem?.SizeColorVariant ?? Enumerable.Empty<ProductVariantSizeAndColorEventModel>())
-                        {
-                            if (variant?.Color != null && highlights?["sizeColorVariant.color.color"]?.Any(h => h.Contains(variant.Color.Color, StringComparison.OrdinalIgnoreCase)) == true)
-                            {
-                                suggestions.Add(new SuggestionResponse
-                                {
-                                    Text = variant.Color.Color, // Full text of the color
-                                    Value = $"/search?color={variant.Color.ColorId}" // URL for color
-                                });
-                            }
-                        }
-                    }
-
-                    // Add combined suggestion if multiple fields matched
-                    if (matchedFields.Count > 1)
-                    {
-                        suggestions.Add(new SuggestionResponse
-                        {
-                            Text = string.Join(" ", matchedFields.Select(f =>
-                            {
-                                return f switch
-                                {
-                                    "brand" => productItem?.Brand,
-                                    "gender" => productItem?.Gender,
-                                    "subcategory" => productItem?.SubCategoryName,
-                                    "color" => productItem?.SizeColorVariant
-                                        ?.FirstOrDefault(v => highlights?["sizeColorVariant.color.color"]?.Any(h => h.Contains(v?.Color?.Color, StringComparison.OrdinalIgnoreCase)) == true)
-                                        ?.Color?.Color,
-                                    _ => null
-                                };
-                            }).Where(t => t != null)), // Combined text
-                            Value = url // Combined URL
-                        });
-                    }
-                }
-
-                // Remove duplicate suggestions (if any)
-                var uniqueSuggestions = suggestions
-                    .GroupBy(s => s.Text) // Group by text
-                    .Select(g => g.First()) // Take the first suggestion in each group
+            // Handle color matching using highlights
+            if (matchedFields.Contains("color") && productItem?.SizeColorVariant != null)
+            {
+                // Extract matched color names from highlights
+                    colorMatched = highlights["sizeColorVariant.color.color"]
+                    .Select(h => h.Replace("<em>", "").Replace("</em>", "")) // Remove highlighting tags
+                    .Distinct()
                     .ToList();
 
-                return Ok(uniqueSuggestions);
+                // Iterate through all nested documents and add matching colors
+                foreach (var variant in productItem.SizeColorVariant)
+                {
+                    if (variant?.Color != null && colorMatched.Contains(variant.Color.Color, StringComparer.OrdinalIgnoreCase))
+                    {
+                        urlBuilder.Append($"color={variant.Color.ColorId}&");
+                    }
+                }
+            }
+
+            // Remove the trailing '&'
+            var baseUrl = urlBuilder.ToString().TrimEnd('&');
+
+            // Fetch subcategories based on matched fields
+            var subcategories = FetchSubcategories(productItem, matchedFields, colorMatched);
+
+            // Add suggestions
+            suggestions.AddRange(from subcategory in subcategories
+                from dic in subcategory
+                select new SuggestionResponse
+                {
+                    Text = dic.Key, // Combined text
+                    Value = $"/search?{dic.Value}" // Combined URL
+                });
+        }
+
+        // Remove duplicate suggestions (if any)
+        var uniqueSuggestions = suggestions
+            .GroupBy(s => s.Text) // Group by text
+            .Select(g => g.First()) // Take the first suggestion in each group
+            .ToList();
+
+        return Ok(uniqueSuggestions);
             }
             catch (Exception ex)
             {
@@ -197,7 +147,7 @@ namespace SearchAPI.Controllers
             }
         }
 
-
+    
         [HttpGet("get-mapping")]
         public async Task<IActionResult> GetMapping()
         {
@@ -213,5 +163,48 @@ namespace SearchAPI.Controllers
                 return BadRequest("");
             }
         }
+        
+        private List<Dictionary<string,string>> FetchSubcategories(ProductItemEventModel productItem, List<string> matchedFields, List<string> matchedColor = null)
+        {
+            var subcategories = new List<Dictionary<string,string>>();
+            
+            // If gender is matched, add all subcategories for the gender
+            if (matchedFields.Contains("gender") && productItem?.Gender != null)
+            {
+                var d = new Dictionary<string, string>();
+                d.Add($"{productItem.Gender} {productItem.SubCategoryName}",
+                    $"gender={productItem.Gender}&subcategory={productItem.SubCategoryId}");
+                subcategories.Add(d);
+            }
+
+            // If brand is matched, add all subcategories for the brand and gender
+            if (matchedFields.Contains("brand") && productItem?.Brand != null && productItem?.Gender != null)
+            {
+                var d = new Dictionary<string, string>();
+                d.Add($"{productItem.Brand} {productItem.Gender} {productItem.SubCategoryName}",
+                    $"brand={productItem.Brand}&gender={productItem.Gender}&subcategory={productItem.SubCategoryId}");
+                subcategories.Add(d);
+            }
+
+            // If color is matched, add all subcategories for the color and gender
+            if (matchedFields.Contains("color") && productItem?.SizeColorVariant != null && productItem?.Gender != null)
+            {
+                foreach (var variant in productItem.SizeColorVariant)
+                {
+                    if (matchedColor.Any() && matchedColor.Contains(variant.Color.Color))
+                    {
+                        var d = new Dictionary<string, string>();
+                        d.Add($"{productItem.Gender} {variant.Color.Color} {productItem.SubCategoryName}",
+                            $"gender={productItem.Gender}&color={variant.Color.ColorId}&subcategory={productItem.SubCategoryId}");
+                        subcategories.Add(d);
+                        
+                        subcategories.Add(d);
+                    }
+                }
+            }
+
+            return subcategories.Distinct().ToList();
+        }
+
     }
 }
