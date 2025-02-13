@@ -5,7 +5,7 @@ on:
     branches:
       - 'main'
     paths:
-      - 'CTT_Online_Shopping/k8s/databases/**'
+      - 'CTT_Online_Shopping/K8s/databases/**'
 env:
   PROJECT_ID: '${{ secrets.GCP_PROJECT_ID }}' # Your Google Cloud project ID
   GKE_CLUSTER: 'mcart-autopilot-cluster-1' # Your GKE cluster name
@@ -39,14 +39,14 @@ jobs:
       # Deploy SQL Server
       - name: 'Deploy SQL Server'
         run: |
-          kubectl apply -f ./CTT_Online_Shopping/k8s/databases/sql-server-deployment.yml
+          kubectl apply -f ./CTT_Online_Shopping/K8s/databases/sql-server-deployment.yml
 
       # Deploy Elasticsearch
       - name: 'Deploy Elasticsearch'
         run: |
-          kubectl apply -f ./CTT_Online_Shopping/k8s/databases/elasticsearch-deployment.yml
+          kubectl apply -f ./CTT_Online_Shopping/K8s/databases/elasticsearch-deployment.yml
 
       # Deploy Kafka
       - name: 'Deploy Kafka'
         run: |
-          kubectl apply -f ./CTT_Online_Shopping/k8s/databases/kafka-deployment.yml
+          kubectl apply -f ./CTT_Online_Shopping/K8s/databases/kafka-deployment.yml
