@@ -60,3 +60,17 @@ jobs:
           kubectl apply -f ./CTT_Online_Shopping/K8s/Services/Admin/admin-deployment.yml
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide
+            # Build and push Angular Admin Portal
+
+      - name: 'Build and push Angular Admin Portal'
+        run: |
+          cd ./CTT_Online_Shopping/FrontEnd/admin-portal
+          docker build -t us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/admin-portal:latest .
+          docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/admin-portal:latest
+
+      # Deploy Angular Admin Portal to GKE
+      - name: 'Deploy Angular Admin Portal'
+        run: |
+          kubectl apply -f ./CTT_Online_Shopping/k8s/admin-portal-deployment.yml
+          kubectl rollout status deployment/admin-portal
+          kubectl get services -o wide
