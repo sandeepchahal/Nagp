@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "M7n0sij2OlY=",
+  "dgSpecHash": "N8om2plh3E0=",
   "success": true,
   "projectFilePath": "/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Admin/ProductAPI/ProductAPI.csproj",
   "expectedPackageFiles": [
@@ -15,6 +15,8 @@
     "/Users/sandeepsingh/.nuget/packages/microsoft.win32.registry/5.0.0/microsoft.win32.registry.5.0.0.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/mongodb.bson/3.1.0/mongodb.bson.3.1.0.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/mongodb.driver/3.1.0/mongodb.driver.3.1.0.nupkg.sha512",
+    "/Users/sandeepsingh/.nuget/packages/polly/8.5.2/polly.8.5.2.nupkg.sha512",
+    "/Users/sandeepsingh/.nuget/packages/polly.core/8.5.2/polly.core.8.5.2.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/sharpcompress/0.30.1/sharpcompress.0.30.1.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/snappier/1.0.0/snappier.1.0.0.nupkg.sha512",
     "/Users/sandeepsingh/.nuget/packages/swashbuckle.aspnetcore/7.2.0/swashbuckle.aspnetcore.7.2.0.nupkg.sha512",
