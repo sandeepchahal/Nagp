@@ -5,9 +5,7 @@ metadata:
 type: Opaque
 data:
   sa-password: RGV2ZWxvcGVyQDAwMg==
-
 ---
-
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
