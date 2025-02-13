@@ -5,7 +5,7 @@ on:
     branches:
       - 'main'
     paths:
-      - 'k8s/databases/**'
+      - 'CTT_Online_Shopping/k8s/databases/**'
 env:
   PROJECT_ID: '${{ secrets.GCP_PROJECT_ID }}' # Your Google Cloud project ID
   GKE_CLUSTER: 'mcart-autopilot-cluster-1' # Your GKE cluster name
