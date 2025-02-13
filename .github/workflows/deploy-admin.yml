@@ -1,0 +1,60 @@
+name: 'Build and Deploy Admin Solution to GKE'
+
+on:
+  push:
+    branches:
+      - 'main'
+
+env:
+  PROJECT_ID: '${{ secrets.GCP_PROJECT_ID }}' # Your Google Cloud project ID
+  GKE_CLUSTER: 'mcart-autopilot-cluster-1' # Your GKE cluster name
+  GKE_ZONE: 'us-central1-c' # Your GKE cluster zone
+  DEPLOYMENT_NAME: 'productapi-admin' # Your deployment name
+  REPOSITORY: 'ecommerce-repo' # Your Artifact Registry repository name
+  IMAGE: 'productapi-admin' # Your Docker image name
+
+jobs:
+  setup-build-publish-deploy:
+    name: 'Setup, Build, Publish, and Deploy'
+    runs-on: 'ubuntu-latest'
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      # Checkout the code
+      - name: 'Checkout'
+        uses: 'actions/checkout@v4'
+
+      # Authenticate with Google Cloud using JSON key
+      - name: 'Authenticate Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      # Set up Docker to use Google Artifact Registry
+      - name: 'Docker Auth'
+        run: |
+          gcloud auth configure-docker
+
+      # Get GKE credentials
+      - name: 'Set up GKE credentials'
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: '${{ env.GKE_CLUSTER }}'
+          location: '${{ env.GKE_ZONE }}'
+
+      # Build and push the Docker image
+      - name: 'Build and push Docker container'
+        run: |
+          DOCKER_TAG="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest"
+          docker build -t $DOCKER_TAG ./ProductAPI
+          docker push $DOCKER_TAG
+
+      # Deploy to GKE using your Kubernetes manifest
+      - name: 'Deploy to GKE'
+        run: |
+          kubectl apply -f k8s/admin-deployment.yml
+          kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
+          kubectl get services -o wide
