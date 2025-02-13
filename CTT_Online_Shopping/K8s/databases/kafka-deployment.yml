@@ -27,11 +27,11 @@ spec:
         app: zookeeper
     spec:
       securityContext:
-        fsGroup: 1000  # Ensures the volume is owned by 'appuser' inside the container
+        fsGroup: 1000
       initContainers:
         - name: init-permissions
-          image: busybox
-          command: ['sh', '-c', 'chown -R 1000:1000 /var/lib/zookeeper/data']  # Adjust permissions
+          image: alpine
+          command: ['sh', '-c', 'chown -R 1000:1000 /var/lib/zookeeper/data']
           volumeMounts:
             - name: zookeeper-data
               mountPath: /var/lib/zookeeper/data
@@ -39,11 +39,11 @@ spec:
         - name: zookeeper
           resources:
             requests:
-              memory: "256Mi"  # Request 256MiB memory
-              cpu: "250m"      # Request 0.25 CPU core
+              memory: "256Mi"
+              cpu: "250m"
             limits:
-              memory: "1Gi"    # Limit to 1GiB memory
-              cpu: "500m"      # Limit to 0.5 CPU core
+              memory: "1Gi"
+              cpu: "500m"
           image: confluentinc/cp-zookeeper:latest
           ports:
             - containerPort: 2181
@@ -63,6 +63,7 @@ spec:
         resources:
           requests:
             storage: 2Gi
+        storageClassName: standard
 ---
 apiVersion: v1
 kind: Service
@@ -93,16 +94,16 @@ spec:
         app: kafka
     spec:
       securityContext:
-        fsGroup: 1000  # Ensures the volume is owned by 'appuser' inside the container
+        fsGroup: 1000
       containers:
         - name: kafka
           resources:
             requests:
-              memory: "512Mi"  # Request 512MiB memory
-              cpu: "250m"       # Request 0.25 CPU core
+              memory: "512Mi"
+              cpu: "250m"
             limits:
-              memory: "2Gi"     # Limit to 2GiB memory
-              cpu: "1000m"      # Limit to 1 CPU core
+              memory: "2Gi"
+              cpu: "1000m"
           image: confluentinc/cp-kafka:latest
           ports:
             - containerPort: 9092
@@ -112,7 +113,7 @@ spec:
             - name: KAFKA_ZOOKEEPER_CONNECT
               value: "zookeeper:2181"
             - name: KAFKA_ADVERTISED_LISTENERS
-              value: "PLAINTEXT://kafka.default.svc.cluster.local:9092"
+              value: "PLAINTEXT://kafka:9092"
             - name: KAFKA_LISTENERS
               value: "PLAINTEXT://0.0.0.0:9092"
             - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
@@ -130,3 +131,4 @@ spec:
         resources:
           requests:
             storage: 2Gi
+        storageClassName: standard
