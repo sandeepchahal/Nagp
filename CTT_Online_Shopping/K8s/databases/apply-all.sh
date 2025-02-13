@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Apply MongoDB files
-kubectl apply -f mongodb/mongodb-statefulset.yaml
-kubectl apply -f mongodb/mongodb-service.yaml
-
 # Apply SQL Server files
 kubectl apply -f sql-server/sql-server-secret.yaml
 kubectl apply -f sql-server/sql-server-statefulset.yaml

@@ -55,6 +55,6 @@ jobs:
       # Deploy to GKE using your Kubernetes manifest
       - name: 'Deploy to GKE'
         run: |
-          kubectl apply -f k8s/admin-deployment.yml
+          kubectl apply -f CTT_Online_Shopping/k8s/Services/Admin/admin-deployment.yml
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide
