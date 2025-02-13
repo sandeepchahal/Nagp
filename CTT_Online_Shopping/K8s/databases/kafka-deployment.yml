@@ -5,10 +5,10 @@ metadata:
   name: zookeeper
   namespace: default
 spec:
+  clusterIP: None
   ports:
     - port: 2181
       targetPort: 2181
-  clusterIP: None
   selector:
     app: zookeeper
 ---
@@ -18,45 +18,45 @@ metadata:
   name: zookeeper
   namespace: default
 spec:
-  serviceName: zookeeper
   replicas: 1
   selector:
     matchLabels:
       app: zookeeper
+  serviceName: zookeeper
   template:
     metadata:
       labels:
         app: zookeeper
     spec:
-      securityContext:
-        fsGroup: 1000
-      initContainers:
-        - name: init-permissions
-          image: alpine
-          command: ['sh', '-c', 'chown -R 1000:1000 /var/lib/zookeeper/data']
-          volumeMounts:
-            - name: zookeeper-data
-              mountPath: /var/lib/zookeeper/data
       containers:
-        - name: zookeeper
-          resources:
-            requests:
-              memory: "256Mi"
-              cpu: "250m"
-            limits:
-              memory: "1Gi"
-              cpu: "500m"
+        - env:
+            - name: ZOOKEEPER_CLIENT_PORT
+              value: '2181'
+            - name: ZOOKEEPER_TICK_TIME
+              value: '2000'
           image: confluentinc/cp-zookeeper:latest
+          name: zookeeper
           ports:
             - containerPort: 2181
-          env:
-            - name: ZOOKEEPER_CLIENT_PORT
-              value: "2181"
-            - name: ZOOKEEPER_TICK_TIME
-              value: "2000"
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 256Mi
           volumeMounts:
-            - name: zookeeper-data
-              mountPath: /var/lib/zookeeper/data
+            - mountPath: /var/lib/zookeeper/data
+              name: zookeeper-data
+      initContainers:
+        - command: ['sh', '-c', 'chown -R 1000:1000 /var/lib/zookeeper/data']
+          image: alpine
+          name: init-permissions
+          volumeMounts:
+            - mountPath: /var/lib/zookeeper/data
+              name: zookeeper-data
+      securityContext:
+        fsGroup: 1000
   volumeClaimTemplates:
     - metadata:
         name: zookeeper-data
@@ -73,10 +73,10 @@ metadata:
   name: kafka
   namespace: default
 spec:
+  clusterIP: None
   ports:
     - port: 9092
       targetPort: 9092
-  clusterIP: None
   selector:
     app: kafka
 ---
@@ -86,46 +86,46 @@ metadata:
   name: kafka
   namespace: default
 spec:
-  serviceName: kafka
   replicas: 1
   selector:
     matchLabels:
       app: kafka
+  serviceName: kafka
   template:
     metadata:
       labels:
         app: kafka
     spec:
-      securityContext:
-        fsGroup: 1000
       containers:
-        - name: kafka
-          resources:
-            requests:
-              memory: "512Mi"
-              cpu: "250m"
-            limits:
-              memory: "2Gi"
-              cpu: "1000m"
+        - env:
+            - name: KAFKA_BROKER_ID
+              value: '1'
+            - name: KAFKA_ZOOKEEPER_CONNECT
+              value: zookeeper:2181
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: PLAINTEXT://kafka:9092
+            - name: KAFKA_LISTENERS
+              value: PLAINTEXT://0.0.0.0:9092
+            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+              value: '1'
+            - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
+              value: 'true'
           image: confluentinc/cp-kafka:latest
+          name: kafka
           ports:
             - containerPort: 9092
-          env:
-            - name: KAFKA_BROKER_ID
-              value: "1"
-            - name: KAFKA_ZOOKEEPER_CONNECT
-              value: "zookeeper:2181"
-            - name: KAFKA_ADVERTISED_LISTENERS
-              value: "PLAINTEXT://kafka:9092"
-            - name: KAFKA_LISTENERS
-              value: "PLAINTEXT://0.0.0.0:9092"
-            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
-              value: "1"
-            - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
-              value: "true"
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+            requests:
+              cpu: 250m
+              memory: 512Mi
           volumeMounts:
-            - name: kafka-data
-              mountPath: /var/lib/kafka/data
+            - mountPath: /var/lib/kafka/data
+              name: kafka-data
+      securityContext:
+        fsGroup: 1000
   volumeClaimTemplates:
     - metadata:
         name: kafka-data

@@ -1,58 +1,66 @@
+---
 apiVersion: v1
+data:
+  sa-password: RGV2ZWxvcGVyQDAwMg==
 kind: Secret
 metadata:
   name: sql-server-secret
 type: Opaque
-data:
-  sa-password: RGV2ZWxvcGVyQDAwMg==
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: sql-server
-  namespace: default 
+  namespace: default
 spec:
-  serviceName: sql-server
   replicas: 1
   selector:
     matchLabels:
       app: sql-server
+  serviceName: sql-server
   template:
     metadata:
       labels:
         app: sql-server
     spec:
-      securityContext:
-        fsGroup: 10001  # Ensures volume ownership is set to 'mssql' user inside the container
       containers:
-        - name: sql-server
-          image: mcr.microsoft.com/mssql/server:2019-latest
-          ports:
-            - containerPort: 1433
-          env:
+        - env:
             - name: ACCEPT_EULA
-              value: "Y"
+              value: 'Y'
             - name: SA_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: sql-server-secret
                   key: sa-password
+                  name: sql-server-secret
             - name: MSSQL_MEMORY_LIMIT_MB
-              value: "2048"
+              value: '2048'
+          image: mcr.microsoft.com/mssql/server:2019-latest
+          name: sql-server
+          ports:
+            - containerPort: 1433
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 512Mi
           volumeMounts:
-            - name: sql-data
-              mountPath: /var/opt/mssql
+            - mountPath: /var/opt/mssql
+              name: sql-data
       initContainers:
-        - name: init-permissions
+        - command: ['sh', '-c', 'chown -R 10001:10001 /var/opt/mssql']
           image: busybox
-          command: ['sh', '-c', 'chown -R 10001:10001 /var/opt/mssql']  # Ensures volume permissions are correct
+          name: init-permissions
           volumeMounts:
-            - name: sql-data
-              mountPath: /var/opt/mssql
+            - mountPath: /var/opt/mssql
+              name: sql-data
+      securityContext:
+        fsGroup: 10001
       volumes:
         - name: sql-data
           persistentVolumeClaim:
-            claimName: sql-data-pvc  # Ensure this matches your PVC
+            claimName: sql-data-pvc
         - name: init-sql
   volumeClaimTemplates:
     - metadata:
@@ -68,9 +76,9 @@ kind: Service
 metadata:
   name: sql-server
 spec:
+  clusterIP: None
   ports:
     - port: 1433
       targetPort: 1433
-  clusterIP: None
   selector:
     app: sql-server
