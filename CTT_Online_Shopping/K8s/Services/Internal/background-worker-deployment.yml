@@ -16,5 +16,11 @@ spec:
       containers:
         - name: background-worker
           image: "us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/background-worker:latest"
-          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "1000m"
+              memory: "2Gi"
 
