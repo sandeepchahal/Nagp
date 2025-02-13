@@ -1,4 +1,4 @@
-name: 'Build and Deploy public Solution to GKE'
+name: 'Build and Deploy Pubic Search API to GKE'
 
 on:
   push:
