@@ -7,10 +7,9 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["SearchAPI/SearchAPI.csproj", "SearchAPI/"]
-RUN dotnet restore "SearchAPI/SearchAPI.csproj"
+COPY ["SearchAPI.csproj", "."]
+RUN dotnet restore "SearchAPI.csproj"
 COPY . .
-WORKDIR "/src/SearchAPI"
 RUN dotnet build "SearchAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
