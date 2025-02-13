@@ -1,4 +1,4 @@
-name: 'Deploy Databases'
+name: 'Deploy Databases and Kafka'
 
 on:
   push:
