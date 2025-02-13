@@ -1,4 +1,4 @@
-name: 'Build and Deploy public Solution to GKE'
+name: 'Build and Deploy Public User API to GKE'
 
 on:
   push:
@@ -51,7 +51,7 @@ jobs:
       - name: 'Build and push Docker container'
         run: |
           DOCKER_TAG="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest"
-          docker build -t $DOCKER_TAG ./CTT_Online_Shopping/Services/Public/userAPI
+          docker build -t $DOCKER_TAG ./CTT_Online_Shopping/Services/Public/UserAPI
           docker push $DOCKER_TAG
 
       # Deploy to GKE using your Kubernetes manifest
