@@ -8,7 +8,7 @@ on:
 env:
   PROJECT_ID: '${{ secrets.GCP_PROJECT_ID }}' # Your Google Cloud project ID
   GKE_CLUSTER: 'mcart-autopilot-cluster-1' # Your GKE cluster name
-  GKE_ZONE: 'us-central1-c' # Your GKE cluster zone
+  GKE_ZONE: 'us-central1' # Your GKE cluster zone
   DEPLOYMENT_NAME: 'productapi-admin' # Your deployment name
   REPOSITORY: 'ecommerce-repo' # Your Artifact Registry repository name
   IMAGE: 'productapi-admin' # Your Docker image name
