@@ -14,18 +14,25 @@ jobs:
     steps:
       # Checkout the code
       - name: 'Checkout'
-        uses: actions/checkout@v4
+        uses: 'actions/checkout@v4'
 
-      # Authenticate with Google Cloud
+      # Authenticate with Google Cloud using JSON key
       - name: 'Authenticate Google Cloud'
-        uses: google-github-actions/auth@v1
+        uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      # Set up Docker
+      # Set up Docker to use Google Artifact Registry
       - name: 'Docker Auth'
         run: |
-          gcloud auth configure-docker
+          gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      # Get GKE credentials
+      - name: 'Set up GKE credentials'
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: '${{ env.GKE_CLUSTER }}'
+          location: '${{ env.GKE_ZONE }}'
 
       # Build and push Angular Public Portal
       - name: 'Build and push Angular Public Portal'
