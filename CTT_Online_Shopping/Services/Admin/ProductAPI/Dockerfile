@@ -7,10 +7,10 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["ProductAPI/ProductAPI.csproj", "ProductAPI/"]
-RUN dotnet restore "ProductAPI/ProductAPI.csproj"
+COPY ["CTT_Online_Shopping/Services/Admin/ProductAPI/ProductAPI.csproj", "CTT_Online_Shopping/Services/Admin/ProductAPI/"]
+RUN dotnet restore "CTT_Online_Shopping/Services/Admin/ProductAPI/ProductAPI.csproj"
 COPY . .
-WORKDIR "/src/ProductAPI"
+WORKDIR "/src/CTT_Online_Shopping/Services/Admin/ProductAPI"
 RUN dotnet build "ProductAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
