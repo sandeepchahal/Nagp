@@ -37,6 +37,13 @@ spec:
               mountPath: /var/lib/zookeeper/data
       containers:
         - name: zookeeper
+          resources:
+            requests:
+              memory: "256Mi"  # Request 256MiB memory
+              cpu: "250m"      # Request 0.25 CPU core
+            limits:
+              memory: "1Gi"    # Limit to 1GiB memory
+              cpu: "500m"      # Limit to 0.5 CPU core
           image: confluentinc/cp-zookeeper:latest
           ports:
             - containerPort: 2181
@@ -55,7 +62,7 @@ spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: 1Gi
+            storage: 2Gi
 ---
 apiVersion: v1
 kind: Service
@@ -89,6 +96,13 @@ spec:
         fsGroup: 1000  # Ensures the volume is owned by 'appuser' inside the container
       containers:
         - name: kafka
+          resources:
+            requests:
+              memory: "512Mi"  # Request 512MiB memory
+              cpu: "250m"       # Request 0.25 CPU core
+            limits:
+              memory: "2Gi"     # Limit to 2GiB memory
+              cpu: "1000m"      # Limit to 1 CPU core
           image: confluentinc/cp-kafka:latest
           ports:
             - containerPort: 9092
@@ -115,4 +129,4 @@ spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: 1Gi
+            storage: 2Gi
