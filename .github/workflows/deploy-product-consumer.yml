@@ -10,9 +10,9 @@ env:
   PROJECT_ID: '${{ secrets.GCP_PROJECT_ID }}' # Your Google Cloud project ID
   GKE_CLUSTER: 'mcart-autopilot-cluster-1' # Your GKE cluster name
   GKE_ZONE: 'us-central1' # Your GKE cluster zone
-  DEPLOYMENT_NAME: 'product-kafka-service' # Your deployment name
+  DEPLOYMENT_NAME: 'background-worker' # Your deployment name
   REPOSITORY: 'ecommerce-repo' # Your Artifact Registry repository name
-  IMAGE: 'product-kafka-service' # Your Docker image name
+  IMAGE: 'background-worker' # Your Docker image name
 
 jobs:
   build-and-deploy:
@@ -45,12 +45,12 @@ jobs:
       - name: 'Build and push Product Kafka Consumer Service'
         run: |
           cd ./CTT_Online_Shopping/Services/KafkaConsumers/
-          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/product-kafka-service:latest .
-          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/product-kafka-service:latest
+          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/background-worker:latest .
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/background-worker:latest
 
       # Deploy Product Kafka Consumer Service to GKE
       - name: 'Deploy Product Kafka Consumer Service'
         run: |
-          kubectl apply -f ./CTT_Online_Shopping/k8s/Services/FrontEnd/product-kafka-service-deployment.yml
-          kubectl rollout status deployment/product-kafka-service
+          kubectl apply -f ./CTT_Online_Shopping/k8s/Services/Internal/background-worker-deployment.yml
+          kubectl rollout status deployment/background-worker
           kubectl get services -o wide

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: background-worker
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: background-worker
+  template:
+    metadata:
+      labels:
+        app: background-worker
+    spec:
+      containers:
+        - name: background-worker
+          image: "us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/background-worker:latest"
+          imagePullPolicy: Always
+
