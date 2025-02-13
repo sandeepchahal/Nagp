@@ -1,19 +1,19 @@
-name: 'Build and Deploy Admin Solution to GKE'
+name: 'Build and Deploy public Solution to GKE'
 
 on:
   push:
     branches:
       - 'main'
     paths:
-      - 'CTT_Online_Shopping/Services/Admin/ProductAPI/**' # Trigger only when ProductAPI files change
+      - 'CTT_Online_Shopping/Services/Public/ProductAPI/**' # Trigger only when ProductAPI files change
 
 env:
   PROJECT_ID: '${{ secrets.GCP_PROJECT_ID }}' # Your Google Cloud project ID
   GKE_CLUSTER: 'mcart-autopilot-cluster-1' # Your GKE cluster name
   GKE_ZONE: 'us-central1' # Your GKE cluster zone
-  DEPLOYMENT_NAME: 'productapi-admin' # Your deployment name
+  DEPLOYMENT_NAME: 'productapi-public' # Your deployment name
   REPOSITORY: 'ecommerce-repo' # Your Artifact Registry repository name
-  IMAGE: 'productapi-admin' # Your Docker image name
+  IMAGE: 'productapi-public' # Your Docker image name
 
 jobs:
   setup-build-publish-deploy:
@@ -51,15 +51,15 @@ jobs:
       - name: 'Build and push Docker container'
         run: |
           DOCKER_TAG="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest"
-          docker build -t $DOCKER_TAG ./CTT_Online_Shopping/Services/Admin/ProductAPI
+          docker build -t $DOCKER_TAG ./CTT_Online_Shopping/Services/Public/ProductAPI
           docker push $DOCKER_TAG
 
       # Deploy to GKE using your Kubernetes manifest
       - name: 'Deploy to GKE'
         run: |
           
-          kubectl create namespace admin --dry-run=client -o yaml | kubectl apply -f -
-          kubectl apply -f ./CTT_Online_Shopping/K8s/Services/Admin/admin-deployment.yml
+          kubectl create namespace public --dry-run=client -o yaml | kubectl apply -f -
+          kubectl apply -f ./CTT_Online_Shopping/K8s/Services/Public/public-product-deployment.yml
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide
-            # Build and push Angular Admin Portal
+            # Build and push Angular public Portal

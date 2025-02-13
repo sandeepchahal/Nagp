@@ -1,0 +1,42 @@
+name: 'Build and Deploy Angular Public Portal'
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'CTT_Online_Shopping/FrontEnd/public-portal/**' # Trigger only when Angular files change
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+
+      # Authenticate with Google Cloud
+      - name: 'Authenticate Google Cloud'
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      # Set up Docker
+      - name: 'Docker Auth'
+        run: |
+          gcloud auth configure-docker
+
+      # Build and push Angular Public Portal
+      - name: 'Build and push Angular Public Portal'
+        run: |
+          cd ./CTT_Online_Shopping/FrontEnd/public-portal
+          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/public-portal:latest .
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/public-portal:latest
+
+      # Deploy Angular Public Portal to GKE
+      - name: 'Deploy Angular Public Portal'
+        run: |
+          kubectl apply -f ./CTT_Online_Shopping/k8s/Services/FrontEnd/public-portal-deployment.yml
+          kubectl rollout status deployment/public-portal
+          kubectl get services -o wide

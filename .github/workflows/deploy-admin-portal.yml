@@ -1,0 +1,42 @@
+name: 'Build and Deploy Angular Admin Portal'
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'CTT_Online_Shopping/FrontEnd/admin-portal/**' # Trigger only when Angular files change
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+
+      # Authenticate with Google Cloud
+      - name: 'Authenticate Google Cloud'
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      # Set up Docker
+      - name: 'Docker Auth'
+        run: |
+          gcloud auth configure-docker
+
+      # Build and push Angular Admin Portal
+      - name: 'Build and push Angular Admin Portal'
+        run: |
+          cd ./CTT_Online_Shopping/FrontEnd/admin-portal
+          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/admin-portal:latest .
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/admin-portal:latest
+
+      # Deploy Angular Admin Portal to GKE
+      - name: 'Deploy Angular Admin Portal'
+        run: |
+          kubectl apply -f ./CTT_Online_Shopping/k8s/Services/FrontEnd/admin-portal-deployment.yml
+          kubectl rollout status deployment/admin-portal
+          kubectl get services -o wide

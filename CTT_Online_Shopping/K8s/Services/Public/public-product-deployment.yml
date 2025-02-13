@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: productapi-public
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: productapi-public
+  template:
+    metadata:
+      labels:
+        app: productapi-public
+    spec:
+      containers:
+      - name: productapi-public
+        image: us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/productapi-public:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "1000m"
+            memory: "2Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: productapi-public-service
+  namespace: default
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: productapi-public
