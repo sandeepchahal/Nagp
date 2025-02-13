@@ -66,3 +66,5 @@
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Admin/ProductAPI/bin/Debug/net9.0/runtimes/win-x86/native/vcruntime140.dll
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Admin/ProductAPI/bin/Debug/net9.0/runtimes/win-x86/native/zlib1.dll
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Admin/ProductAPI/bin/Debug/net9.0/runtimes/win-x86/native/zstd.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Admin/ProductAPI/bin/Debug/net9.0/Polly.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Admin/ProductAPI/bin/Debug/net9.0/Polly.Core.dll

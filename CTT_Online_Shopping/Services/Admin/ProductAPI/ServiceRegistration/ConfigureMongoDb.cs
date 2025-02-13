@@ -2,6 +2,7 @@ using System.Text;
 using System.Web;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Polly;
 using ProductAPI.Models;
 using ProductAPI.Models.DbModels;
 
@@ -15,21 +16,31 @@ public static class ConfigurationDbRegistration
         {
             var settings = MongoClientSettings.FromConnectionString(GetConnectionString(configuration));
             settings.ServerApi = new ServerApi(ServerApiVersion.V1);
+            settings.MaxConnectionIdleTime = TimeSpan.FromSeconds(30);
+            settings.ConnectTimeout = TimeSpan.FromSeconds(10);
 
-            var mongoClient = new MongoClient(settings);
+            var retryPolicy = Policy
+                .Handle<MongoConnectionException>()
+                .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
-            // Define the constant database name
-            var databaseName = configuration["MongoDB:Database"];
-            if (string.IsNullOrEmpty(databaseName))
+            MongoClient mongoClient = null!;
+            IMongoDatabase database = null!;
+
+            retryPolicy.Execute(() =>
             {
-                throw new InvalidOperationException("Database name doesn't exist in the configuration");
-            }
+                mongoClient = new MongoClient(settings);
+                var databaseName = configuration["MongoDB:Database"];
 
-            // Create the IMongoDatabase instance using the database name and MongoClient
-            var database = mongoClient.GetDatabase(databaseName);
+                if (string.IsNullOrEmpty(databaseName))
+                {
+                    throw new InvalidOperationException("Database name doesn't exist in the configuration");
+                }
 
-             mongoClient.GetDatabase(databaseName).RunCommand<BsonDocument>(new BsonDocument("ping", 1));
+                database = mongoClient.GetDatabase(databaseName);
 
+                // Ensure MongoDB is reachable before proceeding
+                database.RunCommand<BsonDocument>(new BsonDocument("ping", 1));
+            });
             // Register MongoClient as a singleton service
             serviceCollection.AddSingleton(mongoClient);
              //Register IMongoDatabase as a singleton service
