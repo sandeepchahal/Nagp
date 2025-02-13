@@ -7,7 +7,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = ' http://localhost:5190/api/user';
+  private apiUrl =
+    'http://userapi-public-service.default.svc.cluster.local/api/user';
 
   private userInfoSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
     null

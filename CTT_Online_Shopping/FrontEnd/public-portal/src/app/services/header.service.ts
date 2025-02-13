@@ -7,7 +7,8 @@ import { CategoryView } from '../models/category.model';
   providedIn: 'root',
 })
 export class HeaderService {
-  private apiUrl = 'http://localhost:5267/api/product'; // Update with your API URL
+  private apiUrl =
+    'http://productapi-public-service.default.svc.cluster.local/api/product'; // Update with your API URL
   constructor(private http: HttpClient) {}
 
   getCategories(): Observable<CategoryView[]> {

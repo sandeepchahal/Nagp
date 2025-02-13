@@ -7,7 +7,8 @@ import { SearchResponse } from '../models/searchResponse.model';
   providedIn: 'root',
 })
 export class SearchService {
-  private apiUrl = 'http://localhost:5204/api/search'; // Update with your API URL
+  private apiUrl =
+    'http://searchapi-public-service.default.svc.cluster.local/api/search'; // Update with your API URL
 
   private searchQuerySubject = new BehaviorSubject<string>('');
   searchQuery$ = this.searchQuerySubject.asObservable();
