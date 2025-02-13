@@ -1,0 +1,56 @@
+name: 'Build and Deploy Product Kafka Consumer Service'
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'CTT_Online_Shopping/Services/KafkaConsumers/**' 
+env:
+  PROJECT_ID: '${{ secrets.GCP_PROJECT_ID }}' # Your Google Cloud project ID
+  GKE_CLUSTER: 'mcart-autopilot-cluster-1' # Your GKE cluster name
+  GKE_ZONE: 'us-central1' # Your GKE cluster zone
+  DEPLOYMENT_NAME: 'product-kafka-service' # Your deployment name
+  REPOSITORY: 'ecommerce-repo' # Your Artifact Registry repository name
+  IMAGE: 'product-kafka-service' # Your Docker image name
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: 'Checkout'
+        uses: 'actions/checkout@v4'
+
+      # Authenticate with Google Cloud using JSON key
+      - name: 'Authenticate Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      # Set up Docker to use Google Artifact Registry
+      - name: 'Docker Auth'
+        run: |
+          gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      # Get GKE credentials
+      - name: 'Set up GKE credentials'
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: '${{ env.GKE_CLUSTER }}'
+          location: '${{ env.GKE_ZONE }}'
+
+      # Build and push Product Kafka Consumer Service
+      - name: 'Build and push Product Kafka Consumer Service'
+        run: |
+          cd ./CTT_Online_Shopping/Services/KafkaConsumers/
+          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/product-kafka-service:latest .
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/product-kafka-service:latest
+
+      # Deploy Product Kafka Consumer Service to GKE
+      - name: 'Deploy Product Kafka Consumer Service'
+        run: |
+          kubectl apply -f ./CTT_Online_Shopping/k8s/Services/FrontEnd/product-kafka-service-deployment.yml
+          kubectl rollout status deployment/product-kafka-service
+          kubectl get services -o wide

@@ -22,6 +22,8 @@ spec:
       labels:
         app: sql-server
     spec:
+      securityContext:
+        fsGroup: 10001  # Ensures volume ownership is set to 'mssql' user inside the container
       containers:
         - name: sql-server
           image: mcr.microsoft.com/mssql/server:2019-latest
@@ -40,6 +42,22 @@ spec:
           volumeMounts:
             - name: sql-data
               mountPath: /var/opt/mssql
+            - name: init-sql
+              mountPath: /docker-entrypoint-initdb.d  # Optional, if you want to run custom initialization scripts
+      initContainers:
+        - name: init-permissions
+          image: busybox
+          command: ['sh', '-c', 'chown -R 10001:10001 /var/opt/mssql']  # Ensures volume permissions are correct
+          volumeMounts:
+            - name: sql-data
+              mountPath: /var/opt/mssql
+      volumes:
+        - name: sql-data
+          persistentVolumeClaim:
+            claimName: sql-data-pvc  # Ensure this matches your PVC
+        - name: init-sql
+          configMap:
+            name: sql-init-scripts  # Optional, if using an init script
   volumeClaimTemplates:
     - metadata:
         name: sql-data
@@ -60,5 +78,3 @@ spec:
   clusterIP: None
   selector:
     app: sql-server
-
-
