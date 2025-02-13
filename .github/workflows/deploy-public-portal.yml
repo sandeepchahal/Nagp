@@ -6,6 +6,13 @@ on:
       - 'main'
     paths:
       - 'CTT_Online_Shopping/FrontEnd/public-portal/**' # Trigger only when Angular files change
+env:
+  PROJECT_ID: '${{ secrets.GCP_PROJECT_ID }}' # Your Google Cloud project ID
+  GKE_CLUSTER: 'mcart-autopilot-cluster-1' # Your GKE cluster name
+  GKE_ZONE: 'us-central1' # Your GKE cluster zone
+  DEPLOYMENT_NAME: 'public-portal' # Your deployment name
+  REPOSITORY: 'ecommerce-repo' # Your Artifact Registry repository name
+  IMAGE: 'public-portal' # Your Docker image name
 
 jobs:
   build-and-deploy:
