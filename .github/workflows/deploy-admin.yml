@@ -71,6 +71,6 @@ jobs:
       # Deploy Angular Admin Portal to GKE
       - name: 'Deploy Angular Admin Portal'
         run: |
-          kubectl apply -f ./CTT_Online_Shopping/k8s/admin-portal-deployment.yml
+          kubectl apply -f ./CTT_Online_Shopping/k8s/Admin/admin-portal-deployment.yml
           kubectl rollout status deployment/admin-portal
           kubectl get services -o wide
