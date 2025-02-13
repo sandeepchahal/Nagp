@@ -61,7 +61,8 @@ jobs:
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide
             # Build and push Angular Admin Portal
-
+            
+      # Build and push Angular Admin Portal
       - name: 'Build and push Angular Admin Portal'
         run: |
           cd ./CTT_Online_Shopping/FrontEnd/admin-portal
