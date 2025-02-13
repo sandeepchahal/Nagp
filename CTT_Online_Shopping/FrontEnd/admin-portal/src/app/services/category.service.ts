@@ -10,7 +10,8 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class CategoryService {
-  private apiUrl = 'http://localhost:5175/api/category'; // Update with your API URL
+  private apiUrl =
+    'http://productapi-admin-service.default.svc.cluster.local/api/category'; // Update with your API URL
 
   constructor(private http: HttpClient) {}
 

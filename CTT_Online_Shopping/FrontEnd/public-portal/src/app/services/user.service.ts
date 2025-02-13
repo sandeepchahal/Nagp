@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = 'https://api.example.com/user'; // Replace with actual API
+  private apiUrl =
+    'http://userapi-public-service.default.svc.cluster.local/user'; // Replace with actual API
 
   constructor(private http: HttpClient) {}
 

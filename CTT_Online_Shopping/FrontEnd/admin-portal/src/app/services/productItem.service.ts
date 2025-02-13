@@ -9,7 +9,8 @@ import {
   providedIn: 'root',
 })
 export class ProductItemService {
-  private apiUrl = 'http://localhost:5175/api/product/item'; // Update with your API URL
+  private apiUrl =
+    'http://productapi-admin-service.default.svc.cluster.local/api/product/item'; // Update with your API URL
   constructor(private http: HttpClient) {}
 
   addProductItem(productItem: ProductItemCommand): Observable<any> {

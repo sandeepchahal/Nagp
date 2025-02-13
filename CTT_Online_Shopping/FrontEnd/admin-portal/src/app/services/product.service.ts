@@ -11,7 +11,8 @@ import {
   providedIn: 'root',
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:5175/api/product'; // Update with your API URL
+  private apiUrl =
+    'http://productapi-admin-service.default.svc.cluster.local/api/product';
 
   constructor(private http: HttpClient) {}
 

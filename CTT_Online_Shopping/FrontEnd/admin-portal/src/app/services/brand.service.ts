@@ -7,7 +7,8 @@ import { Observable } from 'rxjs/internal/Observable';
   providedIn: 'root',
 })
 export class BrandService {
-  private apiUrl = 'http://localhost:5175/api/brand'; // Update with your API URL
+  private apiUrl =
+    'http://productapi-admin-service.default.svc.cluster.local/api/brand'; // Update with your API URL
 
   constructor(private http: HttpClient) {}
 
