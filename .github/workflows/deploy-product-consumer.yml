@@ -41,16 +41,19 @@ jobs:
           cluster_name: '${{ env.GKE_CLUSTER }}'
           location: '${{ env.GKE_ZONE }}'
 
-      # Build and push Product Kafka Consumer Service
-      - name: 'Build and push Product Kafka Consumer Service'
+      # Build and push the Docker image
+      - name: 'Build and push Docker container'
         run: |
-          cd ./CTT_Online_Shopping/Services/KafkaConsumers/
-          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/background-worker:latest .
-          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/background-worker:latest
+          DOCKER_TAG="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest"
+          docker build -t $DOCKER_TAG ./CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer
+          docker push $DOCKER_TAG
 
-      # Deploy Product Kafka Consumer Service to GKE
-      - name: 'Deploy Product Kafka Consumer Service'
+      # Deploy to GKE using your Kubernetes manifest
+      - name: 'Deploy to GKE'
         run: |
-          kubectl apply -f ./CTT_Online_Shopping/k8s/Services/Internal/background-worker-deployment.yml
-          kubectl rollout status deployment/background-worker
+          
+          kubectl create namespace admin --dry-run=client -o yaml | kubectl apply -f -
+          kubectl apply -f ./CTT_Online_Shopping/K8s/Services/Internal/background-worker-deployment.yml
+          kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide
+          
