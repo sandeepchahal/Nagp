@@ -36,7 +36,7 @@ jobs:
       # Set up Docker to use Google Artifact Registry
       - name: 'Docker Auth'
         run: |
-          gcloud auth configure-docker
+          gcloud auth configure-docker us-central1-docker.pkg.dev
 
       # Get GKE credentials
       - name: 'Set up GKE credentials'
