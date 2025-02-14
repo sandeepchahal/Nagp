@@ -6,8 +6,14 @@ using UserAPI.ServiceRegistrations;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
-builder.Services.AddOpenApi();
+
+// Add Swagger only in Development environment
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddSwaggerGen();
+    builder.Services.AddOpenApi();
+}
+
 builder.Services.ConfigureDbServices();
 
 builder.Services.AddDbContext<UserDbContext>(options =>
@@ -26,7 +32,6 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 6;
     options.Password.RequireNonAlphanumeric = false;
-
     options.User.RequireUniqueEmail = true;
 });
 

@@ -5,12 +5,14 @@ import {
   ProductItemCommand,
   ProductItemView,
 } from '../models/productItem.model';
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root',
 })
 export class ProductItemService {
-  private apiUrl =
-    'http://productapi-public-service.default.svc.cluster.local/api/product'; // Update with your API URL
+  private apiUrl = environment.productItemApiUrl;
+
   constructor(private http: HttpClient) {}
 
   addProductItem(productItem: ProductItemCommand): Observable<any> {
@@ -21,7 +23,7 @@ export class ProductItemService {
   }
   getProductItemById(productItemId: string): Observable<ProductItemView> {
     return this.http.get<ProductItemView>(
-      `${this.apiUrl}/item/get/${productItemId}`
+      `${this.apiUrl}/get/${productItemId}`
     );
   }
 }

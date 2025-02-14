@@ -5,12 +5,14 @@ import {
   ProductItemCommand,
   ProductItemView,
 } from '../models/productItem/productItem.model';
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root',
 })
 export class ProductItemService {
-  private apiUrl =
-    'http://productapi-admin-service.default.svc.cluster.local/api/product/item'; // Update with your API URL
+  private apiUrl = environment.productItemApiUrl;
+
   constructor(private http: HttpClient) {}
 
   addProductItem(productItem: ProductItemCommand): Observable<any> {

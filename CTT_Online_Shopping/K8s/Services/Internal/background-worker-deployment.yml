@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,12 +16,14 @@ spec:
     spec:
       containers:
         - name: background-worker
-          image: "us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/background-worker:latest"
+        - env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+          image: us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/background-worker:latest
           resources:
-            requests:
-              cpu: "500m"
-              memory: "1Gi"
             limits:
-              cpu: "1000m"
-              memory: "2Gi"
-
+              cpu: 1000m
+              memory: 2Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi

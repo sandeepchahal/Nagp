@@ -1,14 +1,18 @@
-using Elastic.Clients.Elasticsearch;
-using Microsoft.IdentityModel.Protocols.Configuration;
 using SearchAPI.ServiceConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
-builder.Services.AddOpenApi();
-await builder.Services.RegisterElasticClientServices(builder.Configuration);
 
+// Add Swagger only in Development environment
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddSwaggerGen();
+    builder.Services.AddOpenApi();
+    
+}
+
+await builder.Services.RegisterElasticClientServices(builder.Configuration);
 
 // Allowing all origins for testing purposes (you can restrict to specific domains later)
 builder.Services.AddCors(options =>

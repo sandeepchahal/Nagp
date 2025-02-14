@@ -6,13 +6,12 @@ import {
   ProductCommand,
   ProductView,
 } from '../models/product/product.model';
-
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  private apiUrl =
-    'http://productapi-admin-service.default.svc.cluster.local/api/product';
+  private apiUrl = environment.productApiUrl;
 
   constructor(private http: HttpClient) {}
 

@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl =
-    'http://userapi-public-service.default.svc.cluster.local/api/user';
+  private apiUrl = environment.authApiUrl;
 
   private userInfoSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
     null
