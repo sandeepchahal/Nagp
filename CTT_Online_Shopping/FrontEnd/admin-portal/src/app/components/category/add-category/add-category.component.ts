@@ -61,6 +61,10 @@ export class AddCategoryComponent {
         ? Object.values(MenCategories)
         : Object.values(WomenCategories);
     this.category.name = ''; // Reset category name when gender changes
+    // Set the first value by default if the list is not empty
+    this.category.name =
+      this.categoryList.length > 0 ? this.categoryList[0] : '';
+
     this.updateSubCategories();
   }
 
