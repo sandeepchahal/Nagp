@@ -15,6 +15,7 @@ public static class ConfigureServices
     private static async Task<ElasticsearchClient> ConfigureConnection(ConfigurationManager configurationManager)
     {
         var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        Console.WriteLine($"Environment is  {env}");
             var configuration = configurationManager;
             ElasticsearchClientSettings settings;
             string? cloudUrl, defaultIndex, username, password;
