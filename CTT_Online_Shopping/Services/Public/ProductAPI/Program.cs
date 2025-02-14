@@ -49,7 +49,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.Use(async (context, next) =>
 {
-    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    var loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
+    var logger = loggerFactory.CreateLogger("RequestLogger");
+
     logger.LogInformation("Request received at {Path} with method {Method}", context.Request.Path, context.Request.Method);
     
     await next(); // Call the next middleware
