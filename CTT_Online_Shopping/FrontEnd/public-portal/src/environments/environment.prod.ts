@@ -1,14 +1,9 @@
 export const environment = {
   production: true,
-  categoryApiUrl:
-    'http://productapi-public-service.default.svc.cluster.local/api/category', // GKE API
-  authApiUrl:
-    'http://userapi-public-service.default.svc.cluster.local/api/user',
-  productApiUrl:
-    'http://productapi-public-service.default.svc.cluster.local/api/product',
-  productItemApiUrl:
-    'http://productapi-public-service.default.svc.cluster.local/api/product/item',
-  searchApiUrl:
-    'http://searchapi-public-service.default.svc.cluster.local/api/search',
-  userApiUrl: 'http://userapi-public-service.default.svc.cluster.local/user',
+  categoryApiUrl: 'http://publicapi.com/api/category',
+  authApiUrl: 'http://publicapi.com/api/user',
+  productApiUrl: 'http://publicapi.com/api/product',
+  productItemApiUrl: 'http://publicapi.com/api/product/item',
+  searchApiUrl: 'http://publicapi.com/api/search',
+  userApiUrl: 'http://publicapi.com/api/user',
 };
