@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  categoryApiUrl: 'http://adminapi.com/api/category',
-  brandApiUrl: 'http://adminapi.com/api/brand',
-  productApiUrl: 'http://adminapi.com/api/product',
-  productItemApiUrl: 'http://adminapi.com/api/product/item',
+  categoryApiUrl: 'https://adminapi.com/api/category',
+  brandApiUrl: 'https://adminapi.com/api/brand',
+  productApiUrl: 'https://adminapi.com/api/product',
+  productItemApiUrl: 'https://adminapi.com/api/product/item',
 };
