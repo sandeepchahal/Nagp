@@ -1,8 +1,9 @@
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ProductAPI.DbServices;
 
 namespace ProductAPI.Controllers;
-
+[EnableCors("AllowAll")]
 [ApiController]
 [Route("api/[controller]")]
 public class ProductController(IProductDbService productDbService,ILogger<ProductController> logger, ICategoryDbService categoryDbService)
