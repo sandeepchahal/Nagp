@@ -2,13 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { CategoryView } from '../models/category.model';
-
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class HeaderService {
-  private apiUrl =
-    'http://productapi-public-service.default.svc.cluster.local/api/product'; // Update with your API URL
+  private apiUrl = environment.productApiUrl; // Update with your API URL
   constructor(private http: HttpClient) {}
 
   getCategories(): Observable<CategoryView[]> {

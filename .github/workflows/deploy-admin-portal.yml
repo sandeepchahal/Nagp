@@ -26,19 +26,17 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
-      - name: Build and push Angular Admin Portal
+      - name: Build and push Angular Admin Portal container
         run: |
-          cd ./CTT_Online_Shopping/FrontEnd/admin-portal docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/admin-portal:latest . docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/admin-portal:latest
-      # Deploy Angular Admin Portal to GKE
-      # Build and push Angular Admin Portal
-      # Set up Docker to use Google Artifact Registry
-      # Authenticate with Google Cloud using JSON key
-      # Checkout the code
-      - name: Deploy Angular Admin Portal
+          DOCKER_TAG="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest"
+          docker build -t $DOCKER_TAG ./CTT_Online_Shopping/FrontEnd/admin-portal
+          docker push $DOCKER_TAG
+      - name: Deploy to GKE
         run: |
-          kubectl apply -f ./CTT_Online_Shopping/k8s/Services/FrontEnd/admin-portal-deployment.yml
-          kubectl rollout status deployment/admin-portal
+          kubectl apply -f ./CTT_Online_Shopping/K8s/FrontEnd/admin-portal-deployment.yml
+          kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide
+          
 name: Build and Deploy Angular Admin Portal
 'on':
   push:

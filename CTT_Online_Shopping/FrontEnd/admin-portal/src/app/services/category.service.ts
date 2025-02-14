@@ -5,13 +5,13 @@ import {
   CategoryView,
 } from '../models/category/category.model';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoryService {
-  private apiUrl =
-    'http://productapi-admin-service.default.svc.cluster.local/api/category'; // Update with your API URL
+  private apiUrl = environment.categoryApiUrl;
 
   constructor(private http: HttpClient) {}
 

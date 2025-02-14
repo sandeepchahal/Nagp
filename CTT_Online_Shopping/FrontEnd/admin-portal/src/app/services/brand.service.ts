@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BrandCommand, BrandView } from '../models/brand/brand.model';
 import { Observable } from 'rxjs/internal/Observable';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BrandService {
-  private apiUrl =
-    'http://productapi-admin-service.default.svc.cluster.local/api/brand'; // Update with your API URL
+  private apiUrl = environment.brandApiUrl; // Update with your API URL
 
   constructor(private http: HttpClient) {}
 

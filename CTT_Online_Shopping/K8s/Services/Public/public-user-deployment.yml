@@ -1,3 +1,5 @@
+---
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,17 +16,20 @@ spec:
         app: userapi-public
     spec:
       containers:
-      - name: userapi-public
-        image: us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/userapi-public:latest
-        ports:
-        - containerPort: 8080
-        resources:
-          requests:
-            cpu: "500m"
-            memory: "1Gi"
-          limits:
-            cpu: "1000m"
-            memory: "2Gi"
+        - env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+          image: us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/userapi-public:latest
+          name: userapi-public
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
 ---
 apiVersion: v1
 kind: Service
@@ -32,9 +37,9 @@ metadata:
   name: userapi-public-service
   namespace: default
 spec:
-  type: LoadBalancer
   ports:
-  - port: 80
-    targetPort: 8080
+    - port: 80
+      targetPort: 8080
   selector:
     app: userapi-public
+  type: LoadBalancer
