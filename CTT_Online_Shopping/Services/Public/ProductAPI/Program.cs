@@ -26,7 +26,8 @@ builder.Services.AddCors(options =>
     });
 });
 
-
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 // Register MongoDB camelCase convention
 var conventionPack = new ConventionPack
 {
@@ -44,9 +45,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseHttpsRedirection();
+app.Use(async (context, next) =>
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    logger.LogInformation("Request received at {Path} with method {Method}", context.Request.Path, context.Request.Method);
+    
+    await next(); // Call the next middleware
+});
+
 // Add CORS middleware
 app.UseCors("AllowAll");  // Use the CORS policy you've configured
-
 app.MapControllers();
 app.Run();
