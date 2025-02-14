@@ -37,7 +37,7 @@ ConventionRegistry.Register("CamelCaseConvention", conventionPack, _ => true);
 
 
 var app = builder.Build();
-
+app.UseCors("AllowAll");  // Use the CORS policy you've configured
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -58,6 +58,6 @@ app.Use(async (context, next) =>
 });
 
 // Add CORS middleware
-app.UseCors("AllowAll");  // Use the CORS policy you've configured
+
 app.MapControllers();
 app.Run();
