@@ -37,9 +37,7 @@ jobs:
           docker push $DOCKER_TAG
       - name: Deploy to GKE
         run: |
-
-          kubectl create namespace admin --dry-run=client -o yaml | kubectl apply -f -
-          kubectl apply -f ./CTT_Online_Shopping/K8s/Services/Admin/admin-deployment.yml
+          kubectl apply -f ./CTT_Online_Shopping/K8s/Services/Admin/admin-product-deployment.yml
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide
             # Build and push Angular Admin Portal

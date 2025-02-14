@@ -33,8 +33,6 @@ jobs:
           docker push $DOCKER_TAG
       - name: Deploy to GKE
         run: |
-
-          kubectl create namespace admin --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f ./CTT_Online_Shopping/K8s/Services/Internal/background-worker-deployment.yml
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide

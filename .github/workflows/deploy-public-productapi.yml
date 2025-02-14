@@ -42,8 +42,6 @@ jobs:
       # Checkout the code
       - name: Deploy to GKE
         run: |
-
-          kubectl create namespace public --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f ./CTT_Online_Shopping/K8s/Services/Public/public-product-deployment.yml
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide

@@ -30,11 +30,6 @@ jobs:
         run: |
           kubectl apply -f ./CTT_Online_Shopping/K8s/databases/elasticsearch-deployment.yml
 
-      # Deploy Kafka
-      # Deploy SQL Server
-      # Get GKE credentials
-      # Authenticate with Google Cloud
-      # Checkout the code
       - name: Deploy Kafka
         run: |
           kubectl apply -f ./CTT_Online_Shopping/K8s/databases/kafka-deployment.yml
