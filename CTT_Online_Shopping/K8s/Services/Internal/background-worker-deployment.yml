@@ -15,11 +15,11 @@ spec:
         app: background-worker
     spec:
       containers:
-        - name: background-worker
         - env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
           image: us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/background-worker:latest
+          name: background-worker
           resources:
             limits:
               cpu: 1000m
