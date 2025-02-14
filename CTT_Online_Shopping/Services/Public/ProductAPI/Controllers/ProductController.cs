@@ -5,7 +5,7 @@ namespace ProductAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductController(IProductDbService productDbService, ICategoryDbService categoryDbService)
+public class ProductController(IProductDbService productDbService,ILogger<ProductController> logger, ICategoryDbService categoryDbService)
     : ControllerBase
 {
     
@@ -58,8 +58,10 @@ public class ProductController(IProductDbService productDbService, ICategoryDbSe
     {
         try
         {
-            var product = await categoryDbService.GetAllCategories();
-            return Ok(product);
+            logger.LogInformation("Category is hit successfully");
+            var categories = await categoryDbService.GetAllCategories();
+            logger.LogInformation($"Categories  count - {categories.Count}");
+            return Ok(categories);
         }
         catch (Exception e)
         {
