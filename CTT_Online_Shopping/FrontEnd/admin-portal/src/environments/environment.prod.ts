@@ -1,11 +1,7 @@
 export const environment = {
-  production: false,
-  categoryApiUrl:
-    'http://productapi-admin-service.default.svc.cluster.local/api/category',
-  brandApiUrl:
-    'http://productapi-admin-service.default.svc.cluster.local/api/brand',
-  productApiUrl:
-    'http://productapi-admin-service.default.svc.cluster.local/api/product',
-  productItemApiUrl:
-    'http://productapi-admin-service.default.svc.cluster.local/api/product/item',
+  production: true,
+  categoryApiUrl: 'http://adminapi.com/api/category',
+  brandApiUrl: 'http://adminapi.com/api/brand',
+  productApiUrl: 'http://adminapi.com/api/product',
+  productItemApiUrl: 'http://adminapi.com/api/product/item',
 };
