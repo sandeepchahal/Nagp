@@ -1,56 +1,48 @@
-name: 'Build and Deploy Angular Admin Portal'
-
-on:
-  push:
-    branches:
-      - 'main'
-    paths:
-      - 'CTT_Online_Shopping/FrontEnd/admin-portal/**' # Trigger only when Angular files change
+---
 env:
-  PROJECT_ID: '${{ secrets.GCP_PROJECT_ID }}' # Your Google Cloud project ID
-  GKE_CLUSTER: 'mcart-autopilot-cluster-1' # Your GKE cluster name
-  GKE_ZONE: 'us-central1' # Your GKE cluster zone
-  DEPLOYMENT_NAME: 'admin-portal' # Your deployment name
-  REPOSITORY: 'ecommerce-repo' # Your Artifact Registry repository name
-  IMAGE: 'admin-portal' # Your Docker image name
-
+  DEPLOYMENT_NAME: admin-portal
+  GKE_CLUSTER: mcart-autopilot-cluster-1
+  GKE_ZONE: us-central1
+  IMAGE: admin-portal
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REPOSITORY: ecommerce-repo
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      # Checkout the code
-      - name: 'Checkout'
-        uses: 'actions/checkout@v4'
-
-      # Authenticate with Google Cloud using JSON key
-      - name: 'Authenticate Google Cloud'
-        uses: 'google-github-actions/auth@v1'
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Authenticate Google Cloud
+        uses: google-github-actions/auth@v1
         with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
-
-      # Set up Docker to use Google Artifact Registry
-      - name: 'Docker Auth'
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      - name: Docker Auth
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
 
       # Get GKE credentials
-      - name: 'Set up GKE credentials'
-        uses: 'google-github-actions/get-gke-credentials@v2'
+      - name: Set up GKE credentials
+        uses: google-github-actions/get-gke-credentials@v2
         with:
-          cluster_name: '${{ env.GKE_CLUSTER }}'
-          location: '${{ env.GKE_ZONE }}'
-
-      # Build and push Angular Admin Portal
-      - name: 'Build and push Angular Admin Portal'
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+      - name: Build and push Angular Admin Portal
         run: |
-          cd ./CTT_Online_Shopping/FrontEnd/admin-portal
-          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/admin-portal:latest .
-          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/admin-portal:latest
-
+          cd ./CTT_Online_Shopping/FrontEnd/admin-portal docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/admin-portal:latest . docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ecommerce-repo/admin-portal:latest
       # Deploy Angular Admin Portal to GKE
-      - name: 'Deploy Angular Admin Portal'
+      # Build and push Angular Admin Portal
+      # Set up Docker to use Google Artifact Registry
+      # Authenticate with Google Cloud using JSON key
+      # Checkout the code
+      - name: Deploy Angular Admin Portal
         run: |
           kubectl apply -f ./CTT_Online_Shopping/k8s/Services/FrontEnd/admin-portal-deployment.yml
           kubectl rollout status deployment/admin-portal
           kubectl get services -o wide
+name: Build and Deploy Angular Admin Portal
+'on':
+  push:
+    branches:
+      - main
+    paths:
+      - CTT_Online_Shopping/FrontEnd/admin-portal/**

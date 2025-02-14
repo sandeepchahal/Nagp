@@ -1,59 +1,47 @@
-name: 'Build and Deploy Product Kafka Consumer Service'
-
-on:
-  push:
-    branches:
-      - 'main'
-    paths:
-      - 'CTT_Online_Shopping/Services/KafkaConsumers/**' 
+---
 env:
-  PROJECT_ID: '${{ secrets.GCP_PROJECT_ID }}' # Your Google Cloud project ID
-  GKE_CLUSTER: 'mcart-autopilot-cluster-1' # Your GKE cluster name
-  GKE_ZONE: 'us-central1' # Your GKE cluster zone
-  DEPLOYMENT_NAME: 'background-worker' # Your deployment name
-  REPOSITORY: 'ecommerce-repo' # Your Artifact Registry repository name
-  IMAGE: 'background-worker' # Your Docker image name
-
+  DEPLOYMENT_NAME: background-worker
+  GKE_CLUSTER: mcart-autopilot-cluster-1
+  GKE_ZONE: us-central1
+  IMAGE: background-worker
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REPOSITORY: ecommerce-repo
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      # Checkout the code
-      - name: 'Checkout'
-        uses: 'actions/checkout@v4'
-
-      # Authenticate with Google Cloud using JSON key
-      - name: 'Authenticate Google Cloud'
-        uses: 'google-github-actions/auth@v1'
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Authenticate Google Cloud
+        uses: google-github-actions/auth@v1
         with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
-
-      # Set up Docker to use Google Artifact Registry
-      - name: 'Docker Auth'
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      - name: Docker Auth
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
 
       # Get GKE credentials
-      - name: 'Set up GKE credentials'
-        uses: 'google-github-actions/get-gke-credentials@v2'
+      - name: Set up GKE credentials
+        uses: google-github-actions/get-gke-credentials@v2
         with:
-          cluster_name: '${{ env.GKE_CLUSTER }}'
-          location: '${{ env.GKE_ZONE }}'
-
-      # Build and push the Docker image
-      - name: 'Build and push Docker container'
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+      - name: Build and push Docker container
         run: |
           DOCKER_TAG="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest"
           docker build -t $DOCKER_TAG ./CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer
           docker push $DOCKER_TAG
-
-      # Deploy to GKE using your Kubernetes manifest
-      - name: 'Deploy to GKE'
+      - name: Deploy to GKE
         run: |
-          
+
           kubectl create namespace admin --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f ./CTT_Online_Shopping/K8s/Services/Internal/background-worker-deployment.yml
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide
-          
+name: Build and Deploy Product Kafka Consumer Service
+'on':
+  push:
+    branches:
+      - main
+    paths:
+      - CTT_Online_Shopping/Services/KafkaConsumers/**

@@ -1,52 +1,47 @@
-name: 'Deploy Databases and Kafka'
-
-on:
-  push:
-    branches:
-      - 'main'
-    paths:
-      - 'CTT_Online_Shopping/K8s/databases/**'
+---
 env:
-  PROJECT_ID: '${{ secrets.GCP_PROJECT_ID }}' # Your Google Cloud project ID
-  GKE_CLUSTER: 'mcart-autopilot-cluster-1' # Your GKE cluster name
-  GKE_ZONE: 'us-central1' # Your GKE cluster zone
-  DEPLOYMENT_NAME: 'database-deployment' # Your deployment name
-  REPOSITORY: 'ecommerce-repo' # Your Artifact Registry repository name
-  IMAGE: 'database-deployment' # Your Docker image name
-
+  DEPLOYMENT_NAME: database-deployment
+  GKE_CLUSTER: mcart-autopilot-cluster-1
+  GKE_ZONE: us-central1
+  IMAGE: database-deployment
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REPOSITORY: ecommerce-repo
 jobs:
   deploy-databases:
     runs-on: ubuntu-latest
-
     steps:
-      # Checkout the code
-      - name: 'Checkout'
+      - name: Checkout
         uses: actions/checkout@v4
-
-      # Authenticate with Google Cloud
-      - name: 'Authenticate Google Cloud'
+      - name: Authenticate Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
-
-      # Get GKE credentials
-      - name: 'Set up GKE credentials'
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      - name: Set up GKE credentials
         uses: google-github-actions/get-gke-credentials@v2
         with:
-          cluster_name: '${{ env.GKE_CLUSTER }}'
-          location: '${{ env.GKE_ZONE }}'
-
-      # Deploy SQL Server
-      - name: 'Deploy SQL Server'
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+      - name: Deploy SQL Server
         run: |
           kubectl apply -f ./CTT_Online_Shopping/K8s/databases/sql-server-deployment.yml
 
       # Deploy Elasticsearch
-      - name: 'Deploy Elasticsearch'
+      - name: Deploy Elasticsearch
         run: |
           kubectl apply -f ./CTT_Online_Shopping/K8s/databases/elasticsearch-deployment.yml
 
       # Deploy Kafka
-      - name: 'Deploy Kafka'
+      # Deploy SQL Server
+      # Get GKE credentials
+      # Authenticate with Google Cloud
+      # Checkout the code
+      - name: Deploy Kafka
         run: |
           kubectl apply -f ./CTT_Online_Shopping/K8s/databases/kafka-deployment.yml
+name: Deploy Databases and Kafka
+'on':
+  push:
+    branches:
+      - main
+    paths:
+      - CTT_Online_Shopping/K8s/databases/**
