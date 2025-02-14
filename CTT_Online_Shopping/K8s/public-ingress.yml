@@ -1,0 +1,32 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-ingress
+  namespace: default
+spec:
+  rules:
+    - host: publicapi.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: productapi-public-service
+                port:
+                  number: 80
+            path: /api/product
+            pathType: Prefix
+          - backend:
+              service:
+                name: userapi-public-service
+                port:
+                  number: 80
+            path: /api/user
+            pathType: Prefix
+          - backend:
+              service:
+                name: searchapi-public-service
+                port:
+                  number: 80
+            path: /api/search
+            pathType: Prefix

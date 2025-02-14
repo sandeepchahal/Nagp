@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   categoryApiUrl:
-    'http://productapi-admin-service.default.svc.cluster.local/api/category', // GKE API
+    'http://productapi-public-service.default.svc.cluster.local/api/category', // GKE API
   authApiUrl:
     'http://userapi-public-service.default.svc.cluster.local/api/user',
   productApiUrl:
