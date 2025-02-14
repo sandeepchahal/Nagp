@@ -46,6 +46,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 ConfigureMigration.ConfigureMigrationServices(app);
@@ -58,6 +60,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
+app.Use(async (context, next) =>
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    logger.LogInformation("Request received at {Path} with method {Method}", context.Request.Path, context.Request.Method);
+    
+    await next(); // Call the next middleware
+});
+
 app.UseCors("AllowAll");
 app.MapControllers();
 app.Run();

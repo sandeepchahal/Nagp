@@ -28,6 +28,9 @@ var conventionPack = new ConventionPack
 };
 ConventionRegistry.Register("CamelCaseConvention", conventionPack, _ => true);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -39,6 +42,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.Use(async (context, next) =>
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    logger.LogInformation("Request received at {Path} with method {Method}", context.Request.Path, context.Request.Method);
+    
+    await next(); // Call the next middleware
+});
+
 
 // Add CORS middleware
 app.UseCors("AllowAll");  // Use the CORS policy you've configured
