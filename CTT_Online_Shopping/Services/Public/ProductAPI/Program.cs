@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()  // You can also specify a domain like "https://yourfrontend.com"
+        policy.WithOrigins("http://34.58.44.189")  // You can also specify a domain like "https://yourfrontend.com"
             .AllowAnyMethod()  // You can also specify the allowed HTTP methods like .AllowGet(), .AllowPost()...
             .AllowAnyHeader(); // You can also specify headers if needed
     });
