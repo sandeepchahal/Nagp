@@ -16,6 +16,7 @@ spec:
       containers:
       - name: public-portal
         image: us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/public-portal:latest
+        imagePullPolicy: Always  
         ports:
         - containerPort: 80
 ---
