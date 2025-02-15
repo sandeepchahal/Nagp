@@ -41,43 +41,4 @@ spec:
       targetPort: 8080
   selector:
     app: productapi-admin
-  type: ClusterIP
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: api-ingress
-  namespace: default
-spec:
-  rules:
-    - host: adminapi.com
-      http:
-        paths:
-          - backend:
-              service:
-                name: productapi-admin-service
-                port:
-                  number: 80
-            path: /api/product
-            pathType: Prefix
-          - backend:
-              service:
-                name: productapi-admin-service
-                port:
-                  number: 80
-            path: /api/product/item
-            pathType: Prefix
-          - backend:
-              service:
-                name: productapi-admin-service
-                port:
-                  number: 80
-            path: /api/brand
-            pathType: Prefix
-          - backend:
-              service:
-                name: productapi-admin-service
-                port:
-                  number: 80
-            path: /api/category
-            pathType: Prefix
+  type: LoadBalancer
