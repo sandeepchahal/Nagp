@@ -1,5 +1,4 @@
 const apiUrl: string = 'http://localhost:5267';
-
 export const environment = {
   production: false,
   categoryApiUrl: `${apiUrl}/api/category`, // GKE API
