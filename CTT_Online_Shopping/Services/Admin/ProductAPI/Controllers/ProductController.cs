@@ -8,6 +8,7 @@ using ProductAPI.Models.Query;
 
 namespace ProductAPI.Controllers;
 
+[ApiController]
 [Route("api/product")]
 public partial class ProductController(
     IMongoCollection<ProductDb> productCollection,
