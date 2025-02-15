@@ -1,4 +1,5 @@
 name: Build and Deploy Angular Public Portal
+
 on:
   push:
     branches:
