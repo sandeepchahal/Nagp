@@ -1,7 +1,8 @@
+const apiUrl = 'http://localhost:5175';
 export const environment = {
   production: false,
-  categoryApiUrl: 'http://localhost:5175/api/category',
-  brandApiUrl: 'http://localhost:5175/api/brand',
-  productApiUrl: 'http://localhost:5175/api/product',
-  productItemApiUrl: 'http://localhost:5175/api/product/item',
+  categoryApiUrl: `${apiUrl}/api/category`,
+  brandApiUrl: `${apiUrl}api/brand`,
+  productApiUrl: `${apiUrl}/api/product`,
+  productItemApiUrl: `${apiUrl}/api/product/item`,
 };
