@@ -1,36 +1,63 @@
 <!-- app.component.html -->
-<div class="header">
-  <nav>
-    <ul>
-      <li>
-        <a routerLink="/category" routerLinkActive="active">Category</a>
-        <ul>
-          <li><a routerLink="/category" routerLinkActive="active">List</a></li>
-          <li><a routerLink="/category/add" routerLinkActive="active">Add</a></li>
-        </ul>
-      </li>
-      <li>
-        <a routerLink="/product" routerLinkActive="active">Product</a>
-        <ul>
-          <li><a routerLink="/product" routerLinkActive="active">List</a></li>
-          <li><a routerLink="/product/add" routerLinkActive="active">Add</a></li>
-        </ul>
-      </li>
-      <li>
-        <a routerLink="/product-item" routerLinkActive="active">Product Item</a>
-        <ul>
-          <li><a routerLink="/product/items" routerLinkActive="active">List</a></li>
-        </ul>
-      </li>
-      <li>
-        <a routerLink="/brands" routerLinkActive="active">Brand</a>
-        <ul>
-          <li><a routerLink="/brands" routerLinkActive="active">List</a></li>
-          <li><a routerLink="/brand/add" routerLinkActive="active">Add</a></li>
-        </ul>
-      </li>
-    </ul>
-  </nav>
-</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <!-- Logo -->
+    <a class="navbar-brand" href="/">
+      <img src="assets/images/logo.svg"  alt="Logo" width="40" height="40" class="d-inline-block align-top">
+    </a>
+
+    <!-- Toggle button for mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <!-- Category -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Category
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" routerLink="/category" routerLinkActive="active">List</a></li>
+            <li><a class="dropdown-item" routerLink="/category/add" routerLinkActive="active">Add</a></li>
+          </ul>
+        </li>
+
+        <!-- Product -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="productDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Product
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" routerLink="/product" routerLinkActive="active">List</a></li>
+            <li><a class="dropdown-item" routerLink="/product/add" routerLinkActive="active">Add</a></li>
+          </ul>
+        </li>
+
+        <!-- Product Item -->
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/product-item" routerLinkActive="active">Product Item</a>
+        </li>
+
+        <!-- Brands -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="brandDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Brand
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" routerLink="/brands" routerLinkActive="active">List</a></li>
+            <li><a class="dropdown-item" routerLink="/brand/add" routerLinkActive="active">Add</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
 <router-outlet></router-outlet>
