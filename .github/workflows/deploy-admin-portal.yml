@@ -16,6 +16,10 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
+      
+      - name: Set Image Tag
+        run: echo "IMAGE_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
+        
       - name: Docker Auth
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
@@ -31,6 +35,11 @@ jobs:
           DOCKER_TAG="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest"
           docker build -t $DOCKER_TAG ./CTT_Online_Shopping/FrontEnd/admin-portal
           docker push $DOCKER_TAG
+
+      - name: Update Deployment File
+        run: |
+          sed -i "s|TAG_PLACEHOLDER|${{ env.IMAGE_TAG }}|g" ./CTT_Online_Shopping/K8s/FrontEnd/public-portal-deployment.yml
+
       - name: Deploy to GKE
         run: |
           kubectl apply -f ./CTT_Online_Shopping/K8s/FrontEnd/admin-portal-deployment.yml
