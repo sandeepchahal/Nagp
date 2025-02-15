@@ -7,16 +7,32 @@
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    opacity: 0.6;
+    background-color: rgb(250, 250, 250);
   }
   .search-input:hover
   {
     border-color: #66371c;
+    background-color: white;
   }
-  .search-input::after
+  .search-input:focus
   {
     border-color: #66371c;
+    opacity: 1;
+    background-color: white;
+    font-family: sans-serif;  
   }
-  
+
+  .search-input::selection
+  {
+    background-color: white;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: none !important;
+    border-color: inherit !important;
+}
+
   .suggestions {
     position: absolute;
     width: 100%;

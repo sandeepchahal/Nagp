@@ -4,6 +4,7 @@ export const environment = {
   categoryApiUrl: `${apiUrl}/api/category`, // GKE API
   authApiUrl: `${apiUrl}//api/user`,
   productApiUrl: `${apiUrl}/api/product`,
+  homeApiUrl: `${apiUrl}/api/home`,
   productItemApiUrl: `${apiUrl}/api/product/item`,
   searchApiUrl: `${apiUrl}/api/search`,
   userApiUrl: `${apiUrl}/api/ser`,
