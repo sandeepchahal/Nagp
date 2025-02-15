@@ -18,7 +18,8 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.SetIsOriginAllowed(_ => true) // ✅ Allow all origins dynamically
+        policy.SetIsOriginAllowed(origin => true)
+            .WithOrigins("*")
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
@@ -28,7 +29,7 @@ builder.Services.AddCors(options =>
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 var app = builder.Build();
-
+app.UseCors("AllowAll");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -45,6 +46,6 @@ app.Use(async (context, next) =>
     await next(); // Call the next middleware
 });
 
-app.UseCors("AllowAll");
+
 app.MapControllers();
 app.Run();

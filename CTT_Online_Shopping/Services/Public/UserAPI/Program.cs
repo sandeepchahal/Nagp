@@ -34,22 +34,22 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.User.RequireUniqueEmail = true;
 });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.SetIsOriginAllowed(_ => true) // ✅ Allow all origins dynamically
+        policy.SetIsOriginAllowed(origin => true)
+            .WithOrigins("*")
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
 });
 
-
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 var app = builder.Build();
+app.UseCors("AllowAll");
 ConfigureMigration.ConfigureMigrationServices(app);
 
 // Configure the HTTP request pipeline.
