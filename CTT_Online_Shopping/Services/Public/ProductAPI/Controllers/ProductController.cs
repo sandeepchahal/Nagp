@@ -5,7 +5,7 @@ using ProductAPI.DbServices;
 namespace ProductAPI.Controllers;
 [EnableCors("AllowAll")]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/product")]
 public class ProductController(IProductDbService productDbService,ILogger<ProductController> logger, ICategoryDbService categoryDbService)
     : ControllerBase
 {
@@ -54,6 +54,8 @@ public class ProductController(IProductDbService productDbService,ILogger<Produc
             return BadRequest("An error has occurred");
         }
     }
+    
+    
     [HttpGet("categories")]
     public async Task<IActionResult> GetAllCategories()
     {
