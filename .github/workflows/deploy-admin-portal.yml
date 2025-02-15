@@ -32,7 +32,7 @@ jobs:
           location: ${{ env.GKE_ZONE }}
       - name: Build and push Angular Admin Portal container
         run: |
-          DOCKER_TAG="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest"
+          DOCKER_TAG="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}"
           docker build -t $DOCKER_TAG ./CTT_Online_Shopping/FrontEnd/admin-portal
           docker push $DOCKER_TAG
 
