@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using ProductAPI.DbServices;
@@ -8,7 +7,7 @@ using ProductAPI.Models.Products;
 
 namespace ProductAPI.Controllers;
 
-[EnableCors("AllowAll")]
+[ApiController]
 [Route("api/product/item")]
 public class ProductItemController(
     IProductItemDbService productItemDbService,
