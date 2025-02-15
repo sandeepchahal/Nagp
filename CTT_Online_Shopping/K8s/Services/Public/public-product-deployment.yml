@@ -41,41 +41,4 @@ spec:
       targetPort: 8080
   selector:
     app: productapi-public
-  type: ClusterIP
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  annotations:
-    nginx.ingress.kubernetes.io/cors-allow-headers: Authorization, Content-Type
-    nginx.ingress.kubernetes.io/cors-allow-methods: GET, POST, PUT, DELETE, OPTIONS
-    nginx.ingress.kubernetes.io/cors-allow-origin: '*'
-    nginx.ingress.kubernetes.io/enable-cors: 'true'
-  name: api-ingress
-  namespace: default
-spec:
-  rules:
-    - host: publicapi.com
-      http:
-        paths:
-          - backend:
-              service:
-                name: productapi-public-service
-                port:
-                  number: 80
-            path: /api/product/
-            pathType: Prefix
-          - backend:
-              service:
-                name: userapi-public-service
-                port:
-                  number: 80
-            path: /api/user/
-            pathType: Prefix
-          - backend:
-              service:
-                name: searchapi-public-service
-                port:
-                  number: 80
-            path: /api/search/
-            pathType: Prefix
+  type: LoadBalancer
