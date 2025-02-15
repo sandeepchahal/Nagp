@@ -1,9 +1,10 @@
+const apiUrl = 'http://35.202.140.130';
 export const environment = {
   production: true,
-  categoryApiUrl: 'https://publicapi.com/api/category',
-  authApiUrl: 'https://publicapi.com/api/user',
-  productApiUrl: 'http://34.70.118.202/api/product',
-  productItemApiUrl: 'https://publicapi.com/api/product/item',
-  searchApiUrl: 'https://publicapi.com/api/search',
-  userApiUrl: 'https://publicapi.com/api/user',
+  categoryApiUrl: `${apiUrl}/api/category`,
+  authApiUrl: `${apiUrl}/api/user`,
+  productApiUrl: `${apiUrl}/api/product`,
+  productItemApiUrl: `${apiUrl}/api/product/item`,
+  searchApiUrl: `${apiUrl}/api/search`,
+  userApiUrl: `${apiUrl}/api/user`,
 };
