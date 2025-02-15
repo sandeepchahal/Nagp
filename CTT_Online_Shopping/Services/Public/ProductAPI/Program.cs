@@ -17,7 +17,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll", policy =>
     {
         policy.SetIsOriginAllowed(origin => true)
-            .WithOrigins("https://publicapi.com","http://34.70.118.202")
+            .WithOrigins("*")
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
