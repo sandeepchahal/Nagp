@@ -1,4 +1,4 @@
-const apiUrl = 'http://35.202.140.130';
+const apiUrl = 'https://publicapi.com';
 export const environment = {
   production: true,
   categoryApiUrl: `${apiUrl}/api/category`,

@@ -10,6 +10,7 @@ metadata:
   name: api-ingress
   namespace: default
 spec:
+  ingressClassName: nginx
   rules:
     - host: publicapi.com
       http:
