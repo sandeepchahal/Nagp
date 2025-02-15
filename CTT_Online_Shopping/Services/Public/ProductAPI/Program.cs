@@ -4,8 +4,6 @@ using ProductAPI.ServiceRegistrations;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-// Add Swagger only in Development environment
-
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddSwaggerGen();
@@ -46,6 +44,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting(); 
 app.Use(async (context, next) =>
 {
     var loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
@@ -65,6 +64,5 @@ app.Use(async (context, next) =>
     }
     await next();
 });
-app.UseRouting(); 
 app.MapControllers();
 app.Run();
