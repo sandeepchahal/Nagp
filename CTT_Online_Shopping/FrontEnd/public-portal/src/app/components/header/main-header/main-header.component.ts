@@ -18,6 +18,7 @@ import { SuggestionComponent } from '../../search/suggestion/suggestion.componen
     PopupCartComponent,
     LoginComponent,
     SuggestionComponent,
+    RouterModule,
   ],
   templateUrl: './main-header.component.html',
   styleUrl: './main-header.component.css',

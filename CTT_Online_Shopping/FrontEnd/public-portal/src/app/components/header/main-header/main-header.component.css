@@ -17,27 +17,21 @@ list-style: none;
 .navbar-brand img {
   margin-right: 20px; /* Add space to the right of the logo */
   padding: 10px; /* Add padding around the logo */
-  margin-left: 20px;
+  margin-left: 10px;
 }
 .navbar-brand {
   display: flex;
   align-items: center; /* Center vertically */
 }
-.navbar-brand img:hover {
-  opacity: 0.8; /* Slightly fade the logo on hover */
-  transform: scale(1.1); /* Slightly enlarge the logo on hover */
-  transition: all 0.3s ease; /* Smooth transition */
-}
-.navbar-brand img {
-  border: 2px solid #000; /* Add a border */
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow */
-}
+
 .navbar-brand img {
   width: 100px; /* Default size */
   height: auto;
 }
-
+.navbar-brand img:hover 
+{
+  cursor: pointer;
+}
 @media (max-width: 768px) {
   .navbar-brand img {
     width: 100px; /* Smaller size for tablets */
@@ -48,4 +42,23 @@ list-style: none;
   .navbar-brand img {
     width: 80px; /* Smaller size for mobile */
   }
+}
+
+.dropdown-header
+{
+  color: #66371c;
+  font: bold;
+  font-size:medium ;
+}
+.dropdown-item
+{
+  opacity: 0.6;
+}
+.dropdown-item:hover
+{
+  opacity: 1;
+  background: white;
+  cursor: pointer;
+  font: bold;
+  font-size: large;
 }
