@@ -9,7 +9,6 @@ if (builder.Environment.IsDevelopment())
     builder.Services.AddSwaggerGen();
     builder.Services.AddOpenApi();
 }
-
 builder.Services.ConfigureMongoDb(builder.Configuration);
 builder.Services.ConfigureDbServices();
 
