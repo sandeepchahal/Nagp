@@ -41,4 +41,4 @@ spec:
       targetPort: 8080
   selector:
     app: userapi-public
-  type: ClusterIP
+  type: LoadBalancer
