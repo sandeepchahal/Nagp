@@ -67,17 +67,3 @@ spec:
                   number: 80
             path: /api/product/
             pathType: Prefix
-          - backend:
-              service:
-                name: userapi-public-service
-                port:
-                  number: 80
-            path: /api/user/
-            pathType: Prefix
-          - backend:
-              service:
-                name: searchapi-public-service
-                port:
-                  number: 80
-            path: /api/search/
-            pathType: Prefix
