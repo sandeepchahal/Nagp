@@ -35,16 +35,16 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.User.RequireUniqueEmail = true;
 });
 
-// Allowing all origins for testing purposes (you can restrict to specific domains later)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()  // You can also specify a domain like "https://yourfrontend.com"
-            .AllowAnyMethod()  // You can also specify the allowed HTTP methods like .AllowGet(), .AllowPost()...
-            .AllowAnyHeader(); // You can also specify headers if needed
+        policy.SetIsOriginAllowed(_ => true) // ✅ Allow all origins dynamically
+            .AllowAnyMethod()
+            .AllowAnyHeader();
     });
 });
+
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
