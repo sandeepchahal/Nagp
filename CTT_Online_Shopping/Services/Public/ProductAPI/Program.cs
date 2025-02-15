@@ -31,7 +31,6 @@ var conventionPack = new ConventionPack
 };
 ConventionRegistry.Register("CamelCaseConvention", conventionPack, _ => true);
 
-
 var app = builder.Build();
 app.UseCors("AllowAll"); 
 
