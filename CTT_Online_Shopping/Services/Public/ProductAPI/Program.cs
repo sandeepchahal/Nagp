@@ -15,20 +15,19 @@ if (builder.Environment.IsDevelopment())
 builder.Services.ConfigureMongoDb(builder.Configuration);
 builder.Services.ConfigureDbServices();
 
-// Allowing all origins for testing purposes (you can restrict to specific domains later)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://34.58.44.189")  // You can also specify a domain like "https://yourfrontend.com"
-            .AllowAnyMethod()  // You can also specify the allowed HTTP methods like .AllowGet(), .AllowPost()...
-            .AllowAnyHeader(); // You can also specify headers if needed
+        policy.WithOrigins()
+            .AllowAnyMethod()  
+            .AllowAnyHeader(); 
     });
 });
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-// Register MongoDB camelCase convention
+
 var conventionPack = new ConventionPack
 {
     new CamelCaseElementNameConvention()
@@ -38,6 +37,7 @@ ConventionRegistry.Register("CamelCaseConvention", conventionPack, _ => true);
 
 var app = builder.Build();
 app.UseCors("AllowAll"); 
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -53,7 +53,18 @@ app.Use(async (context, next) =>
 
     logger.LogInformation("Request received at {Path} with method {Method}", context.Request.Path, context.Request.Method);
     
-    await next(); // Call the next middleware
+    await next(); 
 });
+app.Use(async (context, next) =>
+{
+    if (context.Request.Method == "OPTIONS")
+    {
+        context.Response.StatusCode = 200;
+        await context.Response.CompleteAsync();
+        return;
+    }
+    await next();
+});
+app.UseRouting(); 
 app.MapControllers();
 app.Run();
