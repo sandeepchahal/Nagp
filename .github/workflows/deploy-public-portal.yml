@@ -1,4 +1,11 @@
----
+name: Build and Deploy Angular Public Portal
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - CTT_Online_Shopping/FrontEnd/public-portal/**
+
 env:
   DEPLOYMENT_NAME: public-portal
   GKE_CLUSTER: mcart-autopilot-cluster-1
@@ -6,29 +13,33 @@ env:
   IMAGE: public-portal
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   REPOSITORY: ecommerce-repo
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
+
       - name: Authenticate Google Cloud
         uses: google-github-actions/auth@v1
-      - name: Set Image Tag
-        run: echo "IMAGE_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set Image Tag
+        run: echo "IMAGE_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
+
       - name: Docker Auth
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
 
-      # Get GKE credentials
-      - name: Set up GKE credentials
+      - name: Get GKE Credentials
         uses: google-github-actions/get-gke-credentials@v2
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
-      - name: Build and push Angular Public Portal container
+
+      - name: Build and Push Angular Public Portal Container
         run: |
           DOCKER_TAG="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}"
           docker build -t $DOCKER_TAG ./CTT_Online_Shopping/FrontEnd/public-portal
@@ -43,10 +54,3 @@ jobs:
           kubectl apply -f ./CTT_Online_Shopping/K8s/FrontEnd/public-portal-deployment.yml
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide
-name: Build and Deploy Angular Public Portal
-'on':
-  push:
-    branches:
-      - main
-    paths:
-      - CTT_Online_Shopping/FrontEnd/public-portal/**
