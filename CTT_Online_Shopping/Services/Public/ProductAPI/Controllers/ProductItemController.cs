@@ -44,30 +44,31 @@ public class ProductItemController(
             productItem.Product.Images = ProductHelper.GetImages(productItem!);
             productItem.Product.Price = ProductHelper.GetPrice(productItem!);
             productItem.Product.ProductItemId = productItem.Id;
-
-
+            
             var similarBrand = await productItemDbService.GetByBrand(product.BrandId);
             var excludeCurrentItem = 
                 similarBrand.Products.Where(col => col.ProductItemId != id).ToList();
 
-            productItem.SimilarBrand = new ProductWithSimilarBrand()
-                { Brand = similarBrand.Brand, Products = excludeCurrentItem };
+            productItem.SimilarBrand = similarBrand.Brand != null
+                ? new ProductWithSimilarBrand()
+                    { Brand = similarBrand.Brand, Products = excludeCurrentItem }
+                : null;
             
             var similarSubcategory = await productItemDbService.GetBySubcategoryType(product.SubCategoryId);
             
-            var excludeSimilarSubcategory = 
-                similarSubcategory.Products.Where(col => col.ProductItemId != id).ToList();
+            var excludeSimilarSubcategory = similarSubcategory.SubCategory != null?
+                similarSubcategory.Products.Where(col => col.ProductItemId != id).ToList():null;
 
             productItem.SimilarSubCategory = new ProductWithSimilarChoiceView()
-                { SubCategory = similarSubcategory.SubCategory, Products = excludeSimilarSubcategory };
+                { SubCategory = similarSubcategory.SubCategory??null, Products = excludeSimilarSubcategory };
             
             var similarCategory = await productItemDbService.GetByCategoryType(product.CategoryId);
             
-            var excludeSimilarCategory = 
-                similarCategory.Products.Where(col => col.ProductItemId != id).ToList();
+            var excludeSimilarCategory = similarCategory.Category !=null?
+                similarCategory.Products.Where(col => col.ProductItemId != id).ToList():null;
 
             productItem.SimilarCategory = new ProductWithSimilarGenderView()
-                { Category = similarCategory.Category, Products = excludeSimilarCategory };
+                { Category = similarCategory.Category??null, Products = excludeSimilarCategory };
             
             return Ok(productItem);
         }

@@ -136,10 +136,10 @@
 
 <br>
     <!-- Product with Similar choices -->
-    <h2 *ngIf="productItem.similarSubCategory && productItem.similarSubCategory.products.length>0">Similar Choices</h2>
-    <div class="col-md-9" style="max-width: 600px;">
+    <h2 *ngIf="productItem?.similarSubCategory">Similar Choices</h2>
+    <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarSubCategory">
       <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col" *ngFor="let product of productItem.similarSubCategory.products">
+        <div class="col" *ngFor="let product of productItem.similarSubCategory?.products">
           <div class="card h-100" (click)="goToDetail(product.productItemId)">
             <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
             <div class="card-body text-center">
@@ -164,10 +164,10 @@
     </div>
     
     <br>
-    <h2 *ngIf="productItem.similarBrand && productItem.similarBrand.products.length>0">More from {{productItem.similarBrand.brand.name}}</h2>
-    <div class="col-md-9" style="max-width: 600px;">
+    <h2 *ngIf="productItem?.similarBrand">More from {{productItem.similarBrand?.brand?.name}}</h2>
+    <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarBrand">
       <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col" *ngFor="let product of productItem.similarBrand.products">
+        <div class="col" *ngFor="let product of productItem?.similarBrand?.products">
           <div class="card h-100" (click)="goToDetail(product.productItemId)">
             <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
             <div class="card-body text-center">
@@ -192,10 +192,10 @@
     </div>
 
     <br>
-    <h2 *ngIf="productItem.similarCategory && productItem.similarCategory.products.length>0">More for you</h2>
-    <div class="col-md-9" style="max-width: 600px;">
+    <h2 *ngIf="productItem?.similarCategory">More for you</h2>
+    <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarCategory">
       <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col" *ngFor="let product of productItem.similarCategory.products">
+        <div class="col" *ngFor="let product of productItem?.similarCategory?.products">
           <div class="card h-100" (click)="goToDetail(product.productItemId)">
             <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
             <div class="card-body text-center">

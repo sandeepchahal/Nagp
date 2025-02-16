@@ -50,19 +50,19 @@ public class ProductView
 
 public class ProductWithSimilarGenderView
 {
-    public CategoryView Category { get; set; } = new();
+    public CategoryView? Category { get; set; } = new();
     public List<ProductView> Products { get; set; } = new();
 }
 
 public class ProductWithSimilarChoiceView
 {
-    public SubCategoryView SubCategory { get; set; } = new();
+    public SubCategoryView? SubCategory { get; set; } = new();
     public List<ProductView> Products { get; set; } = new();
 }
 
 public class ProductWithSimilarBrand
 {
-    public Brand Brand { get; set; } = new();
+    public Brand? Brand { get; set; } = new();
     public List<ProductView> Products { get; set; } = new();
 }
 

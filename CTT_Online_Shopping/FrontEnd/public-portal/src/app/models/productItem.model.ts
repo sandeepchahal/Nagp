@@ -89,9 +89,9 @@ export interface ProductItemView extends ProductItemBase {
   id: string;
   variants: ProductVariantView;
   product: ProductView;
-  similarCategory: ProductWithSimilarGenderView;
-  similarBrand: ProductWithSimilarBrand;
-  similarSubCategory: ProductWithSimilarChoiceView;
+  similarCategory?: ProductWithSimilarGenderView;
+  similarBrand?: ProductWithSimilarBrand;
+  similarSubCategory?: ProductWithSimilarChoiceView;
 }
 
 export interface ProductVariantView extends ProductVariantBase {

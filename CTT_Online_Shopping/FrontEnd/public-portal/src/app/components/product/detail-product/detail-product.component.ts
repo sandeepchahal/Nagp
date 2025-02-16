@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -20,7 +20,7 @@ import { TruncatePipe } from '../../../truncate.pipe';
   templateUrl: './detail-product.component.html',
   styleUrl: './detail-product.component.css',
 })
-export class DetailProductComponent {
+export class DetailProductComponent implements OnInit {
   productItem!: ProductItemView;
   selectedImageIndex = 0; // Track the currently selected image
   selectedVariant!: {

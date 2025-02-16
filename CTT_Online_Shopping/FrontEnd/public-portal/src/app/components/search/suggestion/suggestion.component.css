@@ -1,6 +1,6 @@
 .search-container {
     position: relative;
-    width: 800px;
+    width: 90%;
   }
   .search-input {
     width: 100%;
@@ -9,6 +9,7 @@
     border-radius: 4px;
     opacity: 0.6;
     background-color: rgb(250, 250, 250);
+    min-width: 400px;
   }
   .search-input:hover
   {
