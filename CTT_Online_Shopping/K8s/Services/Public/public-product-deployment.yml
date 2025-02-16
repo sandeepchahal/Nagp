@@ -18,7 +18,7 @@ spec:
         - env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
-          image: us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/productapi-public:latest
+          image: us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/productapi-public:TAG_PLACEHOLDER
           name: productapi-public
           ports:
             - containerPort: 8080

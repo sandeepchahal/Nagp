@@ -18,7 +18,7 @@ spec:
         - env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
-          image: us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/background-worker:latest
+          image: us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/background-worker:TAG_PLACEHOLDER
           name: background-worker
           resources:
             limits:
