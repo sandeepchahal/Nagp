@@ -6,16 +6,17 @@ import {
   ProductItemView,
   ProductVariantSizeColor,
 } from '../../../models/productItem.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { VariantType } from '../../../models/enums';
 import { ProductItemService } from '../../../services/productItem.service';
 import { CartService } from '../../../services/cart.service';
 import { CartItem } from '../../../models/cart.model';
+import { TruncatePipe } from '../../../truncate.pipe';
 
 @Component({
   selector: 'app-detail-product',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, TruncatePipe],
   templateUrl: './detail-product.component.html',
   styleUrl: './detail-product.component.css',
 })
@@ -55,7 +56,8 @@ export class DetailProductComponent {
   constructor(
     private route: ActivatedRoute,
     private productItemService: ProductItemService,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -380,5 +382,21 @@ export class DetailProductComponent {
     this.cartItem.discountedPrice = 0;
     this.cartItem.stockQuantity = 0;
     this.cartItem.price = 0;
+  }
+  goToDetail(id: string) {
+    this.router.navigate(['/product/item', id]);
+  }
+  // Calculate discount percentage
+  calculateDiscount(price: {
+    originalPrice: number;
+    discountPrice: number;
+  }): number {
+    if (price.discountPrice > 0) {
+      return Math.round(
+        ((price.originalPrice - price.discountPrice) / price.originalPrice) *
+          100
+      );
+    }
+    return 0;
   }
 }

@@ -19,4 +19,14 @@ public static class CategoryHelper
             }).ToList()   
         };
     }
+    
+    public static SubCategoryView MapToSubCategoryView(SubCategory subCategory)
+    {
+        return new SubCategoryView()
+        {
+            Id = subCategory.Id,
+            Name = subCategory.Name,
+            Slug = subCategory.Slug
+        };
+    }
 }

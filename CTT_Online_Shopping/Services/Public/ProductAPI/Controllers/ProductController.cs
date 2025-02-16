@@ -24,7 +24,6 @@ public class ProductController(IProductDbService productDbService,ILogger<Produc
         }
     }
     
-    
     [HttpGet("get-all")] 
     public async Task<IActionResult> GetAll()
     {
@@ -38,7 +37,6 @@ public class ProductController(IProductDbService productDbService,ILogger<Produc
             return BadRequest("An error has occurred");
         }
     }
-    
     
 
     [HttpGet("category/{slug}")]
@@ -84,4 +82,6 @@ public class ProductController(IProductDbService productDbService,ILogger<Produc
         
         return Ok(result);
     }
+    
+    
 }

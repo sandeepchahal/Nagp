@@ -41,10 +41,33 @@ public class ProductItemController(
             var productView = ProductHelper.MapToProductView(product);
             productView.Brand = await brandDbService.GetAsync(product.BrandId) ?? new Brand();
             productItem.Product = productView;
-            
             productItem.Product.Images = ProductHelper.GetImages(productItem!);
             productItem.Product.Price = ProductHelper.GetPrice(productItem!);
             productItem.Product.ProductItemId = productItem.Id;
+
+
+            var similarBrand = await productItemDbService.GetByBrand(product.BrandId);
+            var excludeCurrentItem = 
+                similarBrand.Products.Where(col => col.ProductItemId != id).ToList();
+
+            productItem.SimilarBrand = new ProductWithSimilarBrand()
+                { Brand = similarBrand.Brand, Products = excludeCurrentItem };
+            
+            var similarSubcategory = await productItemDbService.GetBySubcategoryType(product.SubCategoryId);
+            
+            var excludeSimilarSubcategory = 
+                similarSubcategory.Products.Where(col => col.ProductItemId != id).ToList();
+
+            productItem.SimilarSubCategory = new ProductWithSimilarChoiceView()
+                { SubCategory = similarSubcategory.SubCategory, Products = excludeSimilarSubcategory };
+            
+            var similarCategory = await productItemDbService.GetByCategoryType(product.CategoryId);
+            
+            var excludeSimilarCategory = 
+                similarCategory.Products.Where(col => col.ProductItemId != id).ToList();
+
+            productItem.SimilarCategory = new ProductWithSimilarGenderView()
+                { Category = similarCategory.Category, Products = excludeSimilarCategory };
             
             return Ok(productItem);
         }

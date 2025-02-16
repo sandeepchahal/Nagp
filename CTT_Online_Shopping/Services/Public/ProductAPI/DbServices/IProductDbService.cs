@@ -12,4 +12,7 @@ public interface IProductDbService
     Task<List<ProductFilterView>> GetAsync(string? gender = null, string? brand = null, string? color = null,
         string? subcategory = null);
 
+
+
+
 }
