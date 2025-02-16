@@ -1,6 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using ProductAPI.Models.Brands;
+using ProductAPI.Models.Categories;
 using ProductAPI.Models.Common;
 using ProductAPI.Models.ProductItems;
 
@@ -41,11 +42,28 @@ public class ProductView
     public string Id { get; set; } = string.Empty;
     public string ProductItemId { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
-    
     public string Description { get; set; } = string.Empty;
     public Brand Brand { get; set; } = new();
     public PriceBase Price { get; set; } = new();
     public List<ImagesBase> Images { get; set; } = new();
+}
+
+public class ProductWithSimilarGenderView
+{
+    public CategoryView? Category { get; set; } = new();
+    public List<ProductView> Products { get; set; } = new();
+}
+
+public class ProductWithSimilarChoiceView
+{
+    public SubCategoryView? SubCategory { get; set; } = new();
+    public List<ProductView> Products { get; set; } = new();
+}
+
+public class ProductWithSimilarBrand
+{
+    public Brand? Brand { get; set; } = new();
+    public List<ProductView> Products { get; set; } = new();
 }
 
 public class ProductItemFilterContents

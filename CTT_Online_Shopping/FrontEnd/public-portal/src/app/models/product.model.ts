@@ -1,3 +1,5 @@
+import { CategoryView, SubCategoryView } from './category.model';
+
 export interface ProductView {
   id: string;
   productItemId: string;
@@ -55,4 +57,19 @@ export interface ProductItemFilterFlatten {
   productItemId: string;
   price: PriceBase;
   images: ImagesBase[];
+}
+
+export interface ProductWithSimilarGenderView {
+  category: CategoryView;
+  products: ProductView[];
+}
+
+export interface ProductWithSimilarChoiceView {
+  subCategory: SubCategoryView;
+  products: ProductView[];
+}
+
+export interface ProductWithSimilarBrand {
+  brand: Brand;
+  products: ProductView[];
 }

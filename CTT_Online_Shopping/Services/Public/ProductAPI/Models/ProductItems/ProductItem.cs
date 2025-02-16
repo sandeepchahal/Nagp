@@ -92,4 +92,12 @@ public class ProductItem
 public class ProductItemView : ProductItem
 {
     public ProductView Product { get; set; } = new ();
+    public ProductWithSimilarGenderView? SimilarCategory { get; set; } = new();
+    public ProductWithSimilarBrand? SimilarBrand { get; set; } = new();
+    public ProductWithSimilarChoiceView? SimilarSubCategory { get; set; } = new();
+
 }
+
+
+
+

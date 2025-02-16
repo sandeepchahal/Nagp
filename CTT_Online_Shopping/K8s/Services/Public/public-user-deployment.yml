@@ -18,7 +18,7 @@ spec:
         - env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
-          image: us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/userapi-public:latest
+          image: us-central1-docker.pkg.dev/nagp-ctt/ecommerce-repo/userapi-public:TAG_PLACEHOLDER
           name: userapi-public
           ports:
             - containerPort: 8080

@@ -147,7 +147,6 @@ public class ProductDbService(
 
         return finalResult;
     }
-
     private async Task<List<ProductItemFilterContents>> FetchProductItemFilterContents(string productId, string? color= null)
     {
         var productItems = await productItemDbService.GetByProductIdAsync(productId);

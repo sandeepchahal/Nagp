@@ -6,6 +6,7 @@ env:
   IMAGE: userapi-public
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   REPOSITORY: ecommerce-repo
+
 jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
@@ -16,10 +17,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Authenticate Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
+
       - name: Docker Auth
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
@@ -30,27 +33,29 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
+
+      - name: Set Image Tag
+        run: echo "IMAGE_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
+
       - name: Build and push Docker container
         run: |
-          DOCKER_TAG="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest"
+          set -e
+          DOCKER_TAG="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}"
           docker build -t $DOCKER_TAG ./CTT_Online_Shopping/Services/Public/UserAPI
           docker push $DOCKER_TAG
-      # Deploy to GKE using your Kubernetes manifest
-      # Build and push the Docker image
-      # Set up Docker to use Google Artifact Registry
-      # Authenticate with Google Cloud using JSON key
-      # Checkout the code
+
       - name: Deploy to GKE
         run: |
+          set -e
           kubectl apply -f ./CTT_Online_Shopping/K8s/Services/Public/public-user-deployment.yml
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide
-            # Build and push Angular public Portal
+
 name: Build and Deploy Public User API to GKE
-'on':
+
+on:
   push:
     branches:
       - main
     paths:
       - CTT_Online_Shopping/Services/Public/UserAPI/**
-            # Build and push Angular public Portal

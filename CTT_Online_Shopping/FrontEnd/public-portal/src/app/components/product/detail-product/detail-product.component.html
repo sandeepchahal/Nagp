@@ -133,3 +133,88 @@
       </div>
     </div>
   </div>
+
+<br>
+    <!-- Product with Similar choices -->
+    <h2 *ngIf="productItem?.similarSubCategory">Similar Choices</h2>
+    <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarSubCategory">
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" *ngFor="let product of productItem.similarSubCategory?.products">
+          <div class="card h-100" (click)="goToDetail(product.productItemId)">
+            <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
+            <div class="card-body text-center">
+              <h5 class="card-title">{{ product.brand.name }}</h5>
+              <p class="card-text text-muted">{{ product.name | truncate:20 }}</p>
+              <div class="product-price">
+                  <span class="fw-bold text-dark price-color">
+                      ₹{{ product.price.discountPrice || product.price.originalPrice }}
+                  </span>
+                <span class="text-muted me-2" *ngIf="product.price.discountPrice > 0">
+                  <del>₹{{ product.price.originalPrice }}</del>
+                </span>
+              
+                <span class="badge bg-success ms-2" *ngIf="product.price.discountPrice > 0">
+                  {{ calculateDiscount(product.price) }}% off
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <br>
+    <h2 *ngIf="productItem?.similarBrand">More from {{productItem.similarBrand?.brand?.name}}</h2>
+    <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarBrand">
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" *ngFor="let product of productItem?.similarBrand?.products">
+          <div class="card h-100" (click)="goToDetail(product.productItemId)">
+            <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
+            <div class="card-body text-center">
+              <h5 class="card-title">{{ product.brand.name }}</h5>
+              <p class="card-text text-muted">{{ product.name | truncate:20 }}</p>
+              <div class="product-price">
+                  <span class="fw-bold text-dark price-color">
+                      ₹{{ product.price.discountPrice || product.price.originalPrice }}
+                  </span>
+                <span class="text-muted me-2" *ngIf="product.price.discountPrice > 0">
+                  <del>₹{{ product.price.originalPrice }}</del>
+                </span>
+              
+                <span class="badge bg-success ms-2" *ngIf="product.price.discountPrice > 0">
+                  {{ calculateDiscount(product.price) }}% off
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <h2 *ngIf="productItem?.similarCategory">More for you</h2>
+    <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarCategory">
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" *ngFor="let product of productItem?.similarCategory?.products">
+          <div class="card h-100" (click)="goToDetail(product.productItemId)">
+            <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
+            <div class="card-body text-center">
+              <h5 class="card-title">{{ product.brand.name }}</h5>
+              <p class="card-text text-muted">{{ product.name | truncate:20 }}</p>
+              <div class="product-price">
+                  <span class="fw-bold text-dark price-color">
+                      ₹{{ product.price.discountPrice || product.price.originalPrice }}
+                  </span>
+                <span class="text-muted me-2" *ngIf="product.price.discountPrice > 0">
+                  <del>₹{{ product.price.originalPrice }}</del>
+                </span>
+              
+                <span class="badge bg-success ms-2" *ngIf="product.price.discountPrice > 0">
+                  {{ calculateDiscount(product.price) }}% off
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

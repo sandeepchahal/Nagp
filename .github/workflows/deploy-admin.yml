@@ -1,4 +1,3 @@
----
 env:
   DEPLOYMENT_NAME: productapi-admin
   GKE_CLUSTER: mcart-autopilot-cluster-1
@@ -30,17 +29,23 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
+
+      - name: Set Image Tag
+        run: echo "IMAGE_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
+
       - name: Build and push Docker container
         run: |
-          DOCKER_TAG="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest"
+          DOCKER_TAG="us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}"
           docker build -t $DOCKER_TAG ./CTT_Online_Shopping/Services/Admin/ProductAPI
           docker push $DOCKER_TAG
+
       - name: Deploy to GKE
         run: |
           kubectl apply -f ./CTT_Online_Shopping/K8s/Services/Admin/admin-product-deployment.yml
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide
-            # Build and push Angular Admin Portal
+
+      # Build and push Angular Admin Portal
 name: Build and Deploy Admin Solution to GKE
 'on':
   push:
@@ -48,4 +53,3 @@ name: Build and Deploy Admin Solution to GKE
       - main
     paths:
       - CTT_Online_Shopping/Services/Admin/ProductAPI/**
-            # Build and push Angular Admin Portal
