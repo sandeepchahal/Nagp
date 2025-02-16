@@ -129,14 +129,14 @@
       <div class="detaill-section">
         <hr>
         <h1>Description</h1>
-        <p>{{ productItem.product.description }}</p>
+        <p [innerHTML]="productItem.product.description"> </p>
       </div>
     </div>
   </div>
 
 <br>
     <!-- Product with Similar choices -->
-    <h2 *ngIf="productItem?.similarSubCategory">Similar Choices</h2>
+    <h2 *ngIf="productItem?.similarSubCategory && productItem.similarSubCategory?.products?.length">Similar Choices</h2>
     <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarSubCategory">
       <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col" *ngFor="let product of productItem.similarSubCategory?.products">
@@ -164,7 +164,7 @@
     </div>
     
     <br>
-    <h2 *ngIf="productItem?.similarBrand">More from {{productItem.similarBrand?.brand?.name}}</h2>
+    <h2 *ngIf="productItem?.similarBrand && productItem?.similarBrand?.products?.length">More from {{productItem.similarBrand?.brand?.name}}</h2>
     <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarBrand">
       <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col" *ngFor="let product of productItem?.similarBrand?.products">
@@ -192,7 +192,7 @@
     </div>
 
     <br>
-    <h2 *ngIf="productItem?.similarCategory">More for you</h2>
+    <h2 *ngIf="productItem?.similarCategory && productItem?.similarCategory?.products?.length">More for you</h2>
     <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarCategory">
       <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col" *ngFor="let product of productItem?.similarCategory?.products">
