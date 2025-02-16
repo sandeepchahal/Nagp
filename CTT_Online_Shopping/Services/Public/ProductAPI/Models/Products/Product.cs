@@ -7,14 +7,6 @@ using ProductAPI.Models.ProductItems;
 
 namespace ProductAPI.Models.Products;
 
-// brandname, productname, price, discount price, discount value, images,rating, 
-// filters - Brand, price Range, color options, discount Range
-// GetBrands from db
-// get min and max price range from db where subcategory Id = id came in request
-// get color options with counts
-// show discount as enums may be 
-// get attributes which are part of 
-
 public class PriceBase
 {
     public decimal OriginalPrice { get; set; } 
