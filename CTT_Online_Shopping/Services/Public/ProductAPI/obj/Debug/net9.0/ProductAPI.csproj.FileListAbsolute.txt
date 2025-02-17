@@ -41,3 +41,8 @@
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.pdb
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ProductAPI.genruntimeconfig.cache
 /Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/obj/Debug/net9.0/ref/ProductAPI.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/Microsoft.IdentityModel.Logging.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/Microsoft.IdentityModel.Tokens.dll
+/Users/sandeepsingh/Documents/NAGP/CTT_Online_Shopping/Services/Public/ProductAPI/bin/Debug/net9.0/System.IdentityModel.Tokens.Jwt.dll

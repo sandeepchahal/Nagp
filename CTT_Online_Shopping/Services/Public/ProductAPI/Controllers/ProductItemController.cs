@@ -12,7 +12,7 @@ namespace ProductAPI.Controllers;
 public class ProductItemController(
     IProductItemDbService productItemDbService,
     IMongoCollection<Product> productCollection, 
-    IBrandDbService brandDbService):ControllerBase
+    IBrandDbService brandDbService, IReviewDbService reviewDbService):ControllerBase
 {
     [HttpGet("get-by-product/{pid}")] 
     public async Task<IActionResult> GetProductById(string pid)
@@ -40,6 +40,7 @@ public class ProductItemController(
             var product = await productCollection.Find(p =>p.Id == productItem.ProductId).FirstOrDefaultAsync();
             var productView = ProductHelper.MapToProductView(product);
             productView.Brand = await brandDbService.GetAsync(product.BrandId) ?? new Brand();
+            productView.Reviews = await reviewDbService.GetByProductId(id);
             productItem.Product = productView;
             productItem.Product.Images = ProductHelper.GetImages(productItem!);
             productItem.Product.Price = ProductHelper.GetPrice(productItem!);

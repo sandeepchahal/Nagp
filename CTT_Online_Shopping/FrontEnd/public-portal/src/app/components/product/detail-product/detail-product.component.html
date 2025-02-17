@@ -131,16 +131,32 @@
         <h1>Description</h1>
         <p [innerHTML]="productItem.product.description"> </p>
       </div>
+      <div class="review-section">
+        <hr>
+        <h1>Reviews</h1>
+        <button *ngIf="!this.showAddReviewFlag" (click)="showAddReview()" class="btn btn-sm btn-success margin-bottom-20">Add Review</button>
+        <div class="add-review" *ngIf="isLoggedIn && this.showAddReviewFlag">
+          <app-add-review [productId]="productItem.productId" [productItemId]="productItem.id"></app-add-review>
+        </div>
+        <div class="list-review">
+          <app-list-review [reviews]="productItem.product.reviews"></app-list-review>
+        </div>
+      </div>
     </div>
   </div>
 
 <br>
     <!-- Product with Similar choices -->
+    <div class="card margin-bottom-20" *ngIf="productItem?.similarSubCategory && productItem.similarSubCategory?.products?.length">
+      <div class="card-header">
     <h2 *ngIf="productItem?.similarSubCategory && productItem.similarSubCategory?.products?.length">Similar Choices</h2>
+   
+  </div>
+  <div class="card-body">
     <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarSubCategory">
       <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col" *ngFor="let product of productItem.similarSubCategory?.products">
-          <div class="card h-100" (click)="goToDetail(product.productItemId)">
+          <div class="card h-100" (click)="loadProductItem(product.productItemId)">
             <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
             <div class="card-body text-center">
               <h5 class="card-title">{{ product.brand.name }}</h5>
@@ -162,13 +178,19 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
     
     <br>
-    <h2 *ngIf="productItem?.similarBrand && productItem?.similarBrand?.products?.length">More from {{productItem.similarBrand?.brand?.name}}</h2>
+    <div class="card margin-bottom-20" *ngIf="productItem?.similarBrand && productItem?.similarBrand?.products?.length">
+      <div class="card-header">
+       <h2 *ngIf="productItem?.similarBrand && productItem?.similarBrand?.products?.length">More from {{productItem.similarBrand?.brand?.name}}</h2>
+      </div>
+      <div class="card-body">
     <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarBrand">
       <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col" *ngFor="let product of productItem?.similarBrand?.products">
-          <div class="card h-100" (click)="goToDetail(product.productItemId)">
+          <div class="card h-100" (click)="loadProductItem(product.productItemId)">
             <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
             <div class="card-body text-center">
               <h5 class="card-title">{{ product.brand.name }}</h5>
@@ -190,13 +212,19 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
 
     <br>
-    <h2 *ngIf="productItem?.similarCategory && productItem?.similarCategory?.products?.length">More for you</h2>
+    <div class="card margin-bottom-20" *ngIf="productItem?.similarCategory  && productItem?.similarCategory?.products?.length">
+      <div class="card-header">
+        <h2 *ngIf="productItem?.similarCategory && productItem?.similarCategory?.products?.length">More Items</h2>
+      </div>
+      <div class="card-body">
     <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarCategory">
       <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col" *ngFor="let product of productItem?.similarCategory?.products">
-          <div class="card h-100" (click)="goToDetail(product.productItemId)">
+          <div class="card h-100" (click)="loadProductItem(product.productItemId)">
             <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
             <div class="card-body text-center">
               <h5 class="card-title">{{ product.brand.name }}</h5>
@@ -218,3 +246,5 @@
         </div>
       </div>
     </div>
+  </div>
+</div>

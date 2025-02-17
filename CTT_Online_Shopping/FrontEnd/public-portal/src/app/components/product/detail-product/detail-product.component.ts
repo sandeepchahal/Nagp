@@ -12,11 +12,20 @@ import { ProductItemService } from '../../../services/productItem.service';
 import { CartService } from '../../../services/cart.service';
 import { CartItem } from '../../../models/cart.model';
 import { TruncatePipe } from '../../../truncate.pipe';
+import { ListReviewComponent } from '../../review/list-review/list-review.component';
+import { AddReviewComponent } from '../../review/add-review/add-review.component';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-detail-product',
   standalone: true,
-  imports: [FormsModule, CommonModule, TruncatePipe],
+  imports: [
+    FormsModule,
+    CommonModule,
+    TruncatePipe,
+    ListReviewComponent,
+    AddReviewComponent,
+  ],
   templateUrl: './detail-product.component.html',
   styleUrl: './detail-product.component.css',
 })
@@ -53,17 +62,34 @@ export class DetailProductComponent implements OnInit {
     stockQuantity: 0,
   };
 
+  isLoggedIn: boolean = false;
+  showAddReviewFlag: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private productItemService: ProductItemService,
     private cartService: CartService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     const productId = this.route.snapshot.paramMap.get('id');
     if (productId) {
       this.loadProductItem(productId);
+    }
+
+    // Subscribe to the userInfo$ observable to get updates
+    this.authService.userInfo$.subscribe((userInfo) => {
+      if (userInfo) {
+        this.isLoggedIn = true;
+      } else {
+        this.isLoggedIn = false;
+      }
+    });
+
+    if (this.authService.isAuthenticated()) {
+      this.isLoggedIn = true;
+      console.log('user is athenticated');
     }
   }
 
@@ -384,6 +410,7 @@ export class DetailProductComponent implements OnInit {
     this.cartItem.price = 0;
   }
   goToDetail(id: string) {
+    console.log('called', id);
     this.router.navigate(['/product/item', id]);
   }
   // Calculate discount percentage
@@ -398,5 +425,9 @@ export class DetailProductComponent implements OnInit {
       );
     }
     return 0;
+  }
+
+  showAddReview() {
+    this.showAddReviewFlag = true;
   }
 }

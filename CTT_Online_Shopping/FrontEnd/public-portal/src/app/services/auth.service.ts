@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = environment.authApiUrl;
+  private apiUrl = environment.userApiUrl;
 
   private userInfoSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
     null
@@ -17,7 +17,11 @@ export class AuthService {
   userInfo$ = this.userInfoSubject.asObservable();
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('authToken');
+    try {
+      return !!localStorage.getItem('authToken');
+    } catch {
+      return false;
+    }
   }
   constructor(private http: HttpClient) {}
 

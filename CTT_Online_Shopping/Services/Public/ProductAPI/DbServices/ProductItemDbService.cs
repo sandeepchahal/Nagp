@@ -1,8 +1,6 @@
 using MongoDB.Driver;
 using ProductAPI.Helper;
-using ProductAPI.Models;
 using ProductAPI.Models.Brands;
-using ProductAPI.Models.Categories;
 using ProductAPI.Models.ProductItems;
 using ProductAPI.Models.Products;
 
@@ -12,6 +10,7 @@ public class ProductItemDbService(
     IMongoCollection<ProductItem> productItemCollection,
     IMongoCollection<Product> productCollection,
     IBrandDbService brandDbService,
+    IReviewDbService reviewDbService,
     ICategoryDbService categoryDbService):IProductItemDbService
 {
     public async Task<List<ProductItem>?> GetByProductIdAsync(string productId)
@@ -139,6 +138,7 @@ public class ProductItemDbService(
 
                 // Brand info
                 productView.Brand = await brandDbService.GetAsync(product.BrandId) ?? new Brand();
+                // Reviews Info
                 // product items
                 var productItems = await GetByProductIdAsync(product.Id);
                 foreach (var productItem in productItems)

@@ -1,4 +1,5 @@
 import { CategoryView, SubCategoryView } from './category.model';
+import { ReviewQuery } from './review.model';
 
 export interface ProductView {
   id: string;
@@ -8,6 +9,7 @@ export interface ProductView {
   brand: Brand;
   price: PriceBase;
   images: ImagesBase[];
+  reviews: ReviewQuery[];
 }
 
 export interface PriceBase {
@@ -21,6 +23,10 @@ export interface ImagesBase {
   altText: string;
   isPrimary: boolean;
   orderNumber: number;
+}
+export interface Image64Bit {
+  url: string;
+  base64Data?: string;
 }
 
 export interface Brand {
