@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ProductAPI.DbServices;
+using ProductAPI.Models.Products;
+using ProductAPI.Models.Review;
 
 namespace ProductAPI.Controllers;
 
@@ -82,6 +84,5 @@ public class ProductController(IProductDbService productDbService,ILogger<Produc
         
         return Ok(result);
     }
-    
-    
+
 }

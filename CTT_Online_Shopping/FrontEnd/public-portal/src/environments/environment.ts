@@ -1,11 +1,16 @@
-const apiUrl: string = 'http://localhost:5267';
+const productApiUrl: string = 'http://localhost:5267';
+const userApiUrl: string = 'http://localhost:5190';
+const searchApiUrl: string = 'http://localhost:5267';
+
 export const environment = {
   production: false,
-  categoryApiUrl: `${apiUrl}/api/category`, // GKE API
-  authApiUrl: `${apiUrl}//api/user`,
-  productApiUrl: `${apiUrl}/api/product`,
-  homeApiUrl: `${apiUrl}/api/home`,
-  productItemApiUrl: `${apiUrl}/api/product/item`,
-  searchApiUrl: `${apiUrl}/api/search`,
-  userApiUrl: `${apiUrl}/api/ser`,
+  categoryApiUrl: `${productApiUrl}/api/category`, // GKE API
+  productApiUrl: `${productApiUrl}/api/product`,
+  homeApiUrl: `${productApiUrl}/api/home`,
+  productItemApiUrl: `${productApiUrl}/api/product/item`,
+  reviewUrl: `${productApiUrl}/api/product/review`,
+
+  searchApiUrl: `${searchApiUrl}/api/search`,
+
+  userApiUrl: `${userApiUrl}/api/user`,
 };

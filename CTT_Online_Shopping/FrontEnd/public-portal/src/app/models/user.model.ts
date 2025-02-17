@@ -15,3 +15,10 @@ export interface AddressDetail {
   zipCode: number;
   country: string;
 }
+
+export interface AuthenticatedUser {
+  id: string;
+  email: string;
+  userName: string;
+  provider: string;
+}

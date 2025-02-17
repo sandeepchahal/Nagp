@@ -1,5 +1,5 @@
 <!-- Products Section -->
-<h2 *ngIf="homePageData.women">Men</h2>
+<h2 *ngIf="homePageData?.men">Men</h2>
 
 <div class="col-md-9" style="max-width: 600px;">
     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -27,7 +27,7 @@
     </div>
   </div>
 
-  <h2 *ngIf="homePageData.women">Women</h2>
+  <h2 *ngIf="homePageData?.women">Women</h2>
 
   <div class="col-md-9" style="max-width: 600px;">
     <div class="row row-cols-1 row-cols-md-3 g-4">

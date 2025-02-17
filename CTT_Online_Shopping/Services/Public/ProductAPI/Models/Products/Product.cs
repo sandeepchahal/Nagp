@@ -4,6 +4,7 @@ using ProductAPI.Models.Brands;
 using ProductAPI.Models.Categories;
 using ProductAPI.Models.Common;
 using ProductAPI.Models.ProductItems;
+using ProductAPI.Models.Review;
 
 namespace ProductAPI.Models.Products;
 
@@ -38,6 +39,8 @@ public class ProductView
     public Brand Brand { get; set; } = new();
     public PriceBase Price { get; set; } = new();
     public List<ImagesBase> Images { get; set; } = new();
+
+    public List<ReviewQuery>? Reviews { get; set; }
 }
 
 public class ProductWithSimilarGenderView
