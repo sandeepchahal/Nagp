@@ -1,6 +1,6 @@
 const productApiUrl = 'http://35.225.226.50';
-const userApiUrl: string = 'http://localhost:5190';
-const searchApiUrl: string = 'http://localhost:5267';
+const userApiUrl: string = 'http://35.223.163.117';
+const searchApiUrl: string = 'http://34.59.239.110';
 
 export const environment = {
   production: false,

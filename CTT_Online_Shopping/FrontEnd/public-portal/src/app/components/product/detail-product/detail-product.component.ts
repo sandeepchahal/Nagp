@@ -409,10 +409,7 @@ export class DetailProductComponent implements OnInit {
     this.cartItem.stockQuantity = 0;
     this.cartItem.price = 0;
   }
-  goToDetail(id: string) {
-    console.log('called', id);
-    this.router.navigate(['/product/item', id]);
-  }
+
   // Calculate discount percentage
   calculateDiscount(price: {
     originalPrice: number;

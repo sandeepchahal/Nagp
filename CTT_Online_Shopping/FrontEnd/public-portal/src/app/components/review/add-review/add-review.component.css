@@ -12,4 +12,29 @@
     display: flex;
     justify-content: left;
   }
+  .star-rating span {
+    font-size: 2em;
+    cursor: pointer;
+    color: lightgray;
+  }
   
+  .star-rating span.filled {
+    color: gold;
+  }
+  
+  .review-list .card {
+    padding: 1rem;
+  }
+  
+  .review-list img {
+    margin-top: 10px;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  button {
+    margin-right: 10px;
+  }
+    
