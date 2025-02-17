@@ -44,6 +44,10 @@ jobs:
           docker build -t $DOCKER_TAG ./CTT_Online_Shopping/Services/Public/SearchAPI
           docker push $DOCKER_TAG
 
+      - name: Update Deployment File
+        run: |
+          sed -i "s|TAG_PLACEHOLDER|${{ env.IMAGE_TAG }}|g" ./CTT_Online_Shopping/K8s/Services/Public/public-search-deployment.yml
+
       - name: Deploy to GKE
         run: |
           set -e
