@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {
   ProductItemCommand,
@@ -16,14 +16,29 @@ export class ProductItemService {
   constructor(private http: HttpClient) {}
 
   addProductItem(productItem: ProductItemCommand): Observable<any> {
-    return this.http.post(`${this.apiUrl}/add`, productItem);
+    return this.http.post(`${this.apiUrl}/add`, productItem).pipe(
+      catchError((error) => {
+        console.error('Error :', error);
+        return throwError(() => error);
+      })
+    );
   }
   getProductItems(): Observable<ProductItemView[]> {
-    return this.http.get<ProductItemView[]>(`${this.apiUrl}/get-all`);
+    return this.http.get<ProductItemView[]>(`${this.apiUrl}/get-all`).pipe(
+      catchError((error) => {
+        console.error('Error :', error);
+        return throwError(() => error);
+      })
+    );
   }
   getProductItemById(productItemId: string): Observable<ProductItemView> {
-    return this.http.get<ProductItemView>(
-      `${this.apiUrl}/get/${productItemId}`
-    );
+    return this.http
+      .get<ProductItemView>(`${this.apiUrl}/get/${productItemId}`)
+      .pipe(
+        catchError((error) => {
+          console.error('Error :', error);
+          return throwError(() => error);
+        })
+      );
   }
 }

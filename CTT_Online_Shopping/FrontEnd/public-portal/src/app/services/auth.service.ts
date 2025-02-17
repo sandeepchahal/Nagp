@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -27,15 +27,27 @@ export class AuthService {
 
   // Regular login
   login(credentials: { username: string; password: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, credentials);
+    return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
+      catchError((error) => {
+        console.error('Login error:', error);
+        return throwError(() => error); // Properly re-throwing error
+      })
+    );
   }
 
   // Google login
   googleLogin(idToken: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/validate-social-login`, {
-      provider: 'Google',
-      idToken: idToken,
-    });
+    return this.http
+      .post(`${this.apiUrl}/validate-social-login`, {
+        provider: 'Google',
+        idToken: idToken,
+      })
+      .pipe(
+        catchError((error) => {
+          console.error('Error :', error);
+          return throwError(() => error);
+        })
+      );
   }
   public setUserInfo(token: string) {
     const decodedToken = this.decodeToken(token);
