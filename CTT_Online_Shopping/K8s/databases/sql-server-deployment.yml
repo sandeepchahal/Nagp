@@ -1,7 +1,7 @@
 ---
 apiVersion: v1
 data:
-  sa-password: RGV2ZWxvcGVyQDAwMg==
+  sa-password: RGV2ZWxvcGVyQDAwMjk=
 kind: Secret
 metadata:
   name: sql-server-secret
