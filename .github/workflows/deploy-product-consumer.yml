@@ -36,6 +36,10 @@ jobs:
           docker build -t $DOCKER_TAG ./CTT_Online_Shopping/Services/KafkaConsumers/ProductConsumer
           docker push $DOCKER_TAG
 
+      - name: Update Deployment File
+        run: |
+          sed -i "s|TAG_PLACEHOLDER|${{ env.IMAGE_TAG }}|g" ./CTT_Online_Shopping/K8s/Services/Internal/background-worker-deployment.yml
+          
       - name: Deploy to GKE
         run: |
           kubectl apply -f ./CTT_Online_Shopping/K8s/Services/Internal/background-worker-deployment.yml
