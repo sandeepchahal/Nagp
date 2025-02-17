@@ -1,6 +1,7 @@
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.Configuration;
 using UserAPI.DbContext;
 using UserAPI.Helpers;
@@ -13,7 +14,8 @@ namespace UserAPI.Controllers;
 public class UserController(
     UserManager<ApplicationUser> userManager, 
     SignInManager<ApplicationUser> signInManager,
-    IJwtTokenGeneration jwtTokenGeneration, 
+    IJwtTokenGeneration jwtTokenGeneration,
+    UserDbContext userDbContext,
     IConfiguration configuration)
     : ControllerBase
 {
@@ -26,20 +28,26 @@ public class UserController(
             return BadRequest(ModelState);
         }
 
-        var user = new ApplicationUser
+        try
         {
-            UserName = model.Email,
-            Email = model.Email,
-            FullName = model.FullName
-        };
+            var user = new ApplicationUser
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                FullName = model.FullName,
+            };
 
-        var result = await userManager.CreateAsync(user, model.Password);
-        if (result.Succeeded)
-        {
-            return Ok(new { message = "User created successfully" });
+            await userDbContext.Users.AddAsync(user);
+            userDbContext.Entry(user).State = EntityState.Added;
+            var result = await userDbContext.SaveChangesAsync();
+            var token = jwtTokenGeneration.GenerateToken(user);
+                return Ok(new { Token=token });
+           
         }
-
-        return BadRequest(result.Errors);
+        catch (Exception e)
+        {
+            return BadRequest("An error has occurred");
+        }
     }
 
     // Login User
@@ -60,7 +68,8 @@ public class UserController(
         var result = await signInManager.PasswordSignInAsync(user, model.Password, false, false);
         if (result.Succeeded)
         {
-            return Ok(new { message = "Login successful" });
+            var token = jwtTokenGeneration.GenerateToken(user);
+            return Ok(new { Token=token });
         }
 
         return Unauthorized(new { message = "Invalid credentials" });

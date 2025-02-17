@@ -17,6 +17,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { jwtDecode } from 'jwt-decode';
+import { RegisterUserComponent } from '../register-user/register-user.component';
 
 @Component({
   selector: 'app-login',
@@ -26,6 +27,7 @@ import { jwtDecode } from 'jwt-decode';
     FormsModule,
     CommonModule,
     GoogleSigninButtonModule,
+    RegisterUserComponent,
   ],
   templateUrl: './login.component.html',
   providers: [
@@ -60,7 +62,7 @@ export class LoginComponent {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
+      email: ['', Validators.required],
       password: ['', Validators.required],
     });
 
@@ -93,13 +95,8 @@ export class LoginComponent {
     this.authService.login(formData).subscribe(
       (response) => {
         console.log('Login success', response);
-        // Store token and navigate user
-        localStorage.setItem('token', response.token); // Save the JWT token
-        this.authService.googleLogin(response.token).subscribe((data) => {
-          localStorage.setItem('token', jwtDecode(data.token));
-        });
-
-        this.router.navigate(['/billing']); // Navigate to billing page
+        this.authService.setUserInfo(response.token);
+        this.router.navigate(['/']);
       },
       (error) => {
         console.error('Login error', error);
