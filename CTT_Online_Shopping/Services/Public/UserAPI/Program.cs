@@ -61,7 +61,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseHttpsRedirection();
 app.Use(async (context, next) =>
 {
     var logger = app.Services.GetRequiredService<ILogger<Program>>();
@@ -70,6 +69,6 @@ app.Use(async (context, next) =>
     await next(); // Call the next middleware
 });
 
-app.UseCors("AllowAll");
+app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
