@@ -1,13 +1,4 @@
----
-apiVersion: v1
-data:
-  ELASTIC_PASSWORD: RGV2ZWxvcGVyQDAwMg==
-kind: Secret
-metadata:
-  name: elasticsearch-secret
-  namespace: default
-type: Opaque
----
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,10 +19,7 @@ spec:
             - name: discovery.type
               value: single-node
             - name: ELASTIC_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: ELASTIC_PASSWORD
-                  name: elasticsearch-secret
+              value: 'Developer@0029'
           image: docker.elastic.co/elasticsearch/elasticsearch:8.5.0
           name: elasticsearch
           ports:
