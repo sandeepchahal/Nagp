@@ -82,7 +82,6 @@ public class HomeController(
 
                 womenResult.Add(productView);
             }
-
             
             return Ok(new HomeQueryModel(){Men = menResult,Women = womenResult});
         }
