@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-ingress
+  namespace: default
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: mcart.local
+      http:
+        paths:
+          - backend:
+              service:
+                name: public-portal-service
+                port:
+                  number: 80
+            path: /api/product/
+            pathType: Prefix

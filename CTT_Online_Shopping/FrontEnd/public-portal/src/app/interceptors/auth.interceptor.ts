@@ -10,8 +10,7 @@ import { Observable } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   try {
-    const authToken = localStorage.getItem('authToken'); // Get token from localStorage
-    console.log('get the token from storage', authToken);
+    const authToken = localStorage.getItem('authToken');
 
     if (authToken) {
       req = req.clone({

@@ -22,3 +22,9 @@ export interface AuthenticatedUser {
   userName: string;
   provider: string;
 }
+
+export interface RegisterUser {
+  fullName: string;
+  email: string;
+  password: string;
+}

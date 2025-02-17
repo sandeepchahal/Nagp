@@ -9,6 +9,7 @@ import { CartService } from '../../../services/cart.service';
 import { LoginComponent } from '../../user/login/login.component';
 import { AuthService } from '../../../services/auth.service';
 import { SuggestionComponent } from '../../search/suggestion/suggestion.component';
+import { RegisterUserComponent } from '../../user/register-user/register-user.component';
 
 @Component({
   selector: 'app-main-header',
@@ -16,7 +17,6 @@ import { SuggestionComponent } from '../../search/suggestion/suggestion.componen
   imports: [
     CommonModule,
     PopupCartComponent,
-    LoginComponent,
     SuggestionComponent,
     RouterModule,
   ],
@@ -28,6 +28,8 @@ export class MainHeaderComponent implements OnInit {
   categoriesByGender: { [gender: string]: CategoryView[] } = {};
   cartCount: number = 0; // Initialize cart count
   isLoggedIn: boolean = false;
+  showRegisterComponent: boolean = false;
+  showLoginComponent: boolean = false;
   constructor(
     private headerService: HeaderService,
     private router: Router,

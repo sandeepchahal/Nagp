@@ -65,9 +65,15 @@
             <li><a class="dropdown-item" >Wishlist</a></li>
             <li><hr class="dropdown-divider"></li>
             <li *ngIf="!isLoggedIn">
-              <app-login></app-login>
+              <a class="dropdown-item" (click)="goToLogin()">Login</a>
             </li>
-            <li *ngIf="isLoggedIn"><a class="dropdown-item" (click)="logout()" >Logout</a></li>
+            <li *ngIf="!isLoggedIn">
+              <a class="dropdown-item" (click)="goToLogin()">Register</a>
+            </li>
+            <!-- If logged in, show Logout button -->
+            <li *ngIf="isLoggedIn">
+              <a class="dropdown-item" (click)="logout()">Logout</a>
+            </li>
           </ul>
         </li>
       </ul>

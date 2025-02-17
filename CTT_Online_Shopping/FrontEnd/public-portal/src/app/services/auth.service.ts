@@ -27,11 +27,11 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   // Regular login
-  login(credentials: { username: string; password: string }): Observable<any> {
+  login(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
       catchError((error) => {
         console.error('Login error:', error);
-        return throwError(() => error); // Properly re-throwing error
+        return throwError(() => error);
       })
     );
   }
