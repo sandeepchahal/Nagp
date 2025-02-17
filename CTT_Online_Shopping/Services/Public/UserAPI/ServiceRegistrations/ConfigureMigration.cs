@@ -8,8 +8,16 @@ public static class ConfigureMigration
     public static void ConfigureMigrationServices(WebApplication app)
     {
         // Other service configurations (e.g., AddDbContext)
-        using var scope = app.Services.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-        context.Database.Migrate();  
+        try
+        {
+            using var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+            context.Database.Migrate();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }
