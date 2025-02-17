@@ -69,34 +69,31 @@ public class UserController(
     [HttpPost("validate-social-login")]
     public async Task<IActionResult> ValidateSocialLogin([FromBody] SocialLoginRequest request)
     {
-        if (request.Provider == "Google")
+        if (request.Provider != "Google") return BadRequest("Unsupported provider");
+        var payload = await ValidateGoogleToken(request.IdToken);
+        if (payload == null) return Unauthorized("Invalid Google Token");
+
+        // Check if user exists in DB
+        var user = await userManager.FindByEmailAsync(payload.Email);
+        if (user == null)
         {
-            var payload = await ValidateGoogleToken(request.IdToken);
-            if (payload == null) return Unauthorized("Invalid Google Token");
-
-            // Check if user exists in DB
-            var user = await userManager.FindByEmailAsync(payload.Email);
-            if (user == null)
+            // Create new user
+            user = new ApplicationUser
             {
-                // Create new user
-                user = new ApplicationUser
-                {
-                    UserName = payload.Email,
-                    Email = payload.Email,
-                    FirstName = payload.GivenName,
-                    LastName = payload.FamilyName,
-                    Provider = "Google",
-                    ProviderId = payload.Subject,
-                    FullName = $"{payload.GivenName} {payload.FamilyName}"
-                };
-                await userManager.CreateAsync(user);
-            }
-
-            // Generate JWT Token
-            var token = jwtTokenGeneration.GenerateToken(user);
-            return Ok(new { Token=token });
+                UserName = payload.Email,
+                Email = payload.Email,
+                FirstName = payload.GivenName,
+                LastName = payload.FamilyName,
+                Provider = "Google",
+                ProviderId = payload.Subject,
+                FullName = $"{payload.GivenName} {payload.FamilyName}"
+            };
+            await userManager.CreateAsync(user);
         }
-        return BadRequest("Unsupported provider");
+
+        // Generate JWT Token
+        var token = jwtTokenGeneration.GenerateToken(user);
+        return Ok(new { Token=token });
     }
     
     private async Task<GoogleJsonWebSignature.Payload> ValidateGoogleToken(string idToken)

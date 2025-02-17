@@ -20,6 +20,7 @@ export class AuthService {
     try {
       return !!localStorage.getItem('authToken');
     } catch {
+      console.log('Token is not found. User is not authenticated');
       return false;
     }
   }

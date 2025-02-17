@@ -1,7 +1,7 @@
 <!-- Products Section -->
 <h2 *ngIf="homePageData?.men">Men</h2>
 
-<div class="col-md-9" style="max-width: 600px;">
+<div class="col-md-9" style="max-width: 600px;" *ngIf="homePageData?.men">
     <div class="row row-cols-1 row-cols-md-3 g-4">
       <div class="col" *ngFor="let product of homePageData.men">
         <div class="card h-100" (click)="goToDetail(product.productItemId)">
@@ -29,7 +29,7 @@
 
   <h2 *ngIf="homePageData?.women">Women</h2>
 
-  <div class="col-md-9" style="max-width: 600px;">
+  <div class="col-md-9" style="max-width: 600px;" *ngIf="homePageData?.women">
     <div class="row row-cols-1 row-cols-md-3 g-4">
       <div class="col" *ngFor="let product of homePageData.women">
         <div class="card h-100" (click)="goToDetail(product.productItemId)">
