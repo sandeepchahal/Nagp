@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { SearchResponse } from '../models/searchResponse.model';
 import { environment } from '../../environments/environment';
@@ -16,7 +16,14 @@ export class SearchService {
   constructor(private http: HttpClient) {}
 
   search(query: string): Observable<SearchResponse[]> {
-    return this.http.get<SearchResponse[]>(`${this.apiUrl}?query=${query}`);
+    return this.http
+      .get<SearchResponse[]>(`${this.apiUrl}?query=${query}`)
+      .pipe(
+        catchError((error) => {
+          console.error('Error :', error);
+          return throwError(() => error);
+        })
+      );
   }
 
   // Method to update the search query
