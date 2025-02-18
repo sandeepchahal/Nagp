@@ -62,3 +62,37 @@ list-style: none;
   font: bold;
   font-size: large;
 }
+/* Ensure the dropdown menu is wide enough */
+.dropdown-wide {
+  width: 600px; /* Adjust as needed */
+  padding: 10px;
+}
+
+/* Flexbox layout for columns */
+.dropdown-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Adjust spacing between columns */
+}
+
+/* Each category column */
+.category-column {
+  flex: 1; /* Distribute space equally */
+  min-width: 200px; /* Minimum width for each column */
+}
+
+/* Style for subcategory lists */
+.subcategory-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.subcategory-list li {
+  margin-bottom: 5px;
+}
+
+/* Dropdown header styling */
+.dropdown-header {
+  font-weight: bold;
+  margin-bottom: 10px;
+}

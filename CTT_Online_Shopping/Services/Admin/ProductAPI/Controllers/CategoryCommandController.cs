@@ -16,34 +16,81 @@ public partial class CategoryController
             // Check if the main category already exists
             var existingCategory = await categoryCollection
                 .Find(c => c.MainCategory.Equals(category.MainCategory, StringComparison.OrdinalIgnoreCase)
-                 && c.Gender.Equals(category.Gender,StringComparison.OrdinalIgnoreCase))
+                           && c.Gender.Equals(category.Gender, StringComparison.OrdinalIgnoreCase))
                 .FirstOrDefaultAsync();
 
             if (existingCategory != null)
             {
-                return BadRequest(new { message = "Main category already exists." });
+                // Iterate over each subcategory
+                foreach (var sub in category.SubCategories)
+                {
+                    var existingSubCategory = existingCategory.SubCategories
+                        .FirstOrDefault(s => s.Name.Equals(sub.Name, StringComparison.OrdinalIgnoreCase));
+
+                    if (existingSubCategory == null) // Add new subcategory
+                    {
+                        existingCategory.SubCategories.Add(new SubCategoryDb()
+                        {
+                            Name = sub.Name,
+                            Slug = string.IsNullOrEmpty(sub.Slug) ? GenerateSlug(category.Gender, sub.Name) : sub.Slug,
+                            FilterAttributes = sub.FilterAttributes.Select(att =>
+                                    new FilterAttributeDb() { Name = att.Name, Options = att.Options, Type = att.Type })
+                                .ToList()
+                        });
+                    }
+                    else
+                    {
+                        // Update only missing filter attributes
+                        foreach (var att in sub.FilterAttributes)
+                        {
+                            var existingAttribute = existingSubCategory.FilterAttributes
+                                .FirstOrDefault(a => a.Name.Equals(att.Name, StringComparison.OrdinalIgnoreCase));
+
+                            if (existingAttribute == null)
+                            {
+                                existingSubCategory.FilterAttributes.Add(new FilterAttributeDb()
+                                {
+                                    Name = att.Name,
+                                    Options = att.Options,
+                                    Type = att.Type
+                                });
+                            }
+                        }
+                    }
+                }
+
+                // Update the existing category in the database
+                await categoryCollection.ReplaceOneAsync(c => c.Id == existingCategory.Id, existingCategory);
+
+                return Ok(new { message = "Subcategories updated successfully." });
             }
 
+            // If category does not exist, create a new one
             var newCategory = new CategoryDb()
             {
                 Gender = category.Gender,
                 MainCategory = category.MainCategory,
                 SubCategories = category.SubCategories.Select(sub =>
-                    new SubCategoryDb(){Name = sub.Name,FilterAttributes = sub.FilterAttributes.Select(att=>
-                            new FilterAttributeDb(){Name = att.Name,Options = att.Options, Type = att.Type}).ToList(), 
-                        Slug = string.IsNullOrEmpty(sub.Slug)?GenerateSlug(category.Gender, sub.Name):sub.Slug
-                        }).ToList()
+                    new SubCategoryDb()
+                    {
+                        Name = sub.Name,
+                        Slug = string.IsNullOrEmpty(sub.Slug) ? GenerateSlug(category.Gender, sub.Name) : sub.Slug,
+                        FilterAttributes = sub.FilterAttributes.Select(att =>
+                                new FilterAttributeDb() { Name = att.Name, Options = att.Options, Type = att.Type })
+                            .ToList()
+                    }).ToList()
             };
+
             await categoryCollection.InsertOneAsync(newCategory);
 
             return CreatedAtAction(nameof(Add), new { id = newCategory.Id }, newCategory);
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "Error adding product.", error = ex.Message });
+            return StatusCode(500, new { message = "Error adding/updating category.", error = ex.Message });
         }
     }
-    
+
     [HttpPut("update/{id}")]
     public async Task<IActionResult> UpdateCategory(string id, [FromBody] CategoryCommand category)
     {
@@ -65,7 +112,7 @@ public partial class CategoryController
                         {
                             Name = sub.Name,
                             Slug = string.IsNullOrEmpty(sub.Slug) ? GenerateSlug(category.Gender, sub.Name) : sub.Slug,
-                            FilterAttributes = sub.FilterAttributes.Select(att => 
+                            FilterAttributes = sub.FilterAttributes.Select(att =>
                                 new FilterAttributeDb
                                 {
                                     Name = att.Name,

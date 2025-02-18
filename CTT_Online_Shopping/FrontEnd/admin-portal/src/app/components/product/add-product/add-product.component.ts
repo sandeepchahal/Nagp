@@ -1,5 +1,5 @@
 // add-product.component.ts
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProductCommand } from '../../../models/product/product.model';
 import { ProductService } from '../../../services/product.service';
 import { CommonModule } from '@angular/common';
@@ -31,7 +31,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
   templateUrl: './add-product.component.html',
   styleUrls: ['./add-product.component.css'],
 })
-export class AddProductComponent {
+export class AddProductComponent implements OnInit {
   product: ProductCommand = {
     name: '',
     brandId: '',
@@ -71,31 +71,29 @@ export class AddProductComponent {
     // Fetch all categories when the component initializes
     this.categoryService.getCategories().subscribe((categories) => {
       this.categories = categories;
-      this.filteredCategories = categories;
-      this.filteredCategories.map((e) => {
-        e.name = `${e.name} (${e.gender})`;
-      });
+      console.log('categories', this.categories);
+      this.filteredCategories = categories.map((e) => ({
+        ...e,
+        name: `${e.name} (${e.gender})`,
+      }));
+      console.log('filter', this.filteredCategories);
     });
 
     this.brandService.getAll().subscribe((data) => {
       this.brands = data;
+      console.log('brand', this.brands);
     });
   }
-
-  // Filter categories based on user input
   onCategoryInputChange(): void {
-    console.log(this.product.categoryId.toLowerCase());
-    if (this.product.categoryId) {
-      // Filter categories locally
-      this.filteredCategories = this.categories.filter((category) =>
-        category.name
-          .toLowerCase()
-          .includes(this.product.categoryId.toLowerCase())
-      );
-      console.log(this.filteredCategories);
-    } else {
-      this.filteredCategories = this.categories; // Show all categories if input is empty
+    if (!this.product.categoryId) {
+      this.filteredCategories = [...this.categories]; // Reset when empty
+      return;
     }
+
+    const searchText = this.product.categoryId.toLowerCase();
+    this.filteredCategories = this.categories.filter((category) =>
+      category.name.toLowerCase().includes(searchText)
+    );
   }
 
   // Select category from the list
@@ -103,7 +101,7 @@ export class AddProductComponent {
     this.product.categoryId = event.option.value;
     this.filteredSubCategories = this.filterSubCategoriesByCategory(
       this.product.categoryId
-    ); // Filter subcategories based on selected category
+    );
   }
   // Filter subcategories based on selected category
   filterSubCategoriesByCategory(categoryId: string): any[] {
@@ -114,17 +112,18 @@ export class AddProductComponent {
     );
   }
 
-  // Filter subcategories based on user input
   onSubCategoryInputChange(): void {
-    if (this.product.subCategoryId) {
-      // Filter subcategories locally based on user input
-      this.filteredSubCategories = this.filteredSubCategories.filter(
-        (subCategory) =>
-          subCategory.name
-            .toLowerCase()
-            .includes(this.product.subCategoryId.toLowerCase())
+    if (!this.product.subCategoryId) {
+      this.filteredSubCategories = this.filterSubCategoriesByCategory(
+        this.product.categoryId
       );
+      return;
     }
+
+    const searchText = this.product.subCategoryId.toLowerCase();
+    this.filteredSubCategories = this.filteredSubCategories.filter(
+      (subCategory) => subCategory.name.toLowerCase().includes(searchText)
+    );
   }
 
   // Select subcategory from the list

@@ -31,13 +31,13 @@ public class HomeController(
             var menPipeline = new[]
             {
                 new BsonDocument("$match", new BsonDocument("categoryId", menCategory.Id)), // Filter by Category
-                new BsonDocument("$sample", new BsonDocument("size", 5)) // Random selection
+                new BsonDocument("$sample", new BsonDocument("size", 10)) // Random selection
             };
             
             var womenPipeline = new[]
             {
                 new BsonDocument("$match", new BsonDocument("categoryId", womenCategory.Id)), // Filter by Category
-                new BsonDocument("$sample", new BsonDocument("size", 5)) // Random selection
+                new BsonDocument("$sample", new BsonDocument("size", 6)) // Random selection
             };
 
             var menProducts = await productCollection.Aggregate<Product>(menPipeline).ToListAsync();
