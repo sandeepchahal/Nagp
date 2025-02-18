@@ -24,49 +24,59 @@ public class ProductSearchController : ControllerBase
         {
             if (string.IsNullOrWhiteSpace(query)) return BadRequest("Search query is required.");
 
-            var searchResponse = await _elasticClient.SearchAsync<ProductItemEventModel>(s => s
-                .Query(q => q
-                    .Bool(b => b
-                        .Should
-                        (
-                            sh => sh.Match(m => m
-                                .Field(f => f.Gender)
-                                .Query(query)
-                                .Fuzziness(new Fuzziness("Auto"))
-                            ),
-                            sh => sh.Match(m => m
-                                .Field(f => f.SubCategoryName)
-                                .Query(query)
-                                .Fuzziness(new Fuzziness("Auto"))
-                            ),
-                            sh => sh.Match(m => m
-                                .Field(f => f.Brand)
-                                .Query(query)
-                                .Fuzziness(new Fuzziness("Auto"))
-                            ),
-                            sh =>
-                                sh.Nested(nc => nc
-                                    .Path("sizeColorVariant")
-                                    .Query(cq =>
-                                        cq.Match(m =>
-                                            m.Field("sizeColorVariant.color.color")
-                                                .Query(query).Operator(Operator.And))
+           var searchResponse = await _elasticClient.SearchAsync<ProductItemEventModel>(s => s
+    .Query(q => q
+        .Bool(b => b
+            .Should
+            (
+                sh => sh.Match(m => m
+                    .Field(f => f.Gender)
+                    .Query(query)
+                    .Fuzziness(new Fuzziness("Auto"))
+                ),
+                sh => sh.Match(m => m
+                    .Field(f => f.SubCategoryName)
+                    .Query(query)
+                    .Fuzziness(new Fuzziness("Auto"))
+                ),
+                sh => sh.Match(m => m
+                    .Field(f => f.Brand)
+                    .Query(query)
+                    .Fuzziness(new Fuzziness("Auto"))
+                ),
+                sh => sh
+                    .Bool(b2 => b2
+                        .MustNot(mn => mn
+                            .Exists(e => e.Field("sizeColorVariant"))
+                        )
+                    ),
+                sh => sh
+                    .Bool(b2 => b2
+                        .Must(m => m
+                            .Nested(nc => nc
+                                .Path("sizeColorVariant")
+                                .Query(cq =>
+                                    cq.Match(m =>
+                                        m.Field("sizeColorVariant.color.color")
+                                            .Query(query)
+                                            .Operator(Operator.And)
                                     )
                                 )
+                            )
                         )
                     )
-                )
-                .Highlight(h => h
-                    .Fields(f => f
-                        // .Add("name", new HighlightFieldDescriptor<ProductItemEventModel>())
-                        .Add("gender", new HighlightFieldDescriptor<ProductItemEventModel>())
-                        .Add("subCategoryName", new HighlightFieldDescriptor<ProductItemEventModel>())
-                        .Add("brand", new HighlightFieldDescriptor<ProductItemEventModel>())
-                        .Add("sizeColorVariant.color.color", new HighlightFieldDescriptor<ProductItemEventModel>()
-                        )
-                    )
-                )
-            );
+            )
+        )
+    )
+    .Highlight(h => h
+        .Fields(f => f
+            .Add("gender", new HighlightFieldDescriptor<ProductItemEventModel>())
+            .Add("subCategoryName", new HighlightFieldDescriptor<ProductItemEventModel>())
+            .Add("brand", new HighlightFieldDescriptor<ProductItemEventModel>())
+            .Add("sizeColorVariant.color.color", new HighlightFieldDescriptor<ProductItemEventModel>())
+        )
+    )
+);
 
             if (!searchResponse.IsValidResponse)
                 throw new Exception($"Search failed: {searchResponse.DebugInformation}");

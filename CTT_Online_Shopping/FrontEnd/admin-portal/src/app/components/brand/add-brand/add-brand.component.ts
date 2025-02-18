@@ -31,7 +31,9 @@ export class AddBrandComponent {
         alert('Brand added successfully');
         this.router.navigate(['/brands']);
       },
-      error: () => alert('Error adding brand'),
+      error: (data) => {
+        alert(data.error);
+      },
     });
   }
 }

@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit {
   getHomeContent() {
     this.homeService.getHomePage().subscribe((data) => {
       this.homePageData = data;
+      console.log(this.homePageData);
     });
   }
 

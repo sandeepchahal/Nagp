@@ -6,6 +6,7 @@ using ProductAPI.Models.Query;
 
 namespace ProductAPI.Controllers;
 
+[ApiController]
 [Route("api/brand")]
 public class BrandController(IMongoCollection<BrandDb> brandCollection):ControllerBase
 {
@@ -44,7 +45,11 @@ public class BrandController(IMongoCollection<BrandDb> brandCollection):Controll
             return BadRequest("Brand name is required.");
         }
 
+        var result = await brandCollection.FindAsync(col => col.Name == command.Name);
+        if (result.FirstOrDefaultAsync().Result != null)
+            return BadRequest("Brand already exists");
         var newBrand = new BrandDb { Name = command.Name };
+        
         await brandCollection.InsertOneAsync(newBrand);
 
         return CreatedAtAction(nameof(GetById), new { id = newBrand.Id }, new BrandView { Id = newBrand.Id, Name = newBrand.Name });

@@ -1,8 +1,11 @@
 <!-- Products Section -->
+<div class="card margin-bottom-20" *ngIf="homePageData?.women">
+  <div class="card-header">
 <h2 *ngIf="homePageData?.men">Men</h2>
-
-<div class="col-md-9" style="max-width: 600px;" *ngIf="homePageData?.men">
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+</div>
+<div class="card-body">
+<div class="container-fluid" *ngIf="homePageData?.men">
+    <div class="row row-cols-1 row-cols-md-6 g-4">
       <div class="col" *ngFor="let product of homePageData.men">
         <div class="card h-100" (click)="goToDetail(product.productItemId)">
           <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
@@ -26,11 +29,17 @@
       </div>
     </div>
   </div>
+</div>
+</div>
 
+
+  <div class="card margin-bottom-20" *ngIf="homePageData?.women">
+    <div class="card-header">
   <h2 *ngIf="homePageData?.women">Women</h2>
-
-  <div class="col-md-9" style="max-width: 600px;" *ngIf="homePageData?.women">
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+</div>
+<div class="card-body">
+  <div *ngIf="homePageData?.women">
+    <div class="row row-cols-1 row-cols-md-6 g-4">
       <div class="col" *ngFor="let product of homePageData.women">
         <div class="card h-100" (click)="goToDetail(product.productItemId)">
           <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
@@ -53,4 +62,6 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
   </div>

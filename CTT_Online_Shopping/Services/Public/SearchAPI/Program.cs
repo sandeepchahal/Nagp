@@ -4,7 +4,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Add Swagger only in Development environment
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddSwaggerGen();
@@ -28,6 +27,7 @@ builder.Services.AddCors(options =>
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+
 var app = builder.Build();
 app.UseCors("AllowAll");
 if (app.Environment.IsDevelopment())
@@ -36,7 +36,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseHttpsRedirection();
 app.Use(async (context, next) =>
 {
     var logger = app.Services.GetRequiredService<ILogger<Program>>();
@@ -44,5 +43,7 @@ app.Use(async (context, next) =>
     
     await next(); // Call the next middleware
 });
+app.UseHttpsRedirection();
+
 app.MapControllers();
 app.Run();

@@ -16,13 +16,6 @@
     border-color: #66371c;
     background-color: white;
   }
-  .search-input:focus
-  {
-    border-color: #66371c;
-    opacity: 1;
-    background-color: white;
-    font-family: sans-serif;  
-  }
 
   .search-input::selection
   {

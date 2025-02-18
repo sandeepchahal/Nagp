@@ -70,7 +70,7 @@ public static class ProductItemMapper
                 if (!discountAtProductLevelFlag) continue;
                 Enum.TryParse(request.Variant.Discount.Type, out DiscountTypeEnum discountAtProuctLevelType);
                 sizeVariant.DiscountedPrice =
-                    CalculateDiscount(discountAtProuctLevelType, sizeVariant.DiscountedPrice, request.Variant.Discount);
+                    CalculateDiscount(discountAtProuctLevelType, sizeVariant.DiscountedPrice ==0? sizeVariant.Price:sizeVariant.DiscountedPrice, request.Variant.Discount);
             }
         if (result.Variant.ColorVariant != null)
             foreach (var colorVariant in result.Variant.ColorVariant)
@@ -81,7 +81,7 @@ public static class ProductItemMapper
                 if (!discountAtProductLevelFlag) continue;
                 Enum.TryParse(request.Variant.Discount.Type, out DiscountTypeEnum discountAtProuctLevelType);
                 colorVariant.DiscountedPrice =
-                    CalculateDiscount(discountAtProuctLevelType, colorVariant.DiscountedPrice, request.Variant.Discount);
+                    CalculateDiscount(discountAtProuctLevelType, colorVariant.DiscountedPrice ==0? colorVariant.Price:colorVariant.DiscountedPrice, request.Variant.Discount);
             }
         
         if (result.Variant.SizeColorVariant != null)
@@ -94,7 +94,7 @@ public static class ProductItemMapper
                   if (!discountAtProductLevelFlag) continue;
                   Enum.TryParse(request.Variant.Discount.Type, out DiscountTypeEnum discountAtProuctLevelType);
                   size.DiscountedPrice =
-                      CalculateDiscount(discountAtProuctLevelType, size.DiscountedPrice, request.Variant.Discount);
+                      CalculateDiscount(discountAtProuctLevelType, size.DiscountedPrice ==0? size.Price:size.DiscountedPrice, request.Variant.Discount);
                 }
             }
 
