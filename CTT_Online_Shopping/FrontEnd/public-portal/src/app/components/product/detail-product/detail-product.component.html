@@ -153,8 +153,8 @@
    
   </div>
   <div class="card-body">
-    <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarSubCategory">
-      <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div  *ngIf="productItem?.similarSubCategory">
+      <div class="row row-cols-1 row-cols-md-6 g-4">
         <div class="col" *ngFor="let product of productItem.similarSubCategory?.products">
           <div class="card h-100" (click)="loadProductItem(product.productItemId)">
             <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
@@ -187,8 +187,8 @@
        <h2 *ngIf="productItem?.similarBrand && productItem?.similarBrand?.products?.length">More from {{productItem.similarBrand?.brand?.name}}</h2>
       </div>
       <div class="card-body">
-    <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarBrand">
-      <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div *ngIf="productItem?.similarBrand">
+      <div class="row row-cols-1 row-cols-md-6 g-4">
         <div class="col" *ngFor="let product of productItem?.similarBrand?.products">
           <div class="card h-100" (click)="loadProductItem(product.productItemId)">
             <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
@@ -221,8 +221,8 @@
         <h2 *ngIf="productItem?.similarCategory && productItem?.similarCategory?.products?.length">More Items</h2>
       </div>
       <div class="card-body">
-    <div class="col-md-9" style="max-width: 600px;" *ngIf="productItem?.similarCategory">
-      <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div  *ngIf="productItem?.similarCategory">
+      <div class="row row-cols-1 row-cols-md-6 g-4">
         <div class="col" *ngFor="let product of productItem?.similarCategory?.products">
           <div class="card h-100" (click)="loadProductItem(product.productItemId)">
             <img [src]="product.images[0].url" [alt]="product.images[0].altText" class="card-img-top img-fluid">
