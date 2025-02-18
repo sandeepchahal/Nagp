@@ -30,7 +30,6 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 var app = builder.Build();
 app.UseCors("AllowAll");
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -45,7 +44,5 @@ app.Use(async (context, next) =>
     
     await next(); // Call the next middleware
 });
-
-
 app.MapControllers();
 app.Run();
