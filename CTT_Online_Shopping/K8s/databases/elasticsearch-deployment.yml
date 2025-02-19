@@ -8,11 +8,21 @@ spec:
   selector:
     matchLabels:
       app: elasticsearch
+  serviceName: elasticsearch
   template:
     metadata:
       labels:
         app: elasticsearch
     spec:
+      initContainers:
+        - name: fix-permissions
+          image: busybox
+          command: ["sh", "-c", "chown -R 1000:1000 /usr/share/elasticsearch/data"]
+          securityContext:
+            runAsUser: 0  # Run as root
+          volumeMounts:
+            - name: elastic-data
+              mountPath: /usr/share/elasticsearch/data
       containers:
         - env:
             - name: discovery.type
@@ -35,12 +45,17 @@ spec:
               cpu: 500m
               memory: 1Gi
           volumeMounts:
-            - mountPath: /usr/share/elasticsearch/data
-              name: elastic-data
-      volumes:
-        - emptyDir: {}
-          name: elastic-data
-
+            - name: elastic-data
+              mountPath: /usr/share/elasticsearch/data
+  volumeClaimTemplates:
+    - metadata:
+        name: elastic-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi  # Adjust the size as needed
 ---
 apiVersion: v1
 kind: Service

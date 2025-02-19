@@ -128,6 +128,7 @@ export class DetailProductComponent implements OnInit {
   }
 
   loadProductItem(productId: string): void {
+    this.showLoading = true;
     this.productItemService.getProductItemById(productId).subscribe({
       next: (data) => {
         this.productItem = data;
@@ -141,7 +142,10 @@ export class DetailProductComponent implements OnInit {
         this.setDefaultPrice();
         this.showLoading = false;
       },
-      error: (err) => console.error('Error fetching product item:', err),
+      error: (err) => {
+        console.error('Error fetching product item:', err);
+        this.showLoading = false;
+      },
     });
   }
 
