@@ -117,7 +117,7 @@ public class UserController(
             return Unauthorized(new { message = "Invalid credentials" });
         }
 
-        var result = await signInManager.PasswordSignInAsync(user, model.Password, false, false);
+        var result = await signInManager.PasswordSignInAsync(user.UserName, model.Password, false, false);
         if (result.Succeeded)
         {
             var token = jwtTokenGeneration.GenerateToken(user);
