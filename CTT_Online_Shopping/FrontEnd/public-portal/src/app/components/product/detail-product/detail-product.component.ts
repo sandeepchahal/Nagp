@@ -16,6 +16,17 @@ import { ListReviewComponent } from '../../review/list-review/list-review.compon
 import { AddReviewComponent } from '../../review/add-review/add-review.component';
 import { AuthService } from '../../../services/auth.service';
 import { LoaderComponent } from '../../common/loader/loader.component';
+import { WishListBase } from '../../../models/wishlist.model';
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate,
+  keyframes,
+} from '@angular/animations';
+import { WishListService } from '../../../services/wishlist.service';
+import { error } from 'console';
 
 @Component({
   selector: 'app-detail-product',
@@ -30,6 +41,23 @@ import { LoaderComponent } from '../../common/loader/loader.component';
   ],
   templateUrl: './detail-product.component.html',
   styleUrl: './detail-product.component.css',
+  animations: [
+    trigger('bounce', [
+      state('normal', style({ transform: 'scale(1)' })),
+      state('bounced', style({ transform: 'scale(1.1)' })),
+      transition('normal => bounced', [
+        animate(
+          '0.5s cubic-bezier(0.4, 0, 0.6, 1)',
+          keyframes([
+            style({ transform: 'scale(1)', offset: 0 }),
+            style({ transform: 'scale(1.2)', offset: 0.3 }),
+            style({ transform: 'scale(1)', offset: 0.6 }),
+            style({ transform: 'scale(1.1)', offset: 1 }),
+          ])
+        ),
+      ]),
+    ]),
+  ],
 })
 export class DetailProductComponent implements OnInit {
   productItem!: ProductItemView;
@@ -67,12 +95,15 @@ export class DetailProductComponent implements OnInit {
   isLoggedIn: boolean = false;
   showAddReviewFlag: boolean = false;
   showLoading: boolean = true;
+  wishListAdded: boolean = false;
+  bounceState = 'default';
   constructor(
     private route: ActivatedRoute,
     private productItemService: ProductItemService,
     private cartService: CartService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private wishListService: WishListService
   ) {}
 
   ngOnInit(): void {
@@ -94,7 +125,6 @@ export class DetailProductComponent implements OnInit {
       this.isLoggedIn = true;
       console.log('user is athenticated');
     }
-    this.showLoading = false;
   }
 
   loadProductItem(productId: string): void {
@@ -109,6 +139,7 @@ export class DetailProductComponent implements OnInit {
         this.cartItem.productItemId = data.id;
         this.setVariantImages();
         this.setDefaultPrice();
+        this.showLoading = false;
       },
       error: (err) => console.error('Error fetching product item:', err),
     });
@@ -400,7 +431,27 @@ export class DetailProductComponent implements OnInit {
   }
 
   addToWishlist() {
-    console.log(this.selectedVariant);
+    if (this.isLoggedIn) {
+      const wishList: WishListBase = {
+        productId: this.productItem.productId,
+        productItemId: this.productItem.id,
+      };
+      this.wishListService.addToWishList(wishList).subscribe({
+        next: () => {
+          this.wishListAdded = true;
+          this.bounceState = 'bounced';
+
+          setTimeout(() => {
+            this.bounceState = 'normal';
+          }, 600);
+        },
+        error: (err) => {
+          alert(err.message);
+        },
+      });
+    } else {
+      alert('You must be logged in to add into wishlist');
+    }
   }
   resetCartItem() {
     this.cartItem.brand = '';

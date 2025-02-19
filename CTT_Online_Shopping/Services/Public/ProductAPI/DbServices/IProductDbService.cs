@@ -1,5 +1,6 @@
 using ProductAPI.Models;
 using ProductAPI.Models.Products;
+using ProductAPI.Models.WishList;
 
 namespace ProductAPI.DbServices;
 
@@ -12,7 +13,7 @@ public interface IProductDbService
     Task<List<ProductFilterView>> GetAsync(string? gender = null, string? brand = null, string? color = null,
         string? subcategory = null);
 
-
+    Task<List<WishListQuery>> GetWishlist(string email);
 
 
 }

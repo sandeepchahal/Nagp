@@ -1,21 +1,20 @@
-using System.Diagnostics;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ProductAPI.Extensions;
 using ProductAPI.Helper;
 using ProductAPI.Models.Brands;
-using ProductAPI.Models.Categories;
 using ProductAPI.Models.ProductItems;
 using ProductAPI.Models.Products;
+using ProductAPI.Models.WishList;
 
 namespace ProductAPI.DbServices;
 
 public class ProductDbService(
     IMongoCollection<Product> productCollection,
-    IMongoCollection<Category> categoryCollection,
     IProductItemDbService productItemDbService,
     IBrandDbService brandDbService,
-    ICategoryDbService categoryDbService
-) : IProductDbService
+    ICategoryDbService categoryDbService,
+    IMongoCollection<WishListDb> wishListCollection) : IProductDbService
 {
     public async Task<Product?> GetAsync(string id)
     {
@@ -147,6 +146,36 @@ public class ProductDbService(
 
         return finalResult;
     }
+
+    public async Task<List<WishListQuery>> GetWishlist(string email)
+    {
+        
+        var result = await wishListCollection.Find(col => col.Email == email).ToListAsync();
+
+        List<WishListQuery> list = new();
+        foreach (var item in result)
+        {
+            var product = await GetAsync(item.ProductId);
+            var brand = await brandDbService.GetAsync(product.BrandId);
+            var productItem = await productItemDbService.GetAsync(item.ProductItemId);
+            var image = ProductHelper.GetImages(productItem);
+            var price = ProductHelper.GetPrice(productItem);
+                var wishList = new WishListQuery()
+            {
+                ProductItemId = item.ProductItemId,
+                ProductId = item.ProductId,
+                Id = item.Id,
+                Name = product.Name,
+                Brand = brand,
+                ImageUrl = image[0].Url,
+                Price = price.OriginalPrice==0?price.DiscountPrice: price.OriginalPrice.ToInt()
+            };
+            list.Add(wishList);
+        }
+
+        return list;
+    }
+
     private async Task<List<ProductItemFilterContents>> FetchProductItemFilterContents(string productId, string? color= null)
     {
         var productItems = await productItemDbService.GetByProductIdAsync(productId);

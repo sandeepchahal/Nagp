@@ -19,8 +19,8 @@ public class ApplicationUser : IdentityUser
     public string? Provider { get; set; } = "System";
     public string? ProviderId { get; set; } // Google User ID
 
-    public string Address { get; set; }
-    public string City { get; set; }
-    public string Zip { get; set; }
-    public string Country { get; set; }
+    public string? Address { get; set; }
+    public string? City { get; set; }
+    public string? Zip { get; set; }
+    public string? Country { get; set; }
 }

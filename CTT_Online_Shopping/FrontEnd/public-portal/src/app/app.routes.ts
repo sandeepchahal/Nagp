@@ -10,8 +10,8 @@ import { HomeComponent } from './components/home/home/home.component';
 import { FilterProductComponent } from './components/product/filter-product/filter-product.component';
 import { ConfirmOrderComponent } from './components/order/confirm-order/confirm-order.component';
 import { ListOrderComponent } from './components/order/list-order/list-order.component';
-import { WishlistComponent } from './components/user/wishlist/wishlist.component';
 import { DetailOrderComponent } from './components/order/detail-order/detail-order.component';
+import { ListWishlistComponent } from './components/wishlist/list-wishlist/list-wishlist.component';
 
 export const routes: Routes = [
   { path: 'products', component: FilterProductComponent },
@@ -28,7 +28,7 @@ export const routes: Routes = [
   { path: 'order/detail/:id', component: DetailOrderComponent },
 
   { path: 'user/login', component: LoginComponent },
-  { path: 'user/wishlist', component: WishlistComponent },
+  { path: 'user/wishlist', component: ListWishlistComponent },
 
   { path: '', component: HomeComponent },
 ];
