@@ -24,7 +24,7 @@ public class ReviewController(IReviewDbService reviewDbService) : ControllerBase
             // convert reviewCommand to  reviewDb
             var reviewDb = await ConvertToDomainModel(reviewCommand, token);
             await reviewDbService.AddReview(reviewDb);
-            return Ok("Review has been added");
+            return Ok(new {message = "Review has been added"});
         }
         catch (Exception)
         {
@@ -36,14 +36,16 @@ public class ReviewController(IReviewDbService reviewDbService) : ControllerBase
     public async Task<IActionResult> GetByProductId(string productId)
     {
         var result = await reviewDbService.GetByProductId(productId);
-        return Ok(result);
+        var final = result.OrderByDescending(col => col.CreatedAt).ToList();
+        
+        return Ok(final.Count()>5? final.Take(5): final);
     }
 
     private async Task<ReviewDb> ConvertToDomainModel(ReviewCommand command, string token)
     {
         var imageUrls = new List<ImageBinaryData>();
 
-        if (command.Images != null)
+        if (command.Images != null && command.Images.Any())
         {
             imageUrls.AddRange(from image in command.Images
                 where !string.IsNullOrEmpty(image.Base64Data)

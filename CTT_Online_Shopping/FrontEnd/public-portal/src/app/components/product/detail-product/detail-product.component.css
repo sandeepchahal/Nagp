@@ -180,3 +180,34 @@
   {
     margin-bottom: 20px;
   }
+
+
+.card-header
+{
+    background-color: #aa8b77 ;
+    color: white;
+    margin-bottom: 20px;
+}
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensures all cards have equal height */
+  }
+  
+  .card-img-top {
+    height: 200px; /* Adjust as per requirement */
+    object-fit: contain; /* Ensures image scales without distortion */
+
+  }
+  
+  .card-body {
+    flex-grow: 1; /* Fills remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Aligns text at the bottom */
+  }
+  .card-container
+  {
+    margin: 10px;
+  }
+  
