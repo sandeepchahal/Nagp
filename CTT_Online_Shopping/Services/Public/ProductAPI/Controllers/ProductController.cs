@@ -1,11 +1,17 @@
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc;
 using ProductAPI.DbServices;
+using ProductAPI.Models.Order;
 
 namespace ProductAPI.Controllers;
 
 [ApiController]
 [Route("api/product")]
-public class ProductController(IProductDbService productDbService,ILogger<ProductController> logger, ICategoryDbService categoryDbService)
+public class ProductController(
+    IProductDbService productDbService,
+    ILogger<ProductController> logger, 
+    ICategoryDbService categoryDbService,
+    IOrderDbService orderDbService)
     : ControllerBase
 {
     
@@ -80,6 +86,72 @@ public class ProductController(IProductDbService productDbService,ILogger<Produc
             await productDbService.GetAsync(gender: gender, brand: brand, color: color, subcategory: subcategory);
         
         return Ok(result);
+    }
+
+
+    [HttpPost("order")]
+    public async Task<IActionResult> CreateOrder(OrderRequest request)
+    {
+        try
+        {
+            // create an order
+            var result  =await orderDbService.CreateOrderAsync(request: request);
+            // update user details in user service
+            
+            return Ok(result);
+        }
+        catch
+        {
+            return BadRequest("An error has occurred");
+        }
+    }
+
+    [HttpGet("order/get")]
+    public async Task<IActionResult> GetOrderlist()
+    {
+        try
+        {
+            var authHeader = Request.Headers["Authorization"].FirstOrDefault();
+
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+            {
+                return Unauthorized("Missing or invalid token");
+            }
+
+            var token = authHeader.Substring("Bearer ".Length).Trim();
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadJwtToken(token);
+
+            var email = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email)?.Value;
+
+            if (string.IsNullOrEmpty(email))
+            {
+                return Unauthorized("Invalid token");
+            }
+
+            var result = await orderDbService.GetOrdersAsync(email);
+            return Ok(result);
+        }
+        catch
+        {
+            return BadRequest("An error has occurred");
+        }
+    }
+    
+    [HttpGet("order/get/{id}")]
+    public async Task<IActionResult> GetOrderlist(string id)
+    {
+        try
+        {
+            
+            var result = await orderDbService.GetAsync(id);
+            return Ok(result);
+        }
+        catch
+        {
+            return BadRequest("An error has occurred");
+        }
     }
 
 }

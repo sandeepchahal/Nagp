@@ -89,4 +89,10 @@ export class MainHeaderComponent implements OnInit {
   logout() {
     this.authService.logout();
   }
+  goToOrderList() {
+    this.router.navigate(['order/list']);
+  }
+  goToWishList() {
+    this.router.navigate(['user/wishlist']);
+  }
 }

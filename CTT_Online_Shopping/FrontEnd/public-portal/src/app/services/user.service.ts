@@ -13,7 +13,7 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getUserDetails(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/details`).pipe(
+    return this.http.get<any>(`${this.apiUrl}/detail`).pipe(
       catchError((error) => {
         console.error('Error :', error);
         return throwError(() => error);

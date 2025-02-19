@@ -1,25 +1,11 @@
 <div class="container mt-4">
     <!-- Login Section -->
-  <div *ngIf="!isLoggedIn && !guestCheckout" class="card p-3 mb-3 text-center">
-    <h5>Checkout as Guest or Login</h5>
-
-    <!-- Login Form -->
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mb-3">
-      <input type="text" formControlName="username" placeholder="Username" class="form-control mb-2" required />
-      <input type="password" formControlName="password" placeholder="Password" class="form-control mb-2" required />
-      <button type="submit" class="btn btn-primary w-100 mb-2">Login</button>
-    </form>
-
-    <p class="text-center">OR</p>
-
-    <!-- Google Sign-In Button -->
-    <asl-google-signin-button class="w-100" ></asl-google-signin-button>
-
-    <p class="text-center mt-3">OR</p>
-
-    <!-- Continue as Guest Button -->
-    <button class="btn btn-warning w-100" (click)="continueAsGuest()">Continue Without Login</button>
+  <div *ngIf="!isLoggedIn || guestCheckout" class="card p-3 mb-3 text-center">
+    <app-login></app-login>
   </div>
+
+  <button  *ngIf="!isLoggedIn" class="btn btn-warning w-100" (click)="continueAsGuest()">Continue Without Login</button>
+
   
     <div *ngIf="isLoggedIn || guestCheckout">
       <div class="row">

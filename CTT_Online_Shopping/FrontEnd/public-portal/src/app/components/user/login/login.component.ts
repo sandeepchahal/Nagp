@@ -92,6 +92,7 @@ export class LoginComponent {
   // Form-based sign-in
   onSubmit(): void {
     const formData = this.loginForm.value;
+    console.log(formData);
     this.authService.login(formData).subscribe(
       (response) => {
         console.log('Login success', response);
@@ -99,7 +100,7 @@ export class LoginComponent {
         this.router.navigate(['/']);
       },
       (error) => {
-        console.error('Login error', error);
+        alert('Email or password is incorrect');
       }
     );
   }

@@ -3,6 +3,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ProductFilterView, ProductView } from '../models/product.model';
 import { environment } from '../../environments/environment';
+import { OrderRequest } from '../models/orderRequest.model';
 @Injectable({
   providedIn: 'root',
 })

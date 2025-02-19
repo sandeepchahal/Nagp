@@ -1,4 +1,7 @@
-<div class="container-fluid mt-4">
+
+<app-loader *ngIf="showLoading"></app-loader>
+
+<div class="container-fluid mt-4"  *ngIf="!showLoading">
   <div class="row">
     <!-- Filters Section (Left Side) -->
     <div class="col-md-3">
@@ -35,17 +38,17 @@
               <div class="product-price small">
                 <!-- Discounted Price or Original Price -->
                 <span class="fw-bold text-dark price-color">
-                  ₹{{ productItem.price.discountPrice || productItem.price.originalPrice }}
+                  ₹{{ (productItem.price.discountPrice || productItem.price.originalPrice) | number:'1.0-0' }}
                 </span>
 
                 <!-- Original Price (Strikethrough) -->
                 <span class="text-muted me-2" *ngIf="productItem.price.discountPrice > 0">
-                  <del>₹{{ productItem.price.originalPrice }}</del>
+                  <del>₹{{ productItem.price.originalPrice | number:'1.0-0' }}</del>
                 </span>
 
                 <!-- Discount Badge -->
                 <span class="badge bg-success ms-2" *ngIf="productItem.price.discountPrice > 0">
-                  {{ calculateDiscount(productItem.price) }}% off
+                  {{ calculateDiscount(productItem.price) | number:'1.0-0' }}% off
                 </span>
               </div>
             </div>

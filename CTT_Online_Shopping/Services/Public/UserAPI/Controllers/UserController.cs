@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,57 @@ public class UserController(
             var token = jwtTokenGeneration.GenerateToken(user);
                 return Ok(new { Token=token });
            
+        }
+        catch (Exception e)
+        {
+            return BadRequest("An error has occurred");
+        }
+    }
+
+    [HttpGet("detail")]
+    public async Task<IActionResult> UserDetails()
+    {
+        try
+        {
+            var authHeader = Request.Headers["Authorization"].FirstOrDefault();
+
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+            {
+                return Unauthorized("Missing or invalid token");
+            }
+
+            var token = authHeader.Substring("Bearer ".Length).Trim();
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadJwtToken(token);
+
+            var email = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email)?.Value;
+
+            if (string.IsNullOrEmpty(email))
+            {
+                return Unauthorized("Invalid token");
+            }
+
+            var user = await userDbContext.Users
+                .Where(u => u.Email == email)
+                .Select(u => new UserDetail
+                {
+                    UserId = u.Id,
+                    FullName = u.FullName,
+                    Email = u.Email,
+                    Phone = u.PhoneNumber,
+                    Address = u.Address,
+                    City = u.City,
+                    Zip = u.Zip,
+                    Country = u.Country
+                }).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            return Ok(user);
         }
         catch (Exception e)
         {

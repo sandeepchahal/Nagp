@@ -5,16 +5,18 @@ import { HomePage } from '../../../models/home.model';
 import { Router } from '@angular/router';
 import { TruncatePipe } from '../../../truncate.pipe';
 import { CommonModule } from '@angular/common';
+import { LoaderComponent } from '../../common/loader/loader.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [TruncatePipe, CommonModule],
+  imports: [TruncatePipe, CommonModule, LoaderComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
   homePageData!: HomePage;
+  isLoadingDone: boolean = false;
 
   constructor(private homeService: HomeService, private router: Router) {}
 
@@ -25,7 +27,7 @@ export class HomeComponent implements OnInit {
   getHomeContent() {
     this.homeService.getHomePage().subscribe((data) => {
       this.homePageData = data;
-      console.log(this.homePageData);
+      this.isLoadingDone = true;
     });
   }
 

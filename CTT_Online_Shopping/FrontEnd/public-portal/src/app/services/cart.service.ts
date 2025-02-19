@@ -133,7 +133,10 @@ export class CartService {
       this.saveCartToLocalStorage();
     }
   }
-
+  removeFromCart() {
+    localStorage.removeItem('cartItems');
+    this.cartItems = [];
+  }
   // Find an item in the cart based on variantType (size, color, etc.)
   private findCartItem(item: CartItem): CartItem | undefined {
     console.log('findCartItem', item);

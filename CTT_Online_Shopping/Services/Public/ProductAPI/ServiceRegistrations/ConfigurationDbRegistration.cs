@@ -6,6 +6,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using ProductAPI.Models.Brands;
 using ProductAPI.Models.Categories;
+using ProductAPI.Models.Order;
 using ProductAPI.Models.ProductItems;
 using ProductAPI.Models.Products;
 using ProductAPI.Models.Review;
@@ -54,6 +55,7 @@ public static class ConfigurationDbRegistration
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<ProductItem>("productItems"));
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<Brand>("brands"));
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<ReviewDb>("reviews"));
+        services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<OrderDb>("orders"));
     }
 
     private static void CustomMapping()

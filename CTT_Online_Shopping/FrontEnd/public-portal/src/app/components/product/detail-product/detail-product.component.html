@@ -1,4 +1,9 @@
-<div class="product-detail" *ngIf="productItem">
+
+<app-loader *ngIf="showLoading">
+
+</app-loader>
+
+<div class="product-detail" *ngIf="productItem && !showLoading">
     <!-- Left Side: Image Section -->
     <div class="image-section">
       <!-- Main Image -->
@@ -36,13 +41,13 @@
       <div class="price">
         <strong>MRP: </strong>
         <span *ngIf="discountPrice > 0" class="original-price">
-          {{ selectedVariant.price | currency:'INR' }}
+          ₹ {{ selectedVariant.price | number:'1.0-0' }}
         </span>
         <span *ngIf="discountPrice > 0" class="discounted-price">
-          {{ selectedVariant.discountedPrice | currency:'INR' }}
+          ₹ {{selectedVariant.discountedPrice | number:'1.0-0' }}
         </span>
         <span *ngIf="discountPrice === 0">
-          {{ selectedVariant.price | currency:'INR' }}
+          ₹ {{ selectedVariant.price | number:'1.0-0' }}
         </span>
       </div>
   
@@ -134,7 +139,8 @@
       <div class="review-section">
         <hr>
         <h1>Reviews</h1>
-        <button *ngIf="!this.showAddReviewFlag" (click)="showAddReview()" class="btn btn-sm btn-success margin-bottom-20">Add Review</button>
+        <p *ngIf="!this.showAddReviewFlag">Please login to add the review! <i (click)="navigateToLogin()" style="cursor: pointer; text-decoration: underline;"> Sign In</i></p>
+        <button *ngIf="this.showAddReviewFlag" (click)="showAddReview()" class="btn btn-sm btn-success margin-bottom-20">Add Review</button>
         <div class="add-review" *ngIf="isLoggedIn && this.showAddReviewFlag">
           <app-add-review [productId]="productItem.productId" [productItemId]="productItem.id"></app-add-review>
         </div>
@@ -147,7 +153,7 @@
 
 <br>
     <!-- Product with Similar choices -->
-    <div class="card margin-bottom-20" *ngIf="productItem?.similarSubCategory && productItem.similarSubCategory?.products?.length">
+    <div class="card margin-bottom-20" *ngIf="productItem?.similarSubCategory && productItem.similarSubCategory?.products?.length && !showLoading">
       <div class="card-header">
     <h2 *ngIf="productItem?.similarSubCategory && productItem.similarSubCategory?.products?.length">Similar Choices</h2>
    
@@ -163,14 +169,14 @@
               <p class="card-text text-muted">{{ product.name | truncate:20 }}</p>
               <div class="product-price">
                   <span class="fw-bold text-dark price-color">
-                      ₹{{ product.price.discountPrice || product.price.originalPrice }}
+                      ₹{{ product.price.discountPrice || product.price.originalPrice | number:'1.0-0' }}
                   </span>
                 <span class="text-muted me-2" *ngIf="product.price.discountPrice > 0">
-                  <del>₹{{ product.price.originalPrice }}</del>
+                  <del>₹{{ product.price.originalPrice | number:'1.0-0' }}</del>
                 </span>
               
                 <span class="badge bg-success ms-2" *ngIf="product.price.discountPrice > 0">
-                  {{ calculateDiscount(product.price) }}% off
+                  {{ calculateDiscount(product.price) | number:'1.0-0' }}% off
                 </span>
               </div>
             </div>
@@ -182,7 +188,7 @@
 </div>
     
     <br>
-    <div class="card margin-bottom-20" *ngIf="productItem?.similarBrand && productItem?.similarBrand?.products?.length">
+    <div class="card margin-bottom-20" *ngIf="productItem?.similarBrand && productItem?.similarBrand?.products?.length && !showLoading">
       <div class="card-header">
        <h2 *ngIf="productItem?.similarBrand && productItem?.similarBrand?.products?.length">More from {{productItem.similarBrand?.brand?.name}}</h2>
       </div>
@@ -197,14 +203,14 @@
               <p class="card-text text-muted">{{ product.name | truncate:20 }}</p>
               <div class="product-price">
                   <span class="fw-bold text-dark price-color">
-                      ₹{{ product.price.discountPrice || product.price.originalPrice }}
+                      ₹{{ (product.price.discountPrice || product.price.originalPrice) | number:'1.0-0' }}
                   </span>
                 <span class="text-muted me-2" *ngIf="product.price.discountPrice > 0">
-                  <del>₹{{ product.price.originalPrice }}</del>
+                  <del>₹{{ product.price.originalPrice  | number:'1.0-0'}}</del>
                 </span>
               
                 <span class="badge bg-success ms-2" *ngIf="product.price.discountPrice > 0">
-                  {{ calculateDiscount(product.price) }}% off
+                  {{ calculateDiscount(product.price) | number:'1.0-0' }}% off
                 </span>
               </div>
             </div>
@@ -216,7 +222,7 @@
 </div>
 
     <br>
-    <div class="card margin-bottom-20" *ngIf="productItem?.similarCategory  && productItem?.similarCategory?.products?.length">
+    <div class="card margin-bottom-20" *ngIf="productItem?.similarCategory  && productItem?.similarCategory?.products?.length && !showLoading">
       <div class="card-header">
         <h2 *ngIf="productItem?.similarCategory && productItem?.similarCategory?.products?.length">More Items</h2>
       </div>
@@ -231,14 +237,14 @@
               <p class="card-text text-muted">{{ product.name | truncate:20 }}</p>
               <div class="product-price">
                   <span class="fw-bold text-dark price-color">
-                      ₹{{ product.price.discountPrice || product.price.originalPrice }}
+                      ₹{{ (product.price.discountPrice || product.price.originalPrice)  | number:'1.0-0'}}
                   </span>
                 <span class="text-muted me-2" *ngIf="product.price.discountPrice > 0">
-                  <del>₹{{ product.price.originalPrice }}</del>
+                  <del>₹{{ product.price.originalPrice | number:'1.0-0' }}</del>
                 </span>
               
                 <span class="badge bg-success ms-2" *ngIf="product.price.discountPrice > 0">
-                  {{ calculateDiscount(product.price) }}% off
+                  {{ calculateDiscount(product.price) | number:'1.0-0' }}% off
                 </span>
               </div>
             </div>

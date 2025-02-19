@@ -21,6 +21,7 @@ import {
 import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { User } from '../../../models/user.model';
 import { CheckoutService } from '../../../services/checkout.service';
+import { LoginComponent } from '../../user/login/login.component';
 
 @Component({
   selector: 'app-billing-information',
@@ -32,6 +33,7 @@ import { CheckoutService } from '../../../services/checkout.service';
     ReactiveFormsModule,
     SocialLoginModule,
     GoogleSigninButtonModule,
+    LoginComponent,
   ],
   templateUrl: './billing-information.component.html',
   styleUrl: './billing-information.component.css',
@@ -73,8 +75,26 @@ export class BillingInformationComponent implements OnInit {
 
   ngOnInit(): void {
     // Check if user is logged in
-    this.isLoggedIn = this.authService.isAuthenticated();
 
+    // Subscribe to social auth state changes
+    this.socialAuthService.authState.subscribe((user: SocialUser) => {
+      this.socialUser = user;
+      if (user) {
+        this.handleSocialLogin(user);
+      }
+    });
+
+    // Subscribe to the userInfo$ observable to get updates
+    this.authService.userInfo$.subscribe((userInfo) => {
+      if (userInfo) {
+        this.isLoggedIn = true;
+      } else {
+        this.isLoggedIn = false;
+      }
+    });
+
+    this.isLoggedIn = this.authService.isAuthenticated();
+    console.log('user logged in ', this.isLoggedIn);
     this.billingForm = this.fb.group({
       fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -112,22 +132,7 @@ export class BillingInformationComponent implements OnInit {
         });
       });
     }
-    // Subscribe to social auth state changes
-    this.socialAuthService.authState.subscribe((user: SocialUser) => {
-      this.socialUser = user;
-      if (user) {
-        this.handleSocialLogin(user);
-      }
-    });
-
-    // Subscribe to the userInfo$ observable to get updates
-    this.authService.userInfo$.subscribe((userInfo) => {
-      if (userInfo) {
-        this.isLoggedIn = true;
-      } else {
-        this.isLoggedIn = false;
-      }
-    });
+    console.log('user logged in ', this.isLoggedIn);
   }
   // Handle Google Sign-In
   handleSocialLogin(user: SocialUser): void {
@@ -192,13 +197,13 @@ export class BillingInformationComponent implements OnInit {
           : this.billingForm.value.city,
         country: this.shippingDifferent
           ? this.shippingForm.value.shipCountry
-          : this.billingForm.value.city,
+          : this.billingForm.value.country,
         streetAddress: this.shippingDifferent
           ? this.shippingForm.value.shipAddress
-          : this.billingForm.value.city,
+          : this.billingForm.value.address,
         zipCode: this.shippingDifferent
           ? this.shippingForm.value.shipZip
-          : this.billingForm.value.city,
+          : this.billingForm.value.zip,
       },
     };
     this.checkOutService.setUserData(user);

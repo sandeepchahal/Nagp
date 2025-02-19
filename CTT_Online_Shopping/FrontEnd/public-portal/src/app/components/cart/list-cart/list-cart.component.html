@@ -29,10 +29,10 @@
               </td>
               <td>
                 <strong *ngIf="item?.discountedPrice !== 0; else originalPriceList">
-                  {{ item?.discountedPrice | currency:'INR' }}
+                  ₹ {{ item?.discountedPrice | number:'1.0-0' }}
                 </strong>
                 <ng-template #originalPriceList>
-                  <strong>{{ item?.price | currency:'INR' }}</strong>
+                  <strong>₹ {{ item?.price | number:'1.0-0' }}</strong>
                 </ng-template>
               </td>
               <td>
@@ -44,10 +44,10 @@
               </td>
               <td>
                 <strong *ngIf="item?.discountedPrice !== 0; else originalPriceTotal">
-                  {{ (item.discountedPrice * item.orderCount) | currency:'INR' }}
+                  ₹ {{ (item.discountedPrice * item.orderCount) | number:'1.0-0' }}
                 </strong>
                 <ng-template #originalPriceTotal>
-                  <strong>{{ (item.price * item.orderCount) | currency:'INR' }}</strong>
+                  <strong>₹ {{ (item.price * item.orderCount) | number:'1.0-0' }}</strong>
                 </ng-template>
               </td>
               <td>
@@ -62,9 +62,9 @@
       <div class="col-md-4">
         <div class="cart-summary">
           <h3>Order Summary</h3>
-          <p><strong>Cart Total:</strong> {{ totalPrice | currency:'INR' }}</p>
-          <p><strong>Shipping:</strong> {{ shipping | currency:'INR' }}</p>
-          <p><strong>Total Price:</strong> {{ (totalPrice + shipping) | currency:'INR' }}</p>
+          <p><strong>Cart Total:</strong> ₹ {{ totalPrice | number:'1.0-0' }}</p>
+          <p><strong>Shipping:</strong> ₹ {{ shipping | number:'1.0-0' }}</p>
+          <p><strong>Total Price:</strong> ₹ {{ (totalPrice + shipping) | number:'1.0-0' }}</p>
           <button class="btn btn-success btn-lg btn-block" (click)="placeOrder()">Proceed To Checkout</button>
         </div>
       </div>
