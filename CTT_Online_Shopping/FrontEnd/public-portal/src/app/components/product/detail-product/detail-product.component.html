@@ -126,8 +126,10 @@
         <button class="btn btn-danger btn-lg margin-right20" (click)="addToBag()">
           <i class="bi bi-bag"></i> Add to Bag
         </button>
-        <button class="btn btn-warning btn-lg" (click)="addToWishlist()">
-          <i class="bi bi-heart"></i> Wishlist
+        <button class="btn btn-warning btn-lg" (click)="addToWishlist()" 
+         [@bounce]="bounceState" 
+        [disabled]="wishListAdded">
+          <i class="bi bi-heart" ></i> Wishlist
         </button>
       </div>
 

@@ -35,7 +35,7 @@ export class RegisterUserComponent {
           this.router.navigate(['/']);
         },
         (error) => {
-          console.error('Error during registration:', error);
+          alert('Error during registration');
         }
       );
     }

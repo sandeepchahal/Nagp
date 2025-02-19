@@ -1,0 +1,32 @@
+
+<app-loader *ngIf="showLoading"></app-loader>
+
+<div class="container mt-4" *ngIf="!showLoading">
+    <h2 class="text-center mb-4">My Wishlist</h2>
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="list-group">
+          <div *ngFor="let item of wishlist" class="list-group-item d-flex align-items-center">
+            <!-- Image Section -->
+            <img [src]="item.imageUrl" [alt]="item.name"
+             class="img-fluid rounded me-3" 
+             style="width: 80px; height: 80px; object-fit: cover;"
+             (click)="goToDetail(item.productItemId)">
+  
+            <!-- Item Details -->
+            <div class="flex-grow-1">
+              <h5 class="mb-1">{{ item.name }}</h5>
+              <p class="mb-1 text-muted">{{ item.brand.name }}</p>
+              <p class="mb-1 fw-bold">₹{{ item.price | number:'1.0-0' }}</p>
+            </div>
+  
+            <!-- Action Buttons -->
+            <button class="btn btn-danger btn-sm" (click)="removeFromWishlist(item.id)">
+              <i class="bi bi-trash"></i> Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

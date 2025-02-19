@@ -10,6 +10,7 @@ using ProductAPI.Models.Order;
 using ProductAPI.Models.ProductItems;
 using ProductAPI.Models.Products;
 using ProductAPI.Models.Review;
+using ProductAPI.Models.WishList;
 
 namespace ProductAPI.ServiceRegistrations;
 
@@ -56,6 +57,7 @@ public static class ConfigurationDbRegistration
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<Brand>("brands"));
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<ReviewDb>("reviews"));
         services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<OrderDb>("orders"));
+        services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<WishListDb>("wishlists"));
     }
 
     private static void CustomMapping()

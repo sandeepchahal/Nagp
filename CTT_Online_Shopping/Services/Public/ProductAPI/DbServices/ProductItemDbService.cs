@@ -10,7 +10,6 @@ public class ProductItemDbService(
     IMongoCollection<ProductItem> productItemCollection,
     IMongoCollection<Product> productCollection,
     IBrandDbService brandDbService,
-    IReviewDbService reviewDbService,
     ICategoryDbService categoryDbService):IProductItemDbService
 {
     public async Task<List<ProductItem>?> GetByProductIdAsync(string productId)
