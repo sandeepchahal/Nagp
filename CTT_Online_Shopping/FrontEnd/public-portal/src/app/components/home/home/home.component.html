@@ -1,5 +1,8 @@
 <!-- Products Section -->
-<div class="card margin-bottom-20" *ngIf="homePageData?.women">
+
+<app-loader *ngIf="!isLoadingDone"></app-loader>
+
+<div class="card margin-bottom-20" *ngIf="homePageData?.women && isLoadingDone">
   <div class="card-header">
 <h2 *ngIf="homePageData?.men">Men</h2>
 </div>
@@ -14,14 +17,14 @@
             <p class="card-text text-muted">{{ product.name | truncate:20 }}</p>
             <div class="product-price">
                 <span class="fw-bold text-dark price-color">
-                    ₹{{ product.price.discountPrice || product.price.originalPrice }}
+                    ₹{{ (product.price.discountPrice || product.price.originalPrice) | number:'1.0-0' }}
                 </span>
               <span class="text-muted me-2" *ngIf="product.price.discountPrice > 0">
-                <del>₹{{ product.price.originalPrice }}</del>
+                <del>₹{{ product.price.originalPrice | number:'1.0-0' }}</del>
               </span>
             
               <span class="badge bg-success ms-2" *ngIf="product.price.discountPrice > 0">
-                {{ calculateDiscount(product.price) }}% off
+                {{ calculateDiscount(product.price)  | number:'1.0-0'}}% off
               </span>
             </div>
           </div>
@@ -33,7 +36,7 @@
 </div>
 
 
-  <div class="card margin-bottom-20" *ngIf="homePageData?.women">
+  <div class="card margin-bottom-20" *ngIf="homePageData?.women && isLoadingDone">
     <div class="card-header">
   <h2 *ngIf="homePageData?.women">Women</h2>
 </div>
@@ -48,14 +51,14 @@
             <p class="card-text text-muted">{{ product.name | truncate:20 }}</p>
             <div class="product-price">
                 <span class="fw-bold text-dark price-color">
-                    ₹{{ product.price.discountPrice || product.price.originalPrice }}
+                    ₹{{ (product.price.discountPrice || product.price.originalPrice ) | number:'1.0-0'}}
                 </span>
               <span class="text-muted me-2" *ngIf="product.price.discountPrice > 0">
-                <del>₹{{ product.price.originalPrice }}</del>
+                <del>₹{{ product.price.originalPrice | number:'1.0-0' }}</del>
               </span>
             
               <span class="badge bg-success ms-2" *ngIf="product.price.discountPrice > 0">
-                {{ calculateDiscount(product.price) }}% off
+                {{ calculateDiscount(product.price) | number:'1.0-0' }}% off
               </span>
             </div>
           </div>

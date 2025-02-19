@@ -62,8 +62,8 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-end dropdown-wide" aria-labelledby="profileDropdown">
             <li *ngIf="userName.length>0"> <p class="dropdown-item">Hi, {{userName}}</p></li>
-            <li><a class="dropdown-item" >Orders</a></li>
-            <li><a class="dropdown-item" >Wishlist</a></li>
+            <li><a class="dropdown-item" (click)="goToOrderList()" >Orders</a></li>
+            <li><a class="dropdown-item" (click)="goToWishList()" >Wishlist</a></li>
             <li><hr class="dropdown-divider"></li>
             <li *ngIf="!isLoggedIn">
               <a class="dropdown-item" (click)="goToLogin()">Login</a>

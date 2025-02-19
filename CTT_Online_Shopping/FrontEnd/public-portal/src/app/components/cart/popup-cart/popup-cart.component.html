@@ -6,10 +6,10 @@
         <p>{{ popupData?.name }}</p>
         <p>Price: 
             <strong *ngIf="popupData?.discountedPrice !== 0; else originalPrice">
-              {{ popupData?.discountedPrice | currency:'INR' }}
+              ₹ {{ popupData?.discountedPrice | number:'1.0-0' }}
             </strong>
             <ng-template #originalPrice>
-              <strong>{{ popupData?.price | currency:'INR' }}</strong>
+              <strong>₹ {{ popupData?.price | number:'1.0-0' }}</strong>
             </ng-template>
           </p>
           <p>Size - {{ popupData?.sizeLabel }}</p>

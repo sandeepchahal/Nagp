@@ -6,19 +6,7 @@ namespace UserAPI.DbContext;
 
 public class UserDbContext(DbContextOptions<UserDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
-    public override int SaveChanges()
-    {
-        foreach (var entry in ChangeTracker.Entries())
-        {
-            Console.WriteLine($"Entity: {entry.Entity.GetType().Name}, State: {entry.State}");
-
-            foreach (var property in entry.Properties.Where(p => p.IsModified || entry.State == EntityState.Added))
-            {
-                Console.WriteLine($"Property: {property.Metadata.Name}, Old: {property.OriginalValue}, New: {property.CurrentValue}");
-            }
-        }
-        return base.SaveChanges();
-    }
+    
 }
 
 public class ApplicationUser : IdentityUser
@@ -30,4 +18,9 @@ public class ApplicationUser : IdentityUser
     public string? FullName { get; set; } = string.Empty;
     public string? Provider { get; set; } = "System";
     public string? ProviderId { get; set; } // Google User ID
+
+    public string Address { get; set; }
+    public string City { get; set; }
+    public string Zip { get; set; }
+    public string Country { get; set; }
 }

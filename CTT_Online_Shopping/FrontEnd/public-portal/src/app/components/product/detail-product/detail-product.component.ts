@@ -15,6 +15,7 @@ import { TruncatePipe } from '../../../truncate.pipe';
 import { ListReviewComponent } from '../../review/list-review/list-review.component';
 import { AddReviewComponent } from '../../review/add-review/add-review.component';
 import { AuthService } from '../../../services/auth.service';
+import { LoaderComponent } from '../../common/loader/loader.component';
 
 @Component({
   selector: 'app-detail-product',
@@ -25,6 +26,7 @@ import { AuthService } from '../../../services/auth.service';
     TruncatePipe,
     ListReviewComponent,
     AddReviewComponent,
+    LoaderComponent,
   ],
   templateUrl: './detail-product.component.html',
   styleUrl: './detail-product.component.css',
@@ -64,6 +66,7 @@ export class DetailProductComponent implements OnInit {
 
   isLoggedIn: boolean = false;
   showAddReviewFlag: boolean = false;
+  showLoading: boolean = true;
   constructor(
     private route: ActivatedRoute,
     private productItemService: ProductItemService,
@@ -91,6 +94,7 @@ export class DetailProductComponent implements OnInit {
       this.isLoggedIn = true;
       console.log('user is athenticated');
     }
+    this.showLoading = false;
   }
 
   loadProductItem(productId: string): void {
@@ -426,5 +430,8 @@ export class DetailProductComponent implements OnInit {
 
   showAddReview() {
     this.showAddReviewFlag = true;
+  }
+  navigateToLogin() {
+    this.router.navigate(['/user/login']);
   }
 }

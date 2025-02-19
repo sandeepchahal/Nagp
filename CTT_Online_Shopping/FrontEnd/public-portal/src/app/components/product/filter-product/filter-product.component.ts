@@ -9,17 +9,18 @@ import { SearchResponse } from '../../../models/searchResponse.model';
 import { SearchService } from '../../../services/search.service';
 import { CommonModule } from '@angular/common';
 import { TruncatePipe } from '../../../truncate.pipe';
+import { LoaderComponent } from '../../common/loader/loader.component';
 
 @Component({
   selector: 'app-filter-product',
   standalone: true,
-  imports: [CommonModule, TruncatePipe],
+  imports: [CommonModule, TruncatePipe, LoaderComponent],
   templateUrl: './filter-product.component.html',
   styleUrl: './filter-product.component.css',
 })
 export class FilterProductComponent {
   products: ProductItemFilterFlatten[] = [];
-
+  showLoading: boolean = true;
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
@@ -32,6 +33,7 @@ export class FilterProductComponent {
       if (query) {
         this.productService.getProducts(query).subscribe((data) => {
           this.products = this.flattenProducts(data);
+          this.showLoading = false;
         });
       }
     });

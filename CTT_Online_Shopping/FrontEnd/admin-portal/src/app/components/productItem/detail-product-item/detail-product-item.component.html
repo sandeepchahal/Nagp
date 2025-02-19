@@ -36,13 +36,13 @@
     <div class="price">
       <strong>MRP: </strong>
       <span *ngIf="discountPrice > 0" class="original-price">
-        {{ selectedVariant.price | currency:'INR' }}
+        ₹ {{ selectedVariant.price | number:'1.0-0'  }}
       </span>
       <span *ngIf="discountPrice > 0" class="discounted-price">
-        {{ selectedVariant.discountedPrice | currency:'INR' }}
+        ₹ {{ selectedVariant.discountedPrice |  number:'1.0-0' }}
       </span>
       <span *ngIf="discountPrice === 0">
-        {{ selectedVariant.price | currency:'INR' }}
+        ₹ {{ selectedVariant.price | number:'1.0-0' }}
       </span>
     </div>
 
