@@ -11,10 +11,29 @@ public class ProductItemService(ElasticsearchClient elasticClient, ILogger<Produ
     {
         try
         {
-            // Step 1: Insert the ProductItemEventModel directly into the database (Elasticsearch)
-            var indexResponse = await elasticClient.IndexAsync(productItemEvent);
+            // Check if productItemId already exists
+            var existingProduct = await elasticClient.SearchAsync<ProductItemEventModel>(s => s
+                .Query(q => q
+                    .Bool(b => b
+                        .Must(
+                            mq => mq.Term(t => t.Field(f => f.ProductItemId).Value(productItemEvent.ProductItemId)),
+                            mq => mq.Term(t => t.Field(f => f.ProductId).Value(productItemEvent.ProductId))
+                        )
+                    )
+                )
+            );
 
-            // Optional: You can log the successful insert
+            if (existingProduct.Documents.Any())
+            {
+                logger.LogInformation($"Skipping indexing. Product Item with ID {productItemEvent.ProductItemId} already exists.");
+                return; // Skip indexing if it already exists
+            }
+
+            // Index new document
+            var indexResponse = await elasticClient.IndexAsync(productItemEvent, i => i
+                    .Index("your-index-name") // Replace with your actual index name
+            );
+
             if (indexResponse.IsValidResponse)
             {
                 logger.LogInformation($"Product Item with ID {productItemEvent.ProductItemId} successfully indexed.");
@@ -29,6 +48,7 @@ public class ProductItemService(ElasticsearchClient elasticClient, ILogger<Produ
             logger.LogError($"An error occurred while indexing the product item. Error - {e.Message}");
         }
     }
+
 
 
     public async Task Update(string id, ProductItemEventModel productItemEventModel)
