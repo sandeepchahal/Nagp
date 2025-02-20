@@ -62,6 +62,25 @@ public class ProductItemDbService(
         return productItemDb;
     }
 
+    public async Task<int> RunAsync()
+    {
+        try
+        {
+            var productItems = await productItemCollection.Find(_ => true).ToListAsync();
+            foreach (var item in productItems)
+            {
+                var productItemAddEventModel = await MapToProductItemEvent(item);
+                await productItemEventService.RaiseAddAsync(productItemAddEventModel);
+            }
+
+            return productItems.Count;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
     private async Task<ProductItemEventModel> MapToProductItemEvent(ProductItemDb productItemDb)
     {
         

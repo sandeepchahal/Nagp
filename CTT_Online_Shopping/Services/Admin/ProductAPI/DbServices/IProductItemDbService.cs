@@ -8,4 +8,6 @@ public interface IProductItemDbService
 {
     Task<ProductItemView?> GetAsync(string productItemId);
     Task<ProductItemDb> AddAsync(ProductItemCommand productItem);
+
+    Task<int> RunAsync();
 }

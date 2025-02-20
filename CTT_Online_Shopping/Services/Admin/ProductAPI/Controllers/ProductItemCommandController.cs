@@ -19,4 +19,19 @@ public partial class ProductItemController
             return StatusCode(500, new { message = "Error adding product item.", error = ex.Message });
         }
     }
+
+    [HttpGet("run")]
+    public async Task<IActionResult> RunJob()
+    {
+        try
+        {
+            var counter = productItemDbService.RunAsync();
+            return Ok(new { message = $" {counter} items added to search db" });
+
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error adding product item.", error = ex.Message });
+        }
+    }
 }

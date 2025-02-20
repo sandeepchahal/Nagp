@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -60,6 +60,17 @@ import { error } from 'console';
   ],
 })
 export class DetailProductComponent implements OnInit {
+  isImageZoomed = false;
+  isDragging = false;
+  startX = 0;
+  startY = 0;
+  offsetX = 0;
+  offsetY = 0;
+  lastX = 0;
+  lastY = 0;
+
+  @ViewChild('zoomImage', { static: false }) zoomImage!: ElementRef;
+
   productItem!: ProductItemView;
   selectedImageIndex = 0; // Track the currently selected image
   selectedVariant!: {
@@ -72,7 +83,6 @@ export class DetailProductComponent implements OnInit {
   currentPrice: number | null = null; // Track the current price
   discountPrice: number = 0; // Track the discounted price
   selectedColorIndex = 0; // Track the selected color index for ColorAndSize variant
-  isImageZoomed = false; // Track if the main image is zoomed
   selectedColorId: string = '';
   cartItem: CartItem = {
     brand: '',
@@ -488,5 +498,33 @@ export class DetailProductComponent implements OnInit {
   }
   navigateToLogin() {
     this.router.navigate(['/user/login']);
+  }
+
+  openImageModal() {
+    this.isImageZoomed = true;
+    this.offsetX = 0;
+    this.offsetY = 0;
+  }
+
+  closeImageModal() {
+    this.isImageZoomed = false;
+  }
+
+  startDragging(event: MouseEvent) {
+    this.isDragging = true;
+    this.startX = event.clientX - this.offsetX;
+    this.startY = event.clientY - this.offsetY;
+  }
+
+  dragImage(event: MouseEvent) {
+    if (!this.isDragging) return;
+    event.preventDefault();
+
+    this.offsetX = event.clientX - this.startX;
+    this.offsetY = event.clientY - this.startY;
+  }
+
+  stopDragging() {
+    this.isDragging = false;
   }
 }
