@@ -19,7 +19,40 @@
     overflow: hidden;
     text-align: center;
   }
-  
+  /* Modal Background */
+.image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Zoomed Image Container */
+.image-container {
+  width: 80%;
+  height: 80%;
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+}
+
+/* Zoomed Image */
+.zoomed-img {
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  transform: scale(2); /* Initial Zoom Level */
+  position: absolute;
+  cursor: grabbing;
+}
+
   .main-image img {
     width: 100%;
     height: auto;
@@ -187,6 +220,7 @@
     background-color: #aa8b77 ;
     color: white;
     margin-bottom: 20px;
+    padding: 10px;
 }
 .card {
     display: flex;
@@ -211,3 +245,11 @@
     margin: 10px;
   }
   
+  .card {
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
+  .card:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Adds shadow */
+    transform: translateY(-5px); /* Lifts the card slightly */
+  }

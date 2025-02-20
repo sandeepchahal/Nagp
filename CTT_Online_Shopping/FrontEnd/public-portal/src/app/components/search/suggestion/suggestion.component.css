@@ -17,10 +17,11 @@
     background-color: white;
   }
 
-  .search-input::selection
-  {
-    background-color: white;
+  .search-input::selection {
+    background-color: #66371c; /* A visible selection background */
+    color: white; /* Ensures text remains readable */
   }
+  
 
   input:focus, textarea:focus, select:focus {
     outline: none !important;
