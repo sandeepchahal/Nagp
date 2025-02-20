@@ -23,16 +23,14 @@ public class ProductItemService(ElasticsearchClient elasticClient, ILogger<Produ
                 )
             );
 
-            if (existingProduct.Documents.Any())
+            if (existingProduct.Documents.Count != 0)
             {
                 logger.LogInformation($"Skipping indexing. Product Item with ID {productItemEvent.ProductItemId} already exists.");
-                return; // Skip indexing if it already exists
+                return; 
             }
 
             // Index new document
-            var indexResponse = await elasticClient.IndexAsync(productItemEvent, i => i
-                    .Index("your-index-name") // Replace with your actual index name
-            );
+            var indexResponse = await elasticClient.IndexAsync(productItemEvent); 
 
             if (indexResponse.IsValidResponse)
             {
