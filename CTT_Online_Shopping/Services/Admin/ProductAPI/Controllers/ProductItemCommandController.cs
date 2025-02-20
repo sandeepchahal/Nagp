@@ -20,7 +20,7 @@ public partial class ProductItemController
         }
     }
 
-    [HttpGet("run")]
+    [HttpGet("update-index-db")]
     public async Task<IActionResult> RunJob()
     {
         try
