@@ -27,7 +27,10 @@
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Adds shadow */
     transform: translateY(-5px); /* Lifts the card slightly */
   }
-  
+  .card-img-top:hover
+  {
+    cursor: pointer;
+  }
 
   .card-body {
     flex-grow: 1; /* Fills remaining space */

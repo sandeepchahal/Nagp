@@ -1,6 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener } from '@angular/core';
 import { SearchService } from '../../../services/search.service';
-import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import {
+  Subject,
+  debounceTime,
+  distinctUntilChanged,
+  of,
+  switchMap,
+} from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchResponse } from '../../../models/searchResponse.model';
@@ -21,21 +27,23 @@ export class SuggestionComponent {
 
   constructor(
     private searchService: SearchService,
-    private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private elementRef: ElementRef
   ) {
-    // Handle input changes with debounce
     this.searchSubject
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        switchMap((query) =>
-          query.length >= 3 ? this.searchService.search(query) : []
-        )
+        switchMap((query) => {
+          if (query.length < 3) {
+            this.suggestions = []; // Clear suggestions when query < 3
+            return of([]); // Return an empty observable
+          }
+          return this.searchService.search(query);
+        })
       )
       .subscribe((results) => {
         this.suggestions = results;
-        console.log(this.suggestions);
       });
   }
 
@@ -45,16 +53,21 @@ export class SuggestionComponent {
 
   selectSuggestion(suggestion: any) {
     this.searchQuery = suggestion.text;
-    console.log(suggestion.value);
     this.suggestions = [];
     this.searchService.updateSearchQuery(suggestion.value);
-
-    // Navigate to the filter-product page
     this.router.navigate(['/products']);
   }
   highlightMatch(text: string): string {
     if (!this.searchQuery) return text;
     const regex = new RegExp(`(${this.searchQuery})`, 'gi');
     return text.replace(regex, '<strong>$1</strong>');
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event) {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.suggestions = []; // Clear suggestions
+      this.searchQuery = ''; // Clear input if needed
+    }
   }
 }

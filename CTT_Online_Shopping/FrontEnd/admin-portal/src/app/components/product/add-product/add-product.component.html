@@ -1,4 +1,4 @@
-<div class="product-add">
+<div>
   <h1>Add Product</h1>
   <form (ngSubmit)="onSubmit()">
     <!-- Category Auto-suggestion -->
@@ -12,8 +12,14 @@
         (input)="onCategoryInputChange()"
         required
       />
-      <mat-autocomplete #autoCategory="matAutocomplete" (optionSelected)="onCategorySelected($event)">
-        <mat-option *ngFor="let category of filteredCategories" [value]="category.id">
+      <mat-autocomplete
+        #autoCategory="matAutocomplete"
+        (optionSelected)="onCategorySelected($event)"
+      >
+        <mat-option
+          *ngFor="let category of filteredCategories"
+          [value]="category.id"
+        >
           {{ category.name }}
         </mat-option>
       </mat-autocomplete>
@@ -31,8 +37,14 @@
         [disabled]="!product.categoryId"
         required
       />
-      <mat-autocomplete #autoSubCategory="matAutocomplete" (optionSelected)="onSubCategorySelected($event)">
-        <mat-option *ngFor="let subCategory of filteredSubCategories" [value]="subCategory.id">
+      <mat-autocomplete
+        #autoSubCategory="matAutocomplete"
+        (optionSelected)="onSubCategorySelected($event)"
+      >
+        <mat-option
+          *ngFor="let subCategory of filteredSubCategories"
+          [value]="subCategory.id"
+        >
           {{ subCategory.name }}
         </mat-option>
       </mat-autocomplete>
@@ -49,7 +61,10 @@
         (input)="onBrandInputChange()"
         required
       />
-      <mat-autocomplete #autoBrand="matAutocomplete" (optionSelected)="onBrandSelected($event)">
+      <mat-autocomplete
+        #autoBrand="matAutocomplete"
+        (optionSelected)="onBrandSelected($event)"
+      >
         <mat-option *ngFor="let brand of brands" [value]="brand.id">
           {{ brand.name }}
         </mat-option>
@@ -65,13 +80,15 @@
     <!-- Product Description (TinyMCE Editor) -->
     <div class="mat-form-field">
       <mat-label>Description</mat-label>
-      <editor [(ngModel)]="product.description"
-      name="description" apiKey="uoekf9wyq7a3jc2vkvotddkco2llde2b2b847xeofo4bb6qc"
-  [init]="{
+      <editor
+        [(ngModel)]="product.description"
+        name="description"
+        apiKey="uoekf9wyq7a3jc2vkvotddkco2llde2b2b847xeofo4bb6qc"
+        [init]="{
     plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
     toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
   }"
-></editor>
+      ></editor>
     </div>
 
     <button mat-raised-button color="primary" type="submit">Add Product</button>
