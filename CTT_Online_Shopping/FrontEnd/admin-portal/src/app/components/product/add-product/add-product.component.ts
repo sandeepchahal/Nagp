@@ -16,6 +16,10 @@ import { BrandCommand, BrandView } from '../../../models/brand/brand.model';
 import { Router } from '@angular/router';
 import { BrandService } from '../../../services/brand.service';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import {
+  SubCategoryView,
+  SubCategoryViewBase,
+} from '../../../models/category/subCategory.model';
 
 @Component({
   selector: 'app-add-product',
@@ -39,10 +43,13 @@ export class AddProductComponent implements OnInit {
     categoryId: '',
     subCategoryId: '',
   };
+  categoryInput = '';
+  subCategoryInput = '';
+  brandInput = '';
 
   categories: CategoryView[] = []; // All categories fetched from the API
   filteredCategories: CategoryView[] = []; // Filtered categories based on user input
-  filteredSubCategories: any[] = []; // Filtered subcategories based on selected category
+  subCategories: SubCategoryViewBase[] = []; // Filtered subcategories based on selected category
   brands: BrandView[] = [];
 
   // TinyMCE Configuration
@@ -76,7 +83,6 @@ export class AddProductComponent implements OnInit {
         ...e,
         name: `${e.name} (${e.gender})`,
       }));
-      console.log('filter', this.filteredCategories);
     });
 
     this.brandService.getAll().subscribe((data) => {
@@ -84,68 +90,57 @@ export class AddProductComponent implements OnInit {
       console.log('brand', this.brands);
     });
   }
-  onCategoryInputChange(): void {
-    if (!this.product.categoryId) {
-      this.filteredCategories = [...this.categories]; // Reset when empty
-      return;
-    }
-
-    const searchText = this.product.categoryId.toLowerCase();
+  onCategoryInputChange() {
     this.filteredCategories = this.categories.filter((category) =>
-      category.name.toLowerCase().includes(searchText)
+      category.name.toLowerCase().includes(this.categoryInput.toLowerCase())
     );
   }
 
-  // Select category from the list
-  onCategorySelected(event: any): void {
-    this.product.categoryId = event.option.value;
-    this.filteredSubCategories = this.filterSubCategoriesByCategory(
-      this.product.categoryId
-    );
-  }
-  // Filter subcategories based on selected category
-  filterSubCategoriesByCategory(categoryId: string): any[] {
-    // Assuming subcategories data is available for each category, you may have to modify this based on your data structure
-    return (
-      this.categories.find((category) => category.id === categoryId)
-        ?.subCategories || []
-    );
+  onCategorySelected(category: any) {
+    this.product.categoryId = category.id;
+    this.categoryInput = category.name;
+    this.filteredCategories = [];
+    this.subCategories =
+      this.categories.find((category) => category.id === category.id)
+        ?.subCategories || [];
   }
 
-  onSubCategoryInputChange(): void {
-    if (!this.product.subCategoryId) {
-      this.filteredSubCategories = this.filterSubCategoriesByCategory(
-        this.product.categoryId
-      );
-      return;
-    }
-
-    const searchText = this.product.subCategoryId.toLowerCase();
-    this.filteredSubCategories = this.filteredSubCategories.filter(
-      (subCategory) => subCategory.name.toLowerCase().includes(searchText)
+  onSubCategoryInputChange() {
+    this.subCategories = this.subCategories.filter(
+      (subCategory) =>
+        subCategory.name
+          .toLowerCase()
+          .includes(this.subCategoryInput.toLowerCase()) &&
+        subCategory.id === this.product.categoryId
     );
   }
 
-  // Select subcategory from the list
-  onSubCategorySelected(event: any): void {
-    this.product.subCategoryId = event.option.value;
+  onSubCategorySelected(subCategory: any) {
+    this.product.subCategoryId = subCategory.id;
+    this.subCategoryInput = subCategory.name;
+    this.subCategories = [];
   }
 
   onBrandInputChange() {
     this.brands = this.brands.filter((brand) =>
-      brand.name
-        .toLowerCase()
-        .includes(this.product.brandId?.toString().toLowerCase() || '')
+      brand.name.toLowerCase().includes(this.brandInput.toLowerCase())
     );
   }
 
-  onBrandSelected(event: MatAutocompleteSelectedEvent) {
-    const selectedBrand = this.brands.find(
-      (brand) => brand.id === event.option.value
+  onBrandSelected(brand: any) {
+    this.product.brandId = brand.id;
+    this.brandInput = brand.name;
+    this.brands = [];
+  }
+
+  isFormValid() {
+    return (
+      this.product.categoryId &&
+      this.product.subCategoryId &&
+      this.product.brandId &&
+      this.product.name &&
+      this.product.description
     );
-    if (selectedBrand) {
-      this.product.brandId = selectedBrand.id;
-    }
   }
 
   onSubmit() {
