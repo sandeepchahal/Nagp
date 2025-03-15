@@ -8,6 +8,7 @@ import {
   OrderQuery,
   OrderRequest,
 } from '../models/orderRequest.model';
+import { CartService } from './cart.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,7 @@ export class OrderService {
   };
 
   apiUrl = environment.productApiUrl;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cartService: CartService) {}
 
   placeOrder(order: OrderRequest): Observable<any> {
     this.orderData.cartItems = order.cartItems;
@@ -39,6 +40,7 @@ export class OrderService {
       map((response: any) => {
         this.orderData.invoiceId = response.invoiceId;
         this.orderData.orderStatus = response.orderStatus;
+        this.cartService.removeFromCart();
         return response;
       }),
       catchError((error) => {
