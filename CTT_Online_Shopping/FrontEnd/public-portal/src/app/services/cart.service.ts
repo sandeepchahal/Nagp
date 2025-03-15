@@ -136,6 +136,7 @@ export class CartService {
   removeFromCart() {
     localStorage.removeItem('cartItems');
     this.cartItems = [];
+    this.cartCountSubject.next(this.cartItems.length);
     this.cartItemsSubject.next([]);
   }
   // Find an item in the cart based on variantType (size, color, etc.)
