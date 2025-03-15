@@ -1,96 +1,106 @@
-<div>
+<div class="product-add">
   <h1>Add Product</h1>
   <form (ngSubmit)="onSubmit()">
-    <!-- Category Auto-suggestion -->
-    <mat-form-field appearance="fill">
-      <mat-label>Category</mat-label>
+    <!-- Category Dropdown -->
+    <div class="form-group">
+      <label for="category">Category</label>
       <input
-        matInput
-        [(ngModel)]="product.categoryId"
-        name="categoryId"
-        [matAutocomplete]="autoCategory"
+        type="text"
+        id="category"
+        [(ngModel)]="categoryInput"
+        name="categoryInput"
         (input)="onCategoryInputChange()"
+        placeholder="Search or select a category"
         required
       />
-      <mat-autocomplete
-        #autoCategory="matAutocomplete"
-        (optionSelected)="onCategorySelected($event)"
-      >
-        <mat-option
+      <div class="dropdown" *ngIf="filteredCategories.length > 0">
+        <div
           *ngFor="let category of filteredCategories"
-          [value]="category.id"
+          (click)="onCategorySelected(category)"
+          class="dropdown-item"
         >
           {{ category.name }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+        </div>
+      </div>
+    </div>
 
-    <!-- SubCategory Auto-suggestion -->
-    <mat-form-field appearance="fill">
-      <mat-label>SubCategory</mat-label>
+    <!-- SubCategory Dropdown -->
+    <div class="form-group">
+      <label for="subCategory">SubCategory</label>
       <input
-        matInput
-        [(ngModel)]="product.subCategoryId"
-        name="subCategoryId"
-        [matAutocomplete]="autoSubCategory"
+        type="text"
+        id="subCategory"
+        [(ngModel)]="subCategoryInput"
+        name="subCategoryInput"
         (input)="onSubCategoryInputChange()"
+        placeholder="Search or select a subcategory"
         [disabled]="!product.categoryId"
         required
       />
-      <mat-autocomplete
-        #autoSubCategory="matAutocomplete"
-        (optionSelected)="onSubCategorySelected($event)"
-      >
-        <mat-option
-          *ngFor="let subCategory of filteredSubCategories"
-          [value]="subCategory.id"
+      <div class="dropdown" *ngIf="subCategories.length > 0">
+        <div
+          *ngFor="let subCategory of subCategories"
+          (click)="onSubCategorySelected(subCategory)"
+          class="dropdown-item"
         >
           {{ subCategory.name }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+        </div>
+      </div>
+    </div>
 
-    <!-- Brand Auto-suggestion -->
-    <mat-form-field appearance="fill">
-      <mat-label>Brand</mat-label>
+    <!-- Brand Dropdown -->
+    <div class="form-group">
+      <label for="brand">Brand</label>
       <input
-        matInput
-        [(ngModel)]="product.brandId"
-        name="brandId"
-        [matAutocomplete]="autoBrand"
+        type="text"
+        id="brand"
+        [(ngModel)]="brandInput"
+        name="brandInput"
         (input)="onBrandInputChange()"
+        placeholder="Search or select a brand"
         required
       />
-      <mat-autocomplete
-        #autoBrand="matAutocomplete"
-        (optionSelected)="onBrandSelected($event)"
-      >
-        <mat-option *ngFor="let brand of brands" [value]="brand.id">
+      <div class="dropdown" *ngIf="brands.length > 0">
+        <div
+          *ngFor="let brand of brands"
+          (click)="onBrandSelected(brand)"
+          class="dropdown-item"
+        >
           {{ brand.name }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+        </div>
+      </div>
+    </div>
 
     <!-- Product Name -->
-    <mat-form-field appearance="fill">
-      <mat-label>Product Name</mat-label>
-      <input matInput [(ngModel)]="product.name" name="name" required />
-    </mat-form-field>
+    <div class="form-group">
+      <label for="productName">Product Name</label>
+      <input
+        type="text"
+        id="productName"
+        [(ngModel)]="product.name"
+        name="name"
+        placeholder="Enter product name"
+        required
+      />
+    </div>
 
     <!-- Product Description (TinyMCE Editor) -->
-    <div class="mat-form-field">
-      <mat-label>Description</mat-label>
+    <div class="form-group">
+      <label for="description">Description</label>
       <editor
         [(ngModel)]="product.description"
         name="description"
         apiKey="uoekf9wyq7a3jc2vkvotddkco2llde2b2b847xeofo4bb6qc"
         [init]="{
-    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-  }"
+          plugins:
+            'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+          toolbar:
+            'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat'
+        }"
       ></editor>
     </div>
 
-    <button mat-raised-button color="primary" type="submit">Add Product</button>
+    <!-- Submit Button -->
+    <button type="submit" [disabled]="!isFormValid()">Add Product</button>
   </form>
 </div>

@@ -37,7 +37,8 @@ public class UserController(
                 Email = model.Email,
                 FullName = model.FullName,
             };
-
+            var passwordHasher = new PasswordHasher<ApplicationUser>();
+            user.PasswordHash = passwordHasher.HashPassword(user, model.Password);
             await userDbContext.Users.AddAsync(user);
             userDbContext.Entry(user).State = EntityState.Added;
             var result = await userDbContext.SaveChangesAsync();
@@ -111,14 +112,17 @@ public class UserController(
             return BadRequest(ModelState);
         }
 
-        var user = await userManager.FindByEmailAsync(model.Email);
+        var user = await userDbContext.Users.Where(col => col.Email == model.Email).FirstOrDefaultAsync();
         if (user == null)
         {
             return Unauthorized(new { message = "Invalid credentials" });
         }
+        
+        // Verify password
+        var passwordHasher = new PasswordHasher<ApplicationUser>();
+        var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password);
 
-        var result = await signInManager.PasswordSignInAsync(user.UserName, model.Password, false, false);
-        if (result.Succeeded)
+        if (result == PasswordVerificationResult.Success)
         {
             var token = jwtTokenGeneration.GenerateToken(user);
             return Ok(new { Token=token });
